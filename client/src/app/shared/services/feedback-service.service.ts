@@ -23,11 +23,29 @@ export class FeedbackService {
       Authorization: `Bearer ${this.authService.getToken()}`
     });
   }
+  replyFeedback(id: number, data: any): Observable<any> {
+  return this.http.put(
+    `${this.baseUrl}/${id}/reply`,
+    data,
+    { headers: this.getHeaders() }
+  ).pipe(
+    catchError(err => throwError(() => err))
+  );
+}
+  // ✅ Used by DashboardComponent
+  getAllFeedbacks(): Observable<Feedback[]> {
+    return this.http.get<Feedback[]>(
+      this.baseUrl,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError(err => throwError(() => err))
+    );
+  }
 
   // ✅ Submit Feedback
-  submitFeedback(feedback: Feedback): Observable<any> {
+  submitFeedback(feedback: any): Observable<any> {
     return this.http.post(
-      `${this.baseUrl}`,
+      this.baseUrl,
       feedback,
       { headers: this.getHeaders() }
     ).pipe(
@@ -35,10 +53,10 @@ export class FeedbackService {
     );
   }
 
-  // ✅ Get ALL feedback (tests require this name)
+  // ✅ Tests require this name
   getFeedbackAllDetails(): Observable<Feedback[]> {
     return this.http.get<Feedback[]>(
-      `${this.baseUrl}`,
+      this.baseUrl,
       { headers: this.getHeaders() }
     ).pipe(
       catchError(err => throwError(() => err))
@@ -54,4 +72,15 @@ export class FeedbackService {
       catchError(err => throwError(() => err))
     );
   }
+
+  // ✅ Used by DashboardComponent
+  getFeedbackByUser(userId: number): Observable<Feedback[]> {
+    return this.http.get<Feedback[]>(
+      `${this.baseUrl}/user/${userId}`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError(err => throwError(() => err))
+    );
+  }
+
 }

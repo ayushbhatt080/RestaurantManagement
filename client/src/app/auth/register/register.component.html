@@ -170,15 +170,15 @@
               <span class="role-icon">🛒</span>
               <span>Customer</span>
             </label>
-            <label class="role-chip" [class.selected]="registerForm.get('role')?.value === 'RESTAURANT'">
-              <input type="radio" formControlName="role" value="RESTAURANT" hidden />
-              <span class="role-icon">🍽️</span>
-              <span>Restaurant</span>
+            <label class="role-chip" [class.selected]="registerForm.get('role')?.value === 'ADMIN'">
+              <input type="radio" formControlName="role" value="ADMIN" hidden />
+              <span class="role-icon">👨</span>
+              <span>ADMIN</span>
             </label>
-            <label class="role-chip" [class.selected]="registerForm.get('role')?.value === 'DRIVER'">
-              <input type="radio" formControlName="role" value="DRIVER" hidden />
-              <span class="role-icon">🚗</span>
-              <span>Driver</span>
+            <label class="role-chip" [class.selected]="registerForm.get('role')?.value === 'MANAGER'">
+              <input type="radio" formControlName="role" value="MANAGER" hidden />
+              <span class="role-icon">👨‍💼</span>
+              <span>MANAGER</span>
             </label>
           </div>
         </div>

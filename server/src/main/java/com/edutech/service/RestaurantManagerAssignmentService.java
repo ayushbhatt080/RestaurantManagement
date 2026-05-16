@@ -6,13 +6,11 @@ import com.edutech.dto.RestaurantManagerAssignmentDTO;
 import com.edutech.model.RestaurantManagerAssignment;
 
 public interface RestaurantManagerAssignmentService {
-	
-	
-//Write your logic here
-	
-	
-	
-	
-	
+
+	RestaurantManagerAssignmentDTO assignManager(Long restaurantId, Long managerId);
+
+	List<RestaurantManagerAssignmentDTO> getAllAssignments();
+
+	RestaurantManagerAssignmentDTO getAssignmentByRestaurantId(Long restaurantId);
 
 }

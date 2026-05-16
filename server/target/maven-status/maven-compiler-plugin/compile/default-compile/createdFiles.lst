@@ -23,6 +23,7 @@ com/edutech/util/JwtRequestFilter.class
 com/edutech/service/RestaurantManagerAssignmentServiceImpl.class
 com/edutech/model/Role.class
 com/edutech/config/Configurations$1.class
+com/edutech/exception/ResourceNotFoundException.class
 com/edutech/repository/FeedbackRepository.class
 com/edutech/controller/MenuItemController.class
 com/edutech/config/SecurityConfig.class

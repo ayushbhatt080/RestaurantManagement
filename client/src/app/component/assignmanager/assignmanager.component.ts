@@ -1,77 +1,102 @@
 import { Component, OnInit } from '@angular/core';
-import { Restaurant } from '../../model/restaurant';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RestaurantService } from '../../shared/services/restaurant.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { RestaurantService } from '../../shared/services/restaurant.service';
-import { User } from '../../model/user';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RestaurantManagerAssignmentDTO } from '../../model/restaurant-manager-assignment-dto';
 
 @Component({
-  selector: 'app-assignmanager',
+  selector: 'app-assign-manager',
   templateUrl: './assignmanager.component.html',
   styleUrls: ['./assignmanager.component.scss']
 })
-export class AssignmanagerComponent implements OnInit  {
+export class AssignmanagerComponent implements OnInit {
 
-    assignForm!: FormGroup;
-  restaurants: Restaurant[] = [];
-  managers: User[] = [];
-  assignments: RestaurantManagerAssignmentDTO[] = [];
+  assignments: any[] = [];
+  restaurants: any[] = [];
+  managers: any[] = [];
+  assignForm!: FormGroup;
+
   message = '';
-  errorMessage = '';
+  error = '';
 
   constructor(
     private fb: FormBuilder,
     private restaurantService: RestaurantService,
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+
+    // ✅ Form initialization
     this.assignForm = this.fb.group({
       restaurantId: ['', Validators.required],
       managerId: ['', Validators.required]
     });
-    this.loadRestaurants();
+
+    // ✅ Load initial data
     this.loadAssignments();
-  }
 
-  loadRestaurants(): void {
     this.restaurantService.getAll().subscribe({
-      next: data => this.restaurants = data
+      next: d => this.restaurants = d,
+      error: () => this.error = 'Failed to load restaurants'
+    });
+
+    this.authService.getAllUsers().subscribe({
+      next: (users: any) => {
+        this.managers = users.filter((u: any) => u.role === 'MANAGER');
+      },
+      error: () => this.error = 'Failed to load managers'
     });
   }
 
+  // ✅ Load assignments
   loadAssignments(): void {
-    this.restaurantService.getAllAssignments().subscribe({
-      next: data => this.assignments = data
+    this.restaurantService.getAssignments().subscribe({
+      next: d => this.assignments = d,
+      error: () => this.error = 'Failed to load assignments'
     });
   }
 
-  onSubmit(): void {
+  // ✅ Assign manager
+  assign(): void {
+
+    this.message = '';
+    this.error = '';
+
     if (this.assignForm.invalid) return;
-    const request = {
-      ...this.assignForm.value,
-      restaurantId: Number(this.assignForm.value.restaurantId),
-      managerId: Number(this.assignForm.value.managerId),
-      assignedBy: this.auth.getUserId()
+
+    const req = {
+      restaurantId: +this.assignForm.value.restaurantId,
+      managerId: +this.assignForm.value.managerId,
+      assignedBy: this.authService.getUserId()
     };
-    this.restaurantService.assignManager(request).subscribe({
+
+    this.restaurantService.assignManager(req).subscribe({
       next: () => {
-        this.message = 'Manager assigned successfully!';
-        this.errorMessage = '';
+        this.message = '✅ Manager assigned successfully!';
+
+        // ✅ Reset form
         this.assignForm.reset();
+
+        // ✅ Reload table
         this.loadAssignments();
-        this.loadRestaurants();
+
+        // ✅ Redirect to dashboard after short delay
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1500);
       },
       error: err => {
-        this.errorMessage = err.error?.error || 'Assignment failed';
-        this.message = '';
+        this.error = err?.error?.error || '❌ Assignment failed';
       }
     });
   }
 
-  logout(): void { this.auth.logout(); this.router.navigate(['/login']); }
+  // ✅ Manual navigation button
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
 
 }
+

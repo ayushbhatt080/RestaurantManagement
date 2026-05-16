@@ -1,4 +1,756 @@
-.dropdown-menu {
-  max-height: 300px;
+$bg-base      : #0d1117;
+$bg-surface   : #141b26;
+$bg-card      : #1a2235;
+$bg-elevated  : #1f2a3d;
+$bg-hover     : #253045;
+
+$gold         : #c9a84c;
+$gold-light   : #e2c47a;
+$gold-dim     : #8a6d2f;
+$gold-glow    : rgba(201, 168, 76, 0.18);
+$gold-border  : rgba(201, 168, 76, 0.35);
+
+$text-primary : #eef0f4;
+$text-secondary: #8a97b0;
+$text-muted   : #4e5d75;
+
+$success      : #3ecf6a;
+$danger       : #e05c5c;
+$warning      : #e8a244;
+$info         : #4a9edd;
+
+$radius-sm    : 6px;
+$radius-md    : 12px;
+$radius-lg    : 18px;
+$radius-xl    : 24px;
+
+$shadow-card  : 0 4px 24px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.3);
+$shadow-glow  : 0 0 20px rgba(201,168,76,0.2);
+
+$font-display : 'Playfair Display', 'Georgia', serif;
+$font-body    : 'DM Sans', 'Segoe UI', sans-serif;
+
+// ─── Base ──────────────────────────────────────────────────────────
+:host {
+  display: block;
+  background: $bg-base;
+  min-height: 100vh;
+  font-family: $font-body;
+  color: $text-primary;
+}
+
+// ─── Page Container ────────────────────────────────────────────────
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 28px 60px;
+}
+
+// ─── Page Header ───────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba($gold, 0.2);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.header-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $gold;
+}
+
+.page-title {
+  font-family: $font-display;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+  line-height: 1.1;
+}
+
+// ─── Alerts ────────────────────────────────────────────────────────
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: $radius-md;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  animation: slideDown 0.3s ease;
+
+  .alert-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  &.alert-success {
+    background: rgba($success, 0.12);
+    border: 1px solid rgba($success, 0.3);
+    color: $success;
+  }
+
+  &.alert-danger {
+    background: rgba($danger, 0.12);
+    border: 1px solid rgba($danger, 0.3);
+    color: $danger;
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ─── Search Bar ────────────────────────────────────────────────────
+.search-bar {
+  position: relative;
+  margin-bottom: 28px;
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 13px 18px 13px 44px;
+    background: $bg-card;
+    border: 1px solid rgba($gold, 0.2);
+    border-radius: $radius-md;
+    color: $text-primary;
+    font-family: $font-body;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    box-sizing: border-box;
+
+    &::placeholder { color: $text-muted; }
+
+    &:focus {
+      border-color: $gold;
+      box-shadow: 0 0 0 3px $gold-glow;
+    }
+  }
+}
+
+// ─── Buttons ───────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: $radius-md;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  text-decoration: none;
+
+  &.btn-primary {
+    background: linear-gradient(135deg, $gold 0%, $gold-light 100%);
+    color: #0d1117;
+
+    &:hover:not(:disabled) {
+      box-shadow: $shadow-glow;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  &.btn-secondary {
+    background: transparent;
+    border: 1px solid rgba($gold, 0.35);
+    color: $gold;
+
+    &:hover {
+      background: $gold-glow;
+    }
+  }
+
+  .btn-icon {
+    font-size: 0.8rem;
+    color: inherit;
+  }
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  border: none;
+  font-family: $font-body;
+  transition: all 0.2s;
+
+  &.btn-danger {
+    background: rgba($danger, 0.15);
+    color: $danger;
+    border: 1px solid rgba($danger, 0.3);
+
+    &:hover {
+      background: rgba($danger, 0.25);
+    }
+  }
+}
+
+// ─── Modal Overlay ─────────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background: $bg-card;
+  border: 1px solid $gold-border;
+  border-radius: $radius-xl;
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
   overflow-y: auto;
+  box-shadow: $shadow-card, $shadow-glow;
+  animation: scaleUp 0.25s ease;
+
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: $gold-dim;
+    border-radius: 10px;
+  }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+// ─── Modal Header ──────────────────────────────────────────────────
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 28px 28px 20px;
+  border-bottom: 1px solid rgba($gold, 0.15);
+}
+
+.modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: $gold;
+}
+
+.modal-title {
+  font-family: $font-display;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: 1px solid rgba($text-muted, 0.3);
+  color: $text-muted;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: $danger;
+    color: $danger;
+    background: rgba($danger, 0.1);
+  }
+}
+
+// ─── Form ──────────────────────────────────────────────────────────
+.form-group {
+  padding: 20px 28px 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $text-secondary;
+  margin-bottom: 8px;
+
+  .required { color: $gold; }
+}
+
+.select-wrapper {
+  position: relative;
+
+  .form-control,
+  .status-select {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    appearance: none;
+    background: $bg-elevated;
+    border: 1px solid rgba($gold, 0.2);
+    border-radius: $radius-md;
+    color: $text-primary;
+    font-family: $font-body;
+    font-size: 0.95rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+    box-sizing: border-box;
+
+    option { background: $bg-elevated; }
+
+    &:focus {
+      border-color: $gold;
+      box-shadow: 0 0 0 3px $gold-glow;
+    }
+  }
+
+  .select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $gold;
+    pointer-events: none;
+    font-size: 0.9rem;
+  }
+
+  &.sm {
+    .status-select {
+      padding: 7px 32px 7px 12px;
+      font-size: 0.82rem;
+      border-radius: $radius-sm;
+    }
+  }
+}
+
+// ─── Menu Section ──────────────────────────────────────────────────
+.menu-section {
+  padding: 20px 28px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $gold;
+  margin: 4px 0 16px;
+
+  .label-line {
+    flex: 1;
+    height: 1px;
+    background: rgba($gold, 0.25);
+  }
+}
+
+.menu-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.menu-select-card {
+  position: relative;
+  background: $bg-elevated;
+  border: 1px solid rgba($text-muted, 0.15);
+  border-radius: $radius-md;
+  padding: 16px 14px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, $gold-glow 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+
+  &:hover {
+    border-color: rgba($gold, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  }
+
+  &.selected {
+    border-color: $gold;
+    background: $bg-hover;
+    box-shadow: 0 0 0 2px $gold-glow, $shadow-glow;
+
+    &::before { opacity: 1; }
+  }
+
+  .item-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 8px 0 4px;
+  }
+
+  .item-price {
+    font-size: 0.85rem;
+    color: $gold;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .check-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: $gold;
+    font-size: 0.9rem;
+    animation: popIn 0.2s ease;
+  }
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+// ─── Menu Badge ────────────────────────────────────────────────────
+.menu-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  &.veg {
+    background: rgba($success, 0.15);
+    color: $success;
+    border: 1px solid rgba($success, 0.3);
+  }
+
+  &.nonveg {
+    background: rgba($danger, 0.15);
+    color: $danger;
+    border: 1px solid rgba($danger, 0.3);
+  }
+}
+
+// ─── Order Total ───────────────────────────────────────────────────
+.order-total {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba($gold, 0.1) 0%, rgba($gold, 0.05) 100%);
+  border: 1px solid $gold-border;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .total-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .total-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $text-secondary;
+  }
+
+  .total-amount {
+    font-family: $font-display;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $gold;
+  }
+
+  .total-count {
+    font-size: 0.82rem;
+    color: $text-muted;
+  }
+}
+
+// ─── Empty Menu ────────────────────────────────────────────────────
+.empty-menu {
+  padding: 20px 28px;
+  text-align: center;
+  color: $text-muted;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+// ─── Modal Actions ─────────────────────────────────────────────────
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px 28px;
+  border-top: 1px solid rgba($gold, 0.12);
+  margin-top: 8px;
+}
+
+// ─── Table ─────────────────────────────────────────────────────────
+.table-wrapper {
+  background: $bg-surface;
+  border: 1px solid rgba($gold, 0.15);
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead tr {
+    background: linear-gradient(90deg, $bg-elevated 0%, $bg-card 100%);
+    border-bottom: 1px solid rgba($gold, 0.25);
+  }
+
+  th {
+    padding: 14px 16px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $gold;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  tbody .table-row {
+    border-bottom: 1px solid rgba($text-muted, 0.08);
+    transition: background 0.18s;
+
+    &:last-child { border-bottom: none; }
+
+    &:hover {
+      background: rgba($gold, 0.04);
+    }
+  }
+
+  td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: $text-primary;
+    vertical-align: middle;
+
+    &.id-cell {
+      color: $text-muted;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    &.center { text-align: center; }
+
+    &.amount {
+      color: $gold-light;
+      font-weight: 600;
+    }
+
+    &.time-cell {
+      color: $text-secondary;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+  }
+
+  .empty-row {
+    text-align: center;
+    color: $text-muted;
+    font-style: italic;
+    padding: 40px;
+  }
+}
+
+// ─── Status Badges ─────────────────────────────────────────────────
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &.status-placed {
+    background: rgba($info, 0.15);
+    color: $info;
+    border: 1px solid rgba($info, 0.3);
+  }
+
+  &.status-processing {
+    background: rgba($warning, 0.15);
+    color: $warning;
+    border: 1px solid rgba($warning, 0.3);
+  }
+
+  &.status-delivered {
+    background: rgba($success, 0.15);
+    color: $success;
+    border: 1px solid rgba($success, 0.3);
+  }
+
+  &.status-cancelled {
+    background: rgba($danger, 0.12);
+    color: $danger;
+    border: 1px solid rgba($danger, 0.25);
+  }
+}
+
+// ─── Action Cell ───────────────────────────────────────────────────
+.action-cell {
+  white-space: nowrap;
+}
+
+// ─── Pagination ────────────────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn-page {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: $bg-card;
+  border: 1px solid rgba($gold, 0.3);
+  color: $gold;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $gold-glow;
+    box-shadow: $shadow-glow;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: $radius-sm;
+  background: transparent;
+  border: 1px solid rgba($text-muted, 0.2);
+  color: $text-secondary;
+  font-size: 0.85rem;
+  font-family: $font-body;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(.active) {
+    border-color: rgba($gold, 0.4);
+    color: $gold;
+  }
+
+  &.active {
+    background: linear-gradient(135deg, $gold 0%, $gold-light 100%);
+    border-color: $gold;
+    color: #0d1117;
+    box-shadow: $shadow-glow;
+  }
+}
+
+// ─── Responsive ────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .page-container { padding: 24px 16px 48px; }
+
+  .page-title { font-size: 1.9rem; }
+
+  .menu-select-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 12px 10px;
+    font-size: 0.82rem;
+  }
+
+  .order-total {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .page-numbers .page-dot { width: 28px; height: 28px; font-size: 0.78rem; }
 }

@@ -1,1 +1,374 @@
- //Write your logic here
+
+<div class="page-container">
+
+  <!-- ── AMBIENT BACKGROUND LAYERS ──────────────────────── -->
+  <div class="ambient-layer" aria-hidden="true">
+    <div class="ambient-orb ambient-orb--top"></div>
+    <div class="ambient-orb ambient-orb--right"></div>
+    <div class="grid-texture"></div>
+  </div>
+
+  <!-- ── PAGE HEADER ────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="header-ornament" aria-hidden="true">
+      <span class="ornament-line ornament-line--left"></span>
+      <span class="ornament-crest">
+        <span class="crest-diamond">◆</span>
+        <span class="crest-dot"></span>
+        <span class="crest-dot"></span>
+      </span>
+      <span class="ornament-line ornament-line--right"></span>
+    </div>
+
+    <div class="header-content">
+      <p class="page-eyebrow">Culinary Collection</p>
+      <h1 class="page-title">Menu Items</h1>
+      <div class="title-underline" aria-hidden="true">
+        <span class="underline-segment"></span>
+        <span class="underline-diamond">◆</span>
+        <span class="underline-segment"></span>
+      </div>
+    </div>
+
+    <div class="header-action">
+      <button class="btn-primary btn-add-trigger" (click)="openAdd()">
+        <span class="btn-icon-wrap" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </span>
+        <span class="btn-text">Add Item</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── ALERTS ─────────────────────────────────────────── -->
+  <div *ngIf="message" class="alert alert-success" role="alert">
+    <span class="alert-icon-wrap" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="alert-text">{{ message }}</span>
+    <span class="alert-shimmer" aria-hidden="true"></span>
+  </div>
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    <span class="alert-icon-wrap" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </span>
+    <span class="alert-text">{{ error }}</span>
+    <span class="alert-shimmer" aria-hidden="true"></span>
+  </div>
+
+  <!-- ── TOOLBAR ─────────────────────────────────────────── -->
+  <div class="toolbar">
+    <div class="search-field">
+      <span class="search-icon" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.4" />
+          <path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </span>
+      <input [(ngModel)]="searchText" type="text" placeholder="Search menu items…" class="search-input"
+        aria-label="Search menu items" />
+      <button class="search-clear" *ngIf="searchText" (click)="searchText=''" aria-label="Clear search">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="toolbar-right">
+      <div class="results-badge">
+        <span class="results-count">{{ (menuItems | filterMenuItems:searchText).length }}</span>
+        <span class="results-label">Results</span>
+      </div>
+      <div class="toolbar-divider" aria-hidden="true"></div>
+      <div class="total-badge">
+        <span class="total-count">{{ menuItems.length }}</span>
+        <span class="total-label">Total Items</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL OVERLAY ──────────────────────────────────── -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="showForm=false" role="dialog" aria-modal="true"
+    [attr.aria-label]="isEditing ? 'Edit Menu Item' : 'Add Menu Item'">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <!-- Modal top accent bar -->
+      <div class="modal-accent-bar" aria-hidden="true">
+        <span class="accent-bar-fill"></span>
+      </div>
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-eyebrow">{{ isEditing ? 'Modify Entry' : 'New Entry' }}</span>
+          <h3 class="modal-title">{{ isEditing ? 'Edit' : 'Add' }} Menu Item</h3>
+        </div>
+        <button class="modal-close" (click)="showForm=false" aria-label="Close modal">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+            <path d="M1 1L10 10M10 1L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-diamond" aria-hidden="true">◆</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Modal Form -->
+      <form [formGroup]="menuForm" (ngSubmit)="save()" class="modal-form" novalidate>
+
+        <!-- 01 — Name -->
+        <div class="form-group">
+          <label class="form-label">
+            <span class="label-index">01</span>
+            <span class="label-text">Item Name <span class="req" aria-label="required">*</span></span>
+          </label>
+          <div class="input-wrapper">
+            <input formControlName="name" class="form-control" placeholder="e.g. Grilled Salmon" autocomplete="off" />
+            <span class="input-focus-border" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- 02 — Type -->
+        <div class="form-group">
+          <label class="form-label">
+            <span class="label-index">02</span>
+            <span class="label-text">Menu Type <span class="req" aria-label="required">*</span></span>
+          </label>
+          <div class="type-toggle" role="group" aria-label="Menu type selection">
+            <button type="button" class="type-btn" [class.type-active--veg]="menuForm.value.menuType === 'Veg'"
+              (click)="menuForm.patchValue({ menuType: 'Veg' })"
+              [attr.aria-pressed]="menuForm.value.menuType === 'Veg'">
+              <span class="type-indicator veg-indicator" aria-hidden="true"></span>
+              <span>Vegetarian</span>
+            </button>
+            <button type="button" class="type-btn" [class.type-active--nonveg]="menuForm.value.menuType === 'Non-Veg'"
+              (click)="menuForm.patchValue({ menuType: 'Non-Veg' })"
+              [attr.aria-pressed]="menuForm.value.menuType === 'Non-Veg'">
+              <span class="type-indicator nonveg-indicator" aria-hidden="true"></span>
+              <span>Non-Vegetarian</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 03 + 04 — Price & Qty row -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-index">03</span>
+              <span class="label-text">Price <span class="req" aria-label="required">*</span></span>
+            </label>
+            <div class="input-wrapper">
+              <div class="input-affixed">
+                <span class="input-affix input-affix--left" aria-hidden="true">₹</span>
+                <input formControlName="price" type="number" step="0.01" class="form-control affixed-left"
+                  placeholder="0.00" />
+              </div>
+              <span class="input-focus-border" aria-hidden="true"></span>
+            </div>
+            <p class="error-msg" role="alert" *ngIf="menuForm.get('price')?.touched && menuForm.get('price')?.invalid">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2" />
+                <path d="M5 3V5.5M5 7H5.01" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+              </svg>
+              Price must be greater than 0
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span class="label-index">04</span>
+              <span class="label-text">Quantity <span class="req" aria-label="required">*</span></span>
+            </label>
+            <div class="input-wrapper">
+              <input formControlName="quantity" type="number" class="form-control" placeholder="1" />
+              <span class="input-focus-border" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05 — Restaurant -->
+        <div class="form-group">
+          <label class="form-label">
+            <span class="label-index">05</span>
+            <span class="label-text">Restaurant <span class="req" aria-label="required">*</span></span>
+          </label>
+          <div class="input-wrapper">
+            <div class="select-wrapper">
+              <select formControlName="restaurantId" class="form-control form-select">
+                <option value="">— Select Restaurant —</option>
+                <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+              </select>
+              <span class="select-chevron" aria-hidden="true">
+                <svg width="11" height="7" viewBox="0 0 11 7" fill="none">
+                  <path d="M1 1L5.5 6L10 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </div>
+            <span class="input-focus-border" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" (click)="showForm=false">
+            <span>Cancel</span>
+          </button>
+          <button type="submit" class="btn-primary" [disabled]="menuForm.invalid">
+            <span class="btn-text">{{ isEditing ? 'Update Item' : 'Save Item' }}</span>
+            <span class="btn-diamond" aria-hidden="true">◆</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- ── TABLE SECTION ───────────────────────────────────── -->
+  <section class="table-section" aria-label="Menu items list">
+
+    <div class="section-header">
+      <div class="section-title-row">
+        <div class="section-title-left">
+          <span class="section-eyebrow">All Items</span>
+          <div class="section-rule" aria-hidden="true"></div>
+        </div>
+        <span class="section-count-badge">
+          <span class="count-num">{{ menuItems.length }}</span>
+          <span class="count-unit">Total</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="table-wrapper" role="region" aria-label="Menu items table" tabindex="0">
+
+      <!-- Top shimmer bar -->
+      <div class="table-shimmer-bar" aria-hidden="true"></div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="col-index" scope="col">#</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Price</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Restaurant</th>
+            <th class="col-actions" scope="col">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- Data Rows -->
+          <tr class="table-row" *ngFor="let item of (menuItems | filterMenuItems:searchText); let i = index"
+            [attr.style]="'--row-index:' + i">
+            <td class="col-index" data-label="#">
+              <span class="row-num">{{ i + 1 }}</span>
+            </td>
+
+            <td class="col-name" data-label="Item Name">
+              <span class="item-name">{{ item.name }}</span>
+            </td>
+
+            <td data-label="Type">
+              <span class="type-badge" [class.badge-veg]="item.menuType === 'Veg'"
+                [class.badge-nonveg]="item.menuType !== 'Veg'">
+                <span class="badge-dot" aria-hidden="true"></span>
+                <span>{{ item.menuType }}</span>
+              </span>
+            </td>
+
+            <td class="col-price" data-label="Price">
+              <span class="price-wrap">
+                <span class="price-symbol" aria-hidden="true">₹</span>
+                <span class="price-amount">{{ item.price | number:'1.2-2' }}</span>
+              </span>
+            </td>
+
+            <td data-label="Qty">
+              <span class="qty-chip">{{ item.quantity }}</span>
+            </td>
+
+            <td data-label="Restaurant">
+              <span class="restaurant-tag">{{ item.restaurant?.name }}</span>
+            </td>
+
+            <td class="col-actions" data-label="Actions">
+              <div class="action-cluster">
+                <button class="action-btn action-btn--edit" (click)="openEdit(item)" title="Edit item"
+                  [attr.aria-label]="'Edit ' + item.name">
+
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M9.5 1.5L11.5 3.5L4.5 10.5L2 11L2.5 8.5L9.5 1.5Z" stroke="currentColor" stroke-width="1.3"
+                      stroke-linejoin="round" />
+                    <path d="M8 3L10 5" stroke="currentColor" stroke-width="1.3" />
+                  </svg>
+                </button>
+                <button class="action-btn action-btn--delete" (click)="delete(item.id)" title="Delete item"
+                  [attr.aria-label]="'Delete ' + item.name">
+                  <svg width="12" height="13" viewBox="0 0 12 13" fill="none">
+                    <path d="M1 3H11M4 3V2H8V3M2 3L2.8 11H9.2L10 3" stroke="currentColor" stroke-width="1.3"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M5 6V9M7 6V9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Search empty state -->
+          <tr class="empty-row" *ngIf="(menuItems | filterMenuItems:searchText).length === 0 && searchText">
+            <td colspan="7">
+              <div class="empty-state empty-state--search">
+                <div class="empty-icon-wrap" aria-hidden="true">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="14" cy="14" r="8" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 2" />
+                    <path d="M20 20L27 27" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                    <path d="M11 14H17M14 11V17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <p class="empty-heading">No results found</p>
+                <p class="empty-sub">No items matching <em>"{{ searchText }}"</em></p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Truly empty state -->
+          <tr class="empty-row" *ngIf="menuItems.length === 0">
+            <td colspan="7">
+              <div class="empty-state empty-state--blank">
+                <div class="empty-icon-wrap" aria-hidden="true">
+                  <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                    <rect x="4" y="8" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.2"
+                      stroke-dasharray="3 2" />
+                    <path d="M12 18H24M18 12V24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                    <circle cx="18" cy="18" r="5" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2" />
+                  </svg>
+                </div>
+                <p class="empty-heading">No menu items yet</p>
+                <p class="empty-sub">Add your first item to begin building your culinary collection</p>
+                <button class="btn-primary empty-cta" (click)="openAdd()">
+                  <span class="btn-text">Add First Item</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+</div>

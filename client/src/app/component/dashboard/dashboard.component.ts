@@ -1,9 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Restaurant } from '../../model/restaurant';
-import { Order } from '../../model/order';
-import { RestaurantService } from '../../shared/services/restaurant.service';
-import { OrderService } from '../../shared/services/order.service';
-import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,26 +6,105 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit  {
- //Write your logic here
-   username = '';
-  role = '';
+export class DashboardComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router) {}
+  username: string = 'User';
+  currentRole: string = 'CUSTOMER';
+  activeTab: string = 'customer-order';
+  sidebarCollapsed: boolean = false;
+  currentDate: string = '';
+
+  restaurants: any[] = [];
+  orders: any[] = [];
+  feedback: any[] = [];
+  menuItems: any[] = [];
+  assignments: any[] = [];
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.username = this.auth.getUsername() || '';
-    this.role = this.auth.getRole() || '';
+    this.username = localStorage.getItem('username') || 'User';
+    const role = localStorage.getItem('role') || 'ADMIN';
+    this.currentRole = role.toUpperCase();
+
+    if (this.isAdmin()) {
+      this.activeTab = 'admin-overview';
+    } else if (this.isManager()) {
+      this.activeTab = 'manager-overview';
+    } else {
+      this.activeTab = 'customer-order';
+    }
+
+    const now = new Date();
+    this.currentDate = now.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  isAdmin(): boolean {
+    return this.currentRole === 'ADMIN';
+  }
+
+  isManager(): boolean {
+    return this.currentRole === 'MANAGER';
+  }
+
+  isCustomer(): boolean {
+    return this.currentRole === 'CUSTOMER';
+  }
+
+  setTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
   logout(): void {
-    this.auth.logout();
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 
-  isAdmin(): boolean { return this.role === 'ADMIN'; }
-  isManager(): boolean { return this.role === 'MANAGER'; }
-  isCustomer(): boolean { return this.role === 'CUSTOMER'; }
+  goToRestaurant(): void {
+    this.router.navigate(['/restaurant']);
+  }
 
+  goToAssignManager(): void {
+    this.router.navigate(['/assign-manager']);
+  }
 
+  goToMenuItems(): void {
+    this.router.navigate(['/menu-item']);
+  }
+
+  goToOrders(): void {
+    this.router.navigate(['/order']);
+  }
+
+  goToFeedback(): void {
+    this.router.navigate(['/feedback']);
+  }
+
+  get userInitial(): string {
+    return this.username ? this.username.charAt(0).toUpperCase() : 'U';
+  }
+
+  get roleBadgeLabel(): string {
+    switch (this.currentRole) {
+      case 'ADMIN': return 'Administrator';
+      case 'MANAGER': return 'Manager';
+      case 'CUSTOMER': return 'Customer';
+      default: return this.currentRole;
+    }
+  }
+
+  get pageTitle(): string {
+    if (this.isAdmin()) return 'Admin Control Center';
+    if (this.isManager()) return 'Manager Operations';
+    return 'My Dashboard';
+  }
 }

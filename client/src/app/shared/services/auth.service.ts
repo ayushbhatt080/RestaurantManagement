@@ -1,67 +1,117 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Role, User } from '../../model/user';
-import { Observable, of, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../../model/user';
+import { Observable, of } from 'rxjs';
 import { LoginRequest } from '../../model/loginrequest';
 import { LoginResponse } from '../../model/login-response';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-   register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, user);
+  private getAuthHeaders() {
+    return {
+      headers: {
+        Authorization: `Bearer ${this.getToken()}`
+      }
+    };
   }
 
-  
-  
-  getToken() {
+  register(user: User): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/api/auth/register`, user);
+  }
+
+  registerUser(user: User): Observable<User> {
+    return this.register(user);
+  }
+
+  login(loginRequest: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
+      `${this.baseUrl}/api/auth/login`,
+      loginRequest
+    );
+  }
+
+  saveLoginData(response: any): void {
+    const normalizedRole = this.normalizeRole(response.role);
+
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('userId', String(response.userId || response.id));
+    localStorage.setItem('username', response.username);
+    localStorage.setItem('email', response.email || '');
+
+    if (normalizedRole) {
+      localStorage.setItem('role', normalizedRole);
+    }
+  }
+
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/api/auth/users`,
+      this.getAuthHeaders()
+    );
+  }
+
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  getRole() {
-    return localStorage.getItem('role');
+  getRole(): string | null {
+    return this.normalizeRole(localStorage.getItem('role'));
   }
 
-  getLoginStatus() {
-    return !!localStorage.getItem('token');
+  getUserId(): number {
+    return Number(localStorage.getItem('userId') || 0);
   }
 
-  logout() {
-    localStorage.clear();
-  }
-
-  getLoggedInUser() {
-    return of({
-      username: localStorage.getItem('username')
-    });
-  }
-   getUserId(): number {
-    return Number(localStorage.getItem('userId'));
-  }
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-    login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, request).pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
-        localStorage.setItem('username', res.username);
-        localStorage.setItem('userId', res.id.toString());
-      })
-    );
-  }
-    getUsername(): string | null {
+  getUsername(): string | null {
     return localStorage.getItem('username');
   }
 
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 
+  getLoginStatus(): boolean {
+    return this.isLoggedIn();
+  }
 
+  getLoggedInUser(): Observable<any> {
+    return of({
+      id: this.getUserId(),
+      userId: this.getUserId(),
+      username: this.getUsername(),
+      email: localStorage.getItem('email'),
+      role: this.getRole()
+    });
+  }
+
+  logout(): void {
+    localStorage.clear();
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'ADMIN';
+  }
+
+  isManager(): boolean {
+    return this.getRole() === 'MANAGER';
+  }
+
+  isCustomer(): boolean {
+    return this.getRole() === 'CUSTOMER';
+  }
+
+  private normalizeRole(role: string | null): string | null {
+    if (!role) return null;
+
+    const cleaned = role.startsWith('ROLE_') ? role.slice(5) : role;
+    return cleaned.toUpperCase();
+  }
 }

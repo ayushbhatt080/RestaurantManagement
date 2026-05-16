@@ -73,9 +73,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             
          //customer feed back
             
-            .antMatchers(HttpMethod.GET, "/api/feedback/menu/*").hasAnyAuthority("CUSTOMER","ADMIN")
-            .antMatchers(HttpMethod.GET, "/api/feedback").hasAnyAuthority("CUSTOMER","ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/feedback").hasAnyAuthority("CUSTOMER","ADMIN")
+
+.antMatchers(HttpMethod.GET, "/api/feedback/menu/*")
+.hasAnyAuthority("CUSTOMER", "ADMIN", "MANAGER")
+
+.antMatchers(HttpMethod.GET, "/api/feedback")
+.hasAnyAuthority("CUSTOMER", "ADMIN", "MANAGER")
+
+.antMatchers(HttpMethod.POST, "/api/feedback")
+.hasAnyAuthority("CUSTOMER", "ADMIN")
+
+.antMatchers(HttpMethod.PUT, "/api/feedback/*/reply")
+.hasAuthority("ADMIN")
+
             
             // Email
             .antMatchers(HttpMethod.POST, "/api/send-email").hasAnyAuthority("ADMIN")

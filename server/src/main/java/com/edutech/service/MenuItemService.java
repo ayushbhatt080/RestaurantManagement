@@ -6,8 +6,9 @@ import java.util.Optional;
 import com.edutech.model.MenuItem;
 
 public interface MenuItemService {
-
-	//Write your logic here
-	
-	
+	public MenuItem addMenuItem(MenuItem item) ;
+	public List<MenuItem> getMenuItems();
+	public MenuItem getMenuItemById(Long id) ;
+	public MenuItem updateMenuItem(Long id, MenuItem item);
+	public void deleteMenuItem(Long id);
 }

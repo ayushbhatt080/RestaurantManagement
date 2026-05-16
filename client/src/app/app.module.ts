@@ -8,8 +8,7 @@ import { RestaurantComponent } from './component/restaurant/restaurant.component
 import { MenuItemComponent } from './component/menu-item/menu-item.component';
 import { OrderComponent } from './component/order/order.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { LoginComponent } from './auth/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { AssignmanagerComponent } from './component/assignmanager/assignmanager.component';
 import { FeedbackComponent } from './component/feedback/feedback.component';
@@ -18,13 +17,15 @@ import { FilterRestaurantsPipe } from './filter-restaurants.pipe';
 import { FilterOrdersPipe } from './filter-orders.pipe';
 import { FilterMenuItemsPipe } from './filter-menu-items.pipe';
 import { AuthGuard } from './auth.guard';
+import { LoginComponent } from './auth/login/login.component';
+import { JwtInterceptor } from './auth.interceptors';
+import { LandingComponent } from './landingpage/landingpage';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
-    LoginComponent,
     RestaurantComponent,
     MenuItemComponent,
     OrderComponent,
@@ -34,17 +35,20 @@ import { AuthGuard } from './auth.guard';
     CustomerdetailsComponent,
     FilterRestaurantsPipe,
     FilterOrdersPipe,
-    FilterMenuItemsPipe
-    
+    FilterMenuItemsPipe,
+    LoginComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule
   ],
-  providers: [],
+   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

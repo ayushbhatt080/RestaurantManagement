@@ -1,203 +1,140 @@
-<div class="page-shell">
 
-  <!-- ── Navbar ─────────────────────────────── -->
-  <nav class="top-nav">
-    <div class="top-nav__brand">
-      <div class="top-nav__icon"><i class="bi bi-building"></i></div>
-      <div class="top-nav__text">
-        <span class="top-nav__name">RestaurantOS</span>
-        <span class="top-nav__role">Administrator</span>
-      </div>
-    </div>
+<div class="page-container">
 
-    <div class="top-nav__breadcrumb d-none d-md-flex">
-      <span>Dashboard</span>
-      <i class="bi bi-chevron-right"></i>
-      <span class="crumb-active">Assign Manager</span>
-    </div>
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn-secondary" (click)="goToDashboard()">
+                ← Back to Dashboard
+            </button>
+        </div>
+        <div class="header-ornament">
+            <span class="ornament-line"></span>
+            <span class="ornament-diamond">◆</span>
+            <span class="ornament-line"></span>
+        </div>
+        <h1 class="page-title">Assign Manager</h1>
+        <p class="page-subtitle">Restaurant Management Console</p>
+    </div>
 
-    <button class="top-nav__logout" (click)="logout()">
-      <i class="bi bi-box-arrow-right"></i>
-      <span class="d-none d-sm-inline">Logout</span>
-    </button>
-  </nav>
+    <!-- Alerts -->
+    <div *ngIf="message" class="alert alert-success">
+        <span class="alert-icon">✓</span>
+        <span>{{ message }}</span>
+    </div>
+    <div *ngIf="error" class="alert alert-danger">
+        <span class="alert-icon">✕</span>
+        <span>{{ error }}</span>
+    </div>
 
-  <!-- ── Page Body ──────────────────────────── -->
-  <div class="page-body container-fluid">
+    <!-- Assignment Form Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title-row">
+                <span class="card-label">NEW ASSIGNMENT</span>
+                <span class="card-title-accent">◆</span>
+            </div>
+        </div>
 
-    <!-- Page Title -->
-    <div class="page-title-row">
-      <div>
-        <p class="page-eyebrow"><i class="bi bi-person-gear me-1"></i>Manager Operations</p>
-        <h1 class="page-h1">Assign Manager</h1>
-      </div>
-      <div class="stats-chip">
-        <i class="bi bi-link-45deg"></i>
-        <strong>{{ assignments.length }}</strong>&nbsp;Assignments
-      </div>
-    </div>
+        <form [formGroup]="assignForm" (ngSubmit)="assign()" class="assign-form">
+            <div class="form-row">
 
-    <div class="row g-4 align-items-start">
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-number">01</span>
+                        Restaurant
+                    </label>
+                    <div class="select-wrapper">
+                        <select formControlName="restaurantId" class="form-control">
+                            <option value="">— Select Restaurant —</option>
+                            <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+                        </select>
+                        <span class="select-arrow">▾</span>
+                    </div>
+                    <span class="form-underline"></span>
+                </div>
 
-      <!-- ── Form Card ───────────────────────── -->
-      <div class="col-12 col-lg-5 col-xl-4">
-        <div class="glass-card">
+                <div class="form-divider">
+                    <span>→</span>
+                </div>
 
-          <div class="card-head">
-            <div class="card-head__icon"><i class="bi bi-person-add"></i></div>
-            <div>
-              <h2 class="card-head__title">New Assignment</h2>
-              <p class="card-head__sub">Link a manager to a restaurant</p>
-            </div>
-          </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-number">02</span>
+                        Manager
+                    </label>
+                    <div class="select-wrapper">
+                        <select formControlName="managerId" class="form-control">
+                            <option value="">— Select Manager —</option>
+                            <option *ngFor="let m of managers" [value]="m.id">{{ m.username }}</option>
+                        </select>
+                        <span class="select-arrow">▾</span>
+                    </div>
+                    <span class="form-underline"></span>
+                </div>
 
-          <div class="card-body-pad">
+            </div>
 
-            <!-- Success -->
-            <div class="fb-alert fb-alert--ok" *ngIf="message">
-              <i class="bi bi-check2-circle"></i><span>{{ message }}</span>
-            </div>
+            <div class="form-footer">
+                <button type="submit" class="btn-primary" [disabled]="assignForm.invalid">
+                    <span class="btn-text">Confirm Assignment</span>
+                    <span class="btn-icon">◆</span>
+                </button>
+            </div>
+        </form>
+    </div>
 
-            <!-- Error -->
-            <div class="fb-alert fb-alert--err" *ngIf="errorMessage">
-              <i class="bi bi-exclamation-octagon"></i><span>{{ errorMessage }}</span>
-            </div>
+    <!-- Assignment History Table -->
+    <div class="table-section">
+        <div class="table-header">
+            <div class="table-title-row">
+                <span class="table-label">ASSIGNMENT HISTORY</span>
+                <span class="table-count">{{ assignments.length }} Records</span>
+            </div>
+            <div class="table-header-rule"></div>
+        </div>
 
-            <form [formGroup]="assignForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="col-index">#</th>
+                        <th>Restaurant</th>
+                        <th>Manager</th>
+                        <th>Assigned At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let a of assignments; let i = index" class="table-row">
+                        <td class="col-index">
+                            <span class="row-num">{{ i + 1 }}</span>
+                        </td>
+                        <td>
+                            <span class="restaurant-badge">{{ a.restaurantName }}</span>
+                        </td>
+                        <td>
+                            <div class="manager-cell">
+                                <span class="manager-avatar">{{ a.managerName?.charAt(0)?.toUpperCase() }}</span>
+                                <span>{{ a.managerName }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="date-text">{{ a.assignedAt | date:'MMM d, y' }}</span>
+                            <span class="time-text">{{ a.assignedAt | date:'h:mm a' }}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="assignments.length === 0" class="empty-row">
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <span class="empty-icon">◇</span>
+                                <p>No assignments on record</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-              <!-- Restaurant -->
-              <div class="field-grp">
-                <label class="field-lbl" for="restaurantId">
-                  <i class="bi bi-shop-window"></i> Restaurant
-                </label>
-                <div class="sel-wrap">
-                  <select
-                    id="restaurantId"
-                    formControlName="restaurantId"
-                    class="sel-ctrl"
-                    [class.sel-invalid]="assignForm.get('restaurantId')?.invalid
-                                      && assignForm.get('restaurantId')?.touched">
-                    <option value="" disabled selected>Choose restaurant…</option>
-                    <option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
-                  </select>
-                  <i class="bi bi-chevron-down sel-arrow"></i>
-                </div>
-                <p class="field-err"
-                   *ngIf="assignForm.get('restaurantId')?.invalid
-                        && assignForm.get('restaurantId')?.touched">
-                  Restaurant is required.
-                </p>
-              </div>
-
-              <!-- Manager -->
-              <div class="field-grp">
-                <label class="field-lbl" for="managerId">
-                  <i class="bi bi-person-badge"></i> Manager
-                </label>
-                <div class="sel-wrap">
-                  <select
-                    id="managerId"
-                    formControlName="managerId"
-                    class="sel-ctrl"
-                    [class.sel-invalid]="assignForm.get('managerId')?.invalid
-                                      && assignForm.get('managerId')?.touched">
-                    <option value="" disabled selected>Choose manager…</option>
-                    <option *ngFor="let m of managers" [value]="m.id">
-                      {{ m.username }}
-                    </option>
-                  </select>
-                  <i class="bi bi-chevron-down sel-arrow"></i>
-                </div>
-                <p class="field-err"
-                   *ngIf="assignForm.get('managerId')?.invalid
-                        && assignForm.get('managerId')?.touched">
-                  Manager is required.
-                </p>
-              </div>
-
-              <!-- Submit -->
-              <button type="submit" class="submit-btn w-100" [disabled]="assignForm.invalid">
-                <i class="bi bi-link-45deg"></i> Assign Manager
-              </button>
-
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── Table Card ──────────────────────── -->
-      <div class="col-12 col-lg-7 col-xl-8">
-        <div class="glass-card glass-card--tbl">
-
-          <div class="card-head">
-            <div class="card-head__icon"><i class="bi bi-table"></i></div>
-            <div>
-              <h2 class="card-head__title">Assignment Records</h2>
-              <p class="card-head__sub">All active manager–restaurant links</p>
-            </div>
-          </div>
-
-          <!-- Empty state -->
-          <div class="empty-state" *ngIf="assignments.length === 0">
-            <i class="bi bi-inbox-fill"></i>
-            <p>No assignments yet</p>
-            <span>Use the form to create your first assignment.</span>
-          </div>
-
-          <!-- Table -->
-          <div class="table-responsive" *ngIf="assignments.length > 0">
-            <table class="data-tbl">
-              <thead>
-                <tr>
-                  <th class="th-num">#</th>
-                  <th><i class="bi bi-hash me-1"></i>Assignment ID</th>
-                  <th><i class="bi bi-shop me-1"></i>Restaurant</th>
-                  <th><i class="bi bi-person me-1"></i>Manager</th>
-                  <th><i class="bi bi-calendar2 me-1"></i>Assigned At</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let a of assignments; let i = index" class="tbl-row">
-                  <td class="th-num">{{ i + 1 }}</td>
-
-                  <td>
-                    <span class="id-tag">{{ a.id }}</span>
-                  </td>
-
-                  <td>
-                    <div class="entity-cell">
-                      <span class="ent-av ent-av--rest"><i class="bi bi-shop"></i></span>
-                      <span class="ent-id">#{{ a.restaurantId }}</span>
-                    </div>
-                  </td>
-
-                  <td>
-                    <div class="entity-cell">
-                      <span class="ent-av ent-av--mgr"><i class="bi bi-person"></i></span>
-                      <span class="ent-id">#{{ a.managerId }}</span>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="date-cell">
-                      {{ a.assignedAt | date:'dd MMM yyyy, HH:mm' }}
-                    </span>
-                  </td>
-
-                  <td>
-                    <span class="status-pill">
-                      <span class="status-dot"></span>Active
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
 </div>
+

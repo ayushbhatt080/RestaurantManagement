@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent{
+export class RegisterComponent implements OnInit{
 
    registerForm!: FormGroup;
   errorMessage = '';
@@ -26,23 +26,42 @@ export class RegisterComponent{
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['CUSTOMER', [Validators.required]]
+      role: ['', [Validators.required]]
     });
   }
 
   onSubmit(): void {
-    if (this.registerForm.invalid) return;
-    this.loading = true;
-    this.auth.register(this.registerForm.value).subscribe({
-      next: () => {
-        this.successMessage = 'Registered successfully! Redirecting to login...';
-        setTimeout(() => this.router.navigate(['/login']), 1500);
-      },
-      error: err => {
-        this.errorMessage = err.error?.error || 'Registration failed.';
-        this.loading = false;
-      }
-    });
+ 
+  console.log('REGISTER CLICKED');
+  console.log('FORM VALUE:', this.registerForm.value);
+  console.log('FORM VALID:', this.registerForm.valid);
+
+  if (this.registerForm.invalid) {
+    console.log('FORM INVALID - REQUEST NOT SENT');
+    this.registerForm.markAllAsTouched();
+    return;
+  }
+
+  this.loading = true;
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  console.log('SENDING REGISTER REQUEST');
+
+  this.auth.register(this.registerForm.value).subscribe({
+    next: (res) => {
+      console.log('REGISTER SUCCESS:', res);
+      this.successMessage = 'Registered successfully! Redirecting to login...';
+      this.loading = false;
+      setTimeout(() => this.router.navigate(['/login']), 1500);
+    },
+    error: err => {
+      console.log('REGISTER ERROR:', err);
+      this.errorMessage = err.error?.error || 'Registration failed.';
+      this.loading = false;
+    }
+  });
+
   }
 
 }

@@ -8,21 +8,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "menu_item")
 public class MenuItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+	@NotBlank
     private String name;
 
     // Veg / Non-Veg
-    @Column(name = "menu_type")
-    private String menuType;
+	@Pattern(regexp = "Veg|Non-Veg")
+    private String menuType ;
 
     private Double price;
 
@@ -90,4 +91,3 @@ public class MenuItem {
         this.restaurant = restaurant;
     }
 }
-

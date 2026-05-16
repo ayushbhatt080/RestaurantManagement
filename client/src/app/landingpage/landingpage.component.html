@@ -1,0 +1,367 @@
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+    <div class="nav-inner">
+        <div class="brand" (click)="scrollTo('hero')">
+            <div class="brand-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <path d="M14 3C14 3 6 7 6 14C6 18.4 9.6 22 14 22C18.4 22 22 18.4 22 14C22 7 14 3 14 3Z"
+                        stroke="#C19A4C" stroke-width="1.5" fill="none" />
+                    <path d="M14 8V16M10 12H18" stroke="#C19A4C" stroke-width="1.5" stroke-linecap="round" />
+                    <circle cx="14" cy="14" r="2" fill="#C19A4C" />
+                    <path d="M8 24H20" stroke="#C19A4C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M14 22V24" stroke="#C19A4C" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </div>
+
+            <span class="brand-name">Let Me<span class="gold"> Dine</span></span>
+        </div>
+
+        <div class="nav-links" [class.open]="mobileMenuOpen">
+            <a type="button" (click)="scrollTo('features')">Features</a>
+            <a type="button" (click)="scrollTo('roles')">Roles</a>
+            <a type="button" (click)="scrollTo('cuisine')">Cuisine</a>
+
+            <!-- Mobile Buttons -->
+            <div class="nav-actions-mobile">
+                <button type="button" class="btn-ghost" (click)="goToLogin()">
+                    Sign In
+                </button>
+
+                <button type="button" class="btn-gold" (click)="goToRegister()">
+                    Register
+                </button>
+            </div>
+        </div>
+
+        <!-- Desktop Buttons -->
+        <div class="nav-actions">
+            <!-- ✅ Night Mode Toggle -->
+            <button type="button" class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="'Toggle theme'">
+                <span *ngIf="!isDarkMode">🌙</span>
+                <span *ngIf="isDarkMode">☀️</span>
+            </button>
+
+
+            <button type="button" class="btn-ghost" (click)="goToLogin()">
+                Sign In
+            </button>
+
+            <button type="button" class="btn-gold" (click)="goToRegister()">
+                Register
+            </button>
+        </div>
+
+        <button type="button" class="hamburger" (click)="toggleMobileMenu()" [class.active]="mobileMenuOpen">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+    <div class="hero-noise"></div>
+    <div class="hero-glow"></div>
+
+    <div class="hero-content" data-reveal>
+        <div class="hero-eyebrow">
+            <span class="dot"></span>
+            Restaurant Intelligence Platform
+            <span class="dot"></span>
+        </div>
+
+        <h1 class="hero-headline">
+            Seamless Dining<br />
+            <span class="gold-text">Experience</span><br />
+            From Order to Table
+        </h1>
+
+        <p class="hero-sub">
+            TableFlow unifies your entire restaurant operation — orders, menus,
+            staff, and analytics — into one elegantly engineered platform. Built
+            for the restaurants that refuse to compromise.
+        </p>
+
+        <div class="hero-cta">
+            <button type="button" class="btn-gold btn-lg" (click)="scrollTo('features')">
+                <span>Get Started</span>
+
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <button type="button" class="btn-outline btn-lg" (click)="scrollTo('cuisine')">
+                Explore Platform
+            </button>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-num">500<span class="gold">+</span></span>
+                <span class="stat-label">Restaurants</span>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat">
+                <span class="stat-num">2M<span class="gold">+</span></span>
+                <span class="stat-label">Orders Processed</span>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat">
+                <span class="stat-num">99.9<span class="gold">%</span></span>
+                <span class="stat-label">Uptime SLA</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-visual" data-reveal>
+        <div class="dashboard-mockup">
+            <div class="mockup-bar">
+                <span class="dot-r"></span>
+                <span class="dot-y"></span>
+                <span class="dot-g"></span>
+                <span class="mockup-title">TableFlow Dashboard</span>
+            </div>
+
+            <div class="mockup-body">
+                <div class="mockup-row">
+                    <div class="mockup-card accent">
+                        <div class="mc-label">Active Orders</div>
+                        <div class="mc-val gold">24</div>
+                    </div>
+
+                    <div class="mockup-card">
+                        <div class="mc-label">Tables Occupied</div>
+                        <div class="mc-val">18/22</div>
+                    </div>
+                </div>
+
+                <div class="mockup-orders">
+                    <div class="mo-header">Live Order Queue</div>
+
+                    <div class="mo-item" *ngFor="let item of [1, 2, 3]">
+                        <span class="mo-id">TF-00{{ item + 40 }}</span>
+
+                        <span class="mo-status" [class.ready]="item === 2">
+                            {{ item === 2 ? 'Ready' : 'Preparing' }}
+                        </span>
+
+                        <span class="mo-time">{{ item * 3 }}m ago</span>
+                    </div>
+                </div>
+
+                <div class="mockup-chart">
+                    <div class="chart-bar" *ngFor="let h of [40, 65, 50, 80, 60, 90, 75]" [style.height.%]="h"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CUISINE CAROUSEL ===== -->
+<section class="cuisine-section" id="cuisine">
+    <div class="section-header" data-reveal>
+        <div class="section-tag">Powered For Every Kitchen</div>
+
+        <h2>
+            From Street Food to <span class="gold-text">Fine Dining</span>
+        </h2>
+
+        <p>
+            TableFlow adapts to every culinary concept. One platform, infinite cuisine possibilities.
+        </p>
+    </div>
+
+    <div class="carousel-wrapper">
+        <div class="carousel-track">
+            <div class="carousel-card" *ngFor="let item of carouselItems">
+                <div class="card-glow" [style.background]="item.color"></div>
+                <div class="card-emoji">{{ item.emoji }}</div>
+                <div class="card-label">{{ item.label }}</div>
+                <div class="card-sub">{{ item.sub }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="carousel-wrapper reverse">
+        <div class="carousel-track reverse-track">
+            <div class="carousel-card sm" *ngFor="let item of secondCuisineItems">
+                <span class="sm-emoji">{{ item.emoji }}</span>
+                <span class="sm-label">{{ item.label }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-section" id="features">
+    <div class="section-header" data-reveal>
+        <div class="section-tag">Platform Features</div>
+
+        <h2>
+            Everything Your Restaurant <span class="gold-text">Needs</span>
+        </h2>
+
+        <p>
+            Every feature engineered to remove friction and elevate the dining experience.
+        </p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card" *ngFor="let f of features; let i = index" data-reveal
+            [attr.style]="'--delay:' + i * 80 + 'ms'">
+            <div class="feature-icon-wrap">
+                <span class="feature-icon">{{ f.icon }}</span>
+                <div class="icon-glow"></div>
+            </div>
+
+            <h3>{{ f.title }}</h3>
+            <p>{{ f.desc }}</p>
+
+            <div class="feature-line"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ROLES SECTION ===== -->
+<section class="roles-section" id="roles">
+    <div class="section-header" data-reveal>
+        <div class="section-tag">Role Architecture</div>
+
+        <h2>
+            Built for <span class="gold-text">Every Stakeholder</span>
+        </h2>
+
+        <p>
+            Precision-designed access levels for every member of your restaurant ecosystem.
+        </p>
+    </div>
+
+    <div class="roles-grid">
+        <div class="role-card" *ngFor="let r of roles; let i = index" data-reveal
+            [attr.style]="'--delay:' + i * 120 + 'ms'" [class.featured]="i === 1">
+            <div class="role-glow" [style.background]="r.color"></div>
+
+            <div class="role-icon">{{ r.icon }}</div>
+
+            <div class="role-title" [style.color]="r.color">
+                {{ r.role }}
+            </div>
+
+            <div class="role-tagline">{{ r.tagline }}</div>
+
+            <ul class="role-points">
+                <li *ngFor="let point of r.points">
+                    <span class="point-dot" [style.background]="r.color"></span>
+                    {{ point }}
+                </li>
+            </ul>
+
+            <button type="button" class="btn-role" [style.border-color]="r.color" [style.color]="r.color">
+                Explore Access
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-section" data-reveal>
+    <div class="cta-inner">
+        <div class="cta-glow-left"></div>
+        <div class="cta-glow-right"></div>
+
+        <div class="cta-tag">Start Today</div>
+
+        <h2 class="cta-headline">
+            Ready to Transform<br />
+            <span class="gold-text">Your Restaurant?</span>
+        </h2>
+
+        <p class="cta-sub">
+            Join hundreds of restaurants already running smarter with TableFlow.
+            Setup takes minutes. Results last a lifetime.
+        </p>
+
+        <div class="cta-actions">
+            <button type="button" class="btn-gold btn-lg" (click)="goToRegister()">
+                <span>Create Free Account</span>
+
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <button type="button" class="btn-ghost btn-lg" (click)="goToLogin()">
+                Sign In
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+                        <path d="M14 3C14 3 6 7 6 14C6 18.4 9.6 22 14 22C18.4 22 22 18.4 22 14C22 7 14 3 14 3Z"
+                            stroke="#C19A4C" stroke-width="1.5" fill="none" />
+                        <path d="M14 8V16M10 12H18" stroke="#C19A4C" stroke-width="1.5" stroke-linecap="round" />
+                        <circle cx="14" cy="14" r="2" fill="#C19A4C" />
+                    </svg>
+                </div>
+
+                <span class="brand-name">Table<span class="gold">Flow</span></span>
+            </div>
+
+            <p class="footer-about">
+                An integrated restaurant workflow and order management system designed
+                to elevate every touchpoint — from order placement to plate presentation.
+            </p>
+
+            <div class="footer-contact">
+                <span>📧</span>
+                <a href="mailto:hello@tableflow.io">hello&#64;tableflow.io</a>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-col">
+                <div class="footer-col-title">Platform</div>
+                <a role="button" (click)="scrollTo('features')">Features</a>
+                <a role="button">Pricing</a>
+                <a role="button">Integrations</a>
+                <a role="button">API Docs</a>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <a role="button">About</a>
+                <a role="button">Blog</a>
+                <a role="button">Careers</a>
+                <a role="button">Contact</a>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-col-title">Legal</div>
+                <a role="button">Privacy Policy</a>
+                <a role="button">Terms of Service</a>
+                <a role="button">Security</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>© {{ currentYear }} TableFlow. All rights reserved.</span>
+        <span class="footer-made">
+            Crafted with precision for the modern restaurateur
+        </span>
+    </div>
+</footer>

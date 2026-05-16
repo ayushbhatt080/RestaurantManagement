@@ -7,9 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RestrurantManagementSystemApplication {
 
 	public static void main(String[] args) {
-		
-        SpringApplication.run(RestrurantManagementSystemApplication.class, args);
-
+		SpringApplication.run(RestrurantManagementSystemApplication.class, args);
+        System.out.println("Welcome to Restaurant Management Project!");
 	}
 
 }

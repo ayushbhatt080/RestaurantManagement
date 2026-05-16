@@ -27,6 +27,9 @@ export class RestaurantService {
       })
     };
   }
+    getAssignments(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/assignmanager`);
+  }
 
   // ✅ get all
   getAll(): Observable<Restaurant[]> {
@@ -77,22 +80,27 @@ export class RestaurantService {
   }
 
   deleteById(id: number): Observable<void> {
-    return this.deleteRestaurant(id);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   // ✅ user details (no auth required in test)
   getUserDetails(): Observable<User[]> {
-    return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
 
-  assignManager(request: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/assignmanager`, request);
-  }
-  
-  getAllAssignments(): Observable<RestaurantManagerAssignmentDTO[]> {
-    return this.http.get<RestaurantManagerAssignmentDTO[]>(`${this.apiUrl}/assignmanager`);
-  }
+ assignManager(request: any): Observable<any> {
+  return this.http.post(
+    `${this.apiUrl}/assignmanager`,
+    request,
+    this.getHeaders()
+  );
+}
 
-
+getAllAssignments(): Observable<RestaurantManagerAssignmentDTO[]> {
+  return this.http.get<RestaurantManagerAssignmentDTO[]>(
+    `${this.apiUrl}/assignmanager`,
+    this.getHeaders()
+  );
+}
 
 }

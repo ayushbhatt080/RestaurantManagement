@@ -1,0 +1,202 @@
+<div class="page-container">
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<div class="page-header">
+<div class="header-ornament">
+<span class="ornament-line"></span>
+<span class="ornament-diamond">◆</span>
+<span class="ornament-line"></span>
+</div>
+<h1 class="page-title">Feedback</h1>
+<p class="page-subtitle">Guest Voices &amp; Reviews</p>
+
+<button *ngIf="authService.isCustomer()"
+class="btn-primary btn-submit-trigger"
+(click)="showForm=true">
+<span class="btn-icon">◆</span>
+<span class="btn-text">Submit Feedback</span>
+</button>
+</div>
+
+<!-- ── ALERTS ─────────────────────────────────────────── -->
+<div *ngIf="message" class="alert alert-success">
+<span class="alert-icon">✓</span>
+<span>{{ message }}</span>
+</div>
+<div *ngIf="error" class="alert alert-danger">
+<span class="alert-icon">✕</span>
+<span>{{ error }}</span>
+</div>
+
+<!-- ── MODAL ──────────────────────────────────────────── -->
+<div class="modal-overlay" *ngIf="showForm" (click)="showForm=false">
+<div class="modal-card" (click)="$event.stopPropagation()">
+
+<div class="modal-header">
+<div class="modal-title-group">
+<span class="modal-label">NEW ENTRY</span>
+<h3 class="modal-title">Submit Feedback</h3>
+</div>
+<button class="modal-close" (click)="showForm=false">✕</button>
+</div>
+
+<div class="modal-rule"></div>
+
+<form [formGroup]="feedbackForm" (ngSubmit)="submit()" class="modal-form">
+
+<!-- Name -->
+<div class="form-group">
+<label class="form-label">
+<span class="label-number">01</span> Your Name
+</label>
+<input formControlName="customerName"
+type="text"
+class="form-control"
+placeholder="Enter your name">
+</div>
+
+<!-- Restaurant -->
+<div class="form-group">
+<label class="form-label">
+<span class="label-number">02</span> Restaurant <span class="req">*</span>
+</label>
+<div class="select-wrapper">
+<select formControlName="restaurantId"
+class="form-control"
+(change)="onRestaurantChange($event)">
+<option value="">— Select Restaurant —</option>
+<option *ngFor="let r of restaurants" [value]="r.id">{{ r.name }}</option>
+</select>
+<span class="select-arrow">▾</span>
+</div>
+</div>
+
+<!-- Menu Item -->
+<div class="form-group" *ngIf="menuItems.length > 0">
+<label class="form-label">
+<span class="label-number">03</span> Menu Item
+</label>
+<div class="select-wrapper">
+<select formControlName="menuItemId" class="form-control">
+<option value="">— Select Item —</option>
+<option *ngFor="let m of menuItems" [value]="m.id">{{ m.name }}</option>
+</select>
+<span class="select-arrow">▾</span>
+</div>
+</div>
+
+<!-- Rating -->
+<div class="form-group">
+<label class="form-label">
+<span class="label-number">{{ menuItems.length > 0 ? '04' : '03' }}</span>
+Rating <span class="req">*</span>
+</label>
+<div class="star-rating">
+<span *ngFor="let s of [1,2,3,4,5]"
+class="star"
+[class.active]="feedbackForm.value.rating >= s"
+(click)="setRating(s)">★</span>
+<span class="rating-label" *ngIf="feedbackForm.value.rating">
+{{ feedbackForm.value.rating }}/5
+</span>
+</div>
+<div class="error-msg"
+*ngIf="feedbackForm.get('rating')?.invalid && feedbackForm.get('rating')?.touched">
+Please select a rating
+</div>
+</div>
+
+<!-- Comment -->
+<div class="form-group">
+<label class="form-label">
+<span class="label-number">{{ menuItems.length > 0 ? '05' : '04' }}</span>
+Comment <span class="req">*</span>
+</label>
+<textarea formControlName="comment"
+rows="3"
+class="form-control"
+placeholder="Share your experience…"></textarea>
+</div>
+
+<!-- Actions -->
+<div class="modal-actions">
+<button type="button" class="btn-ghost" (click)="showForm=false">Cancel</button>
+<button type="submit" class="btn-primary" [disabled]="feedbackForm.invalid">
+<span class="btn-text">Submit</span>
+<span class="btn-icon">◆</span>
+</button>
+</div>
+
+</form>
+</div>
+</div>
+
+<!-- ── FEEDBACK GRID ───────────────────────────────────── -->
+<div class="section-header">
+<div class="table-title-row">
+<span class="table-label">ALL REVIEWS</span>
+<span class="table-count">{{ feedbacks.length }} Entries</span>
+</div>
+<div class="table-header-rule"></div>
+</div>
+
+<div class="feedback-grid" *ngIf="feedbacks.length > 0">
+<div class="feedback-card" *ngFor="let fb of feedbacks; let i = index">
+
+<!-- Card top accent -->
+<div class="card-accent-bar"></div>
+
+<!-- Card Header -->
+<div class="feedback-header">
+<div class="customer-info">
+<div class="customer-avatar">{{ fb.customerName?.charAt(0)?.toUpperCase() }}</div>
+<div class="customer-meta">
+<span class="customer-name">{{ fb.customerName }}</span>
+<span class="restaurant-tag" *ngIf="fb.restaurant">{{ fb.restaurant.name }}</span>
+</div>
+</div>
+<div class="star-display">
+<span *ngFor="let s of [1,2,3,4,5]"
+class="star-readonly"
+[class.filled]="(fb.rating || 0) >= s">★</span>
+</div>
+</div>
+
+<!-- Menu item badge -->
+<div class="menu-badge" *ngIf="fb.menuItem">
+<span class="badge-dot">◆</span>
+{{ fb.menuItem.name }}
+</div>
+
+<!-- Comment -->
+<p class="feedback-comment">{{ fb.comment }}</p>
+
+<!-- Admin Response (existing) -->
+<div class="admin-response" *ngIf="fb.response">
+<div class="response-header">
+<span class="response-icon">◈</span>
+<span class="response-label">Admin Reply</span>
+</div>
+<p class="response-text">{{ fb.response }}</p>
+</div>
+
+<!-- Admin Reply Box -->
+<div class="response-box" *ngIf="authService.isAdmin()">
+<textarea [(ngModel)]="fb.tempResponse"
+placeholder="Write a response…"
+rows="2"
+class="form-control response-textarea"></textarea>
+<button class="btn-reply" (click)="submitResponse(fb)">
+<span>Reply</span>
+<span class="btn-icon-sm">→</span>
+</button>
+</div>
+
+</div>
+</div>
+
+<!-- Empty State -->
+<div class="empty-state" *ngIf="feedbacks.length === 0">
+<span class="empty-icon">◇</span>
+<p>No feedback on record yet</p>
+</div>

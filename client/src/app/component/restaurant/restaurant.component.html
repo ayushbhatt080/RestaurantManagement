@@ -1,1 +1,299 @@
- //Write your logic here
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="brand-icon">🍽️</div>
+      <div class="brand-text">
+        <h1>Restaurant Management</h1>
+        <p class="brand-sub">Manage your restaurant portfolio</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="theme-btn" (click)="toggleTheme()">🌙 Theme</button>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-chip">
+      <span class="stat-num">{{ restaurants.length }}</span>
+      <span class="stat-label">Total Restaurants</span>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="card form-card">
+    <div class="card-header">
+      <div class="card-title-group">
+        <div class="card-icon">
+          {{ editingId ? '✏️' : '➕' }}
+        </div>
+        <div>
+          <h2>{{ editingId ? 'Edit Restaurant' : 'Add New Restaurant' }}</h2>
+          <p class="card-sub">
+            {{ editingId ? 'Update the details below' : 'Fill in the details to register a restaurant' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div class="message success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <!-- ERROR MESSAGE -->
+    <div class="message error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()">
+
+      <p class="section-label">Basic Info</p>
+
+      <div class="grid grid-2">
+
+        <!-- RESTAURANT NAME -->
+        <div class="field">
+          <label>Restaurant Name <span class="req">*</span></label>
+
+          <input
+            placeholder="e.g. The Golden Fork"
+            formControlName="name"
+            required
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['name'].touched && f['name'].errors?.['required']">
+            Restaurant name is required.
+          </small>
+
+          <small
+            class="validation-error"
+            *ngIf="f['name'].touched && f['name'].errors?.['minlength']">
+            Restaurant name must be at least 3 characters.
+          </small>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="field">
+          <label>Location <span class="req">*</span></label>
+
+          <input
+            placeholder="e.g. New York, NY"
+            formControlName="location"
+            required
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['location'].touched && f['location'].errors?.['required']">
+            Location is required.
+          </small>
+        </div>
+
+      </div>
+
+      <p class="section-label">Contact &amp; Details</p>
+
+      <div class="grid grid-3">
+
+        <!-- ADDRESS -->
+        <div class="field">
+          <label>Address <span class="req">*</span></label>
+
+          <input
+            placeholder="Street address"
+            formControlName="address"
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['address'].touched && f['address'].errors?.['required']">
+            Address is required.
+          </small>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+
+          <input
+            placeholder="contact@restaurant.com"
+            formControlName="email"
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['email'].touched && f['email'].errors?.['required']">
+            Email is required.
+          </small>
+
+          <small
+            class="validation-error"
+            *ngIf="f['email'].touched && f['email'].errors?.['email']">
+            Enter a valid email address.
+          </small>
+        </div>
+
+        <!-- CUISINE -->
+        <div class="field">
+          <label>Cuisine Type <span class="req">*</span></label>
+
+          <input
+            placeholder="e.g. Italian, Asian"
+            formControlName="cusine"
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['cusine'].touched && f['cusine'].errors?.['required']">
+            Cuisine type is required.
+          </small>
+        </div>
+
+        <!-- PHONE NUMBER -->
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+
+          <input
+            placeholder="9876543210"
+            formControlName="phoneNumber"
+            maxlength="10"
+          />
+
+          <small
+            class="validation-error"
+            *ngIf="f['phoneNumber'].touched && f['phoneNumber'].errors?.['required']">
+            Phone number is required.
+          </small>
+
+          <small
+            class="validation-error"
+            *ngIf="f['phoneNumber'].touched && f['phoneNumber'].errors?.['pattern']">
+            Phone number must be exactly 10 digits.
+          </small>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="isSubmitting">
+
+          {{
+            isSubmitting
+              ? 'Please wait...'
+              : editingId
+                ? '✦ Save Changes'
+                : '✦ Add Restaurant'
+          }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-secondary"
+          *ngIf="editingId"
+          (click)="cancelEdit()">
+          Cancel
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="card table-card">
+    <div class="card-header">
+      <div class="card-title-group">
+        <div class="card-icon">📋</div>
+        <div>
+          <h2>Restaurants List</h2>
+          <p class="card-sub">All registered restaurants</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Cuisine</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let r of restaurants; let i = index">
+            <td>
+              <span class="row-num">{{ i + 1 }}</span>
+            </td>
+
+            <td>
+              <div class="restaurant-name">
+                <div class="avatar">{{ r.name?.charAt(0) }}</div>
+                <span class="name-text">{{ r.name }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="badge badge-loc">{{ r.location }}</span>
+            </td>
+
+            <td>
+              <span class="badge badge-cuisine">{{ r.cusine || '—' }}</span>
+            </td>
+
+            <td class="cell-muted">
+              {{ r.email || '—' }}
+            </td>
+
+            <td class="cell-muted">
+              {{ r.phoneNumber || '—' }}
+            </td>
+
+            <td>
+              <div class="action-btns">
+                <button
+                  type="button"
+                  class="btn-edit"
+                  (click)="editRestaurant(r)">
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn-delete"
+                  (click)="deleteRestaurant(r.id)">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="restaurants.length === 0">
+            <td colspan="7">
+              <div class="empty-state">
+                <div class="empty-icon">🍽️</div>
+                <p>No restaurants yet. Add your first one above!</p>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

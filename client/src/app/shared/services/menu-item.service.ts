@@ -33,6 +33,12 @@ export class MenuItemService {
       this.getHeaders()
     );
   }
+  getAll():Observable<MenuItem[]>{
+    return this.http.get<MenuItem[]>(
+      this.apiUrl,
+      this.getHeaders()
+    )
+  }
 
   // Get menu items by restaurant
   getMenuItemsByRestaurant(restaurantId: number): Observable<MenuItem[]> {
@@ -49,9 +55,14 @@ export class MenuItemService {
       this.getHeaders()
     );
   }
+  
+addMenuItem(data: any): Observable<any> {
+  return this.createMenuItem(data);
+}
+
 
   // Create menu item
-  addMenuItem(menuItem: MenuItem): Observable<MenuItem> {
+  createMenuItem(menuItem: MenuItem): Observable<MenuItem> {
     return this.http.post<MenuItem>(
       this.apiUrl,
       menuItem,

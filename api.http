@@ -1,0 +1,3 @@
+GET  https://orchardsolvemb64.lntedutech.com/project/2414/proxy/3000/api/restaurants
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBeXVzaEJoYXR0Iiwicm9sZSI6Ik1BTkFHRVIiLCJpYXQiOjE3Nzg5MDM5MTMsImV4cCI6MTc3ODk5MDMxM30.KftNpmRGpLbJ8h0osbayYqSmNT-WqC0zxjV9IcfIPQDzWCymEl8D3Fxsvysz0b8009p0muE9aZ0BHAGTVYK4-w

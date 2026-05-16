@@ -10,16 +10,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "orders")
+@Table(name="orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+	@NotBlank
     private String customerName;
 
     private LocalDateTime orderTime;
@@ -47,6 +50,11 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+	//for auto-generate time 
+	@PrePersist
+	public void setOrderTime(){
+		this.orderTime = LocalDateTime.now();
+	}
     // Constructors
     public Order() {}
 

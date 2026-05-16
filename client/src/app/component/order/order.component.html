@@ -1,1 +1,284 @@
- //Write your logic here
+
+
+<div class="page-container">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-left">
+      <span class="header-eyebrow">Manage</span>
+      <h1 class="page-title">Orders</h1>
+    </div>
+
+    <!-- ✅ ISSUE: Button not visible if NOT customer -->
+    <!-- 🔧 TEMP FIX: remove *ngIf for testing -->
+    <!-- ✅ Uncomment below line to test UI -->
+    <!-- class="btn btn-primary" (click)="showForm=true"> -->
+    
+    <!-- ⚠ Only visible if role = CUSTOMER -->
+    <button
+    *ngIf="authService.isCustomer()"   
+    class="btn btn-primary"
+    (click)="showForm=true; message=''; error=''">
+      <span class="btn-icon">✦</span> Place Order
+    </button>
+  </div>
+
+  <!-- ALERTS -->
+  <div *ngIf="message" class="alert alert-success">
+    <span class="alert-icon">✔</span> {{ message }}
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    <span class="alert-icon">✕</span> {{ error }}
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <span class="search-icon">⌕</span>
+    <input
+      [(ngModel)]="searchText"
+      type="text"
+      placeholder="Search by customer or status…"
+      class="form-control">
+  </div>
+
+  <!-- MODAL -->
+  <!-- ✅ DEBUG: force open to test -->
+  <!-- 🔧 change *ngIf="showForm" to *ngIf="true" to test -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="showForm=false">
+
+    <div class="modal-card" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-eyebrow">New Order</span>
+          <h3 class="modal-title">Place Your Order</h3>
+        </div>
+        <button class="modal-close" (click)="showForm=false">&#10005;</button>
+      </div>
+
+      <!-- RESTAURANT SELECT -->
+      <form [formGroup]="orderForm">
+        <div class="form-group">
+          <label class="form-label">
+            Select Restaurant <span class="required">*</span>
+          </label>
+
+          <div class="select-wrapper">
+            <select
+              formControlName="restaurantId"
+              class="form-control"
+              (change)="onRestaurantChange($event)">
+
+              <option value="">— Choose a Restaurant —</option>
+
+              <!-- ✅ DEBUG: check if restaurants loaded -->
+              <!-- 👉 add this temporarily in TS: console.log(restaurants) -->
+              <option *ngFor="let r of restaurants" [value]="r.id">
+                {{ r.name }} · {{ r.location }}
+              </option>
+
+            </select>
+
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+      </form>
+
+      <!-- MENU ITEMS -->
+      <div *ngIf="menuItems.length > 0" class="menu-section">
+
+        <h4 class="section-label">
+          <span class="label-line"></span>
+          Select Items
+          <span class="label-line"></span>
+        </h4>
+
+        <div class="menu-select-grid">
+
+          <div
+            class="menu-select-card"
+            *ngFor="let item of menuItems"
+            [class.selected]="isSelected(item)"
+            (click)="toggleItem(item)">
+
+            <div
+              class="menu-badge"
+              [class.veg]="item.menuType === 'Veg'"
+              [class.nonveg]="item.menuType !== 'Veg'">
+              {{ item.menuType }}
+            </div>
+
+            <h5 class="item-name">{{ item.name }}</h5>
+            <p class="item-price">Rs. {{ item.price }}</p>
+
+            <div class="check-icon" *ngIf="isSelected(item)">✦</div>
+          </div>
+
+        </div>
+
+        <!-- ✅ TOTAL -->
+        <!-- ⚠ Will NOT show if no items selected -->
+        <div class="order-total" *ngIf="selectedItems.length > 0">
+          <div class="total-inner">
+            <span class="total-label">Order Total</span>
+            <span class="total-amount">
+              Rs. {{ getTotal() | number:'1.2-2' }}
+            </span>
+          </div>
+          <span class="total-count">
+            {{ selectedItems.length }} item(s) selected
+          </span>
+        </div>
+
+      </div>
+
+      <!-- EMPTY MENU -->
+      <div *ngIf="orderForm.value.restaurantId && menuItems.length === 0"
+           class="empty-menu">
+        No menu items available for this restaurant.
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="showForm=false">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary"
+          (click)="placeOrder()"
+          [disabled]="orderForm.invalid || selectedItems.length === 0">
+
+          <span class="btn-icon">✦</span> Confirm Order
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrapper">
+    <table class="data-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer</th>
+          <th>Restaurant</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- ✅ CORRECT: using pagedOrders only -->
+        <tr *ngFor="let o of pagedOrders" class="table-row">
+
+          <td class="id-cell">{{ o.id }}</td>
+          <td>{{ o.customerName }}</td>
+          <td>{{ o.restaurant?.name }}</td>
+
+          <!-- ✅ safe item count -->
+          <td class="center">
+            {{ o.items ? o.items.length : (o.menuItem ? 1 : 0) }}
+          </td>
+
+          <td class="amount">
+            Rs. {{ o.totalAmount | number:'1.2-2' }}
+          </td>
+
+          <td>
+            <span
+              class="status-badge"
+              [ngClass]="'status-' + (o.status?.toLowerCase())">
+              {{ o.status }}
+            </span>
+          </td>
+
+          <td class="time-cell">
+            {{ o.orderTime | date:'short' }}
+          </td>
+
+          <td class="action-cell">
+
+            <button
+              *ngIf="authService.isCustomer() && o.status === 'PLACED'"
+              class="btn-sm btn-danger"
+              (click)="cancelOrder(o.id)">
+              Cancel
+            </button>
+
+            <div
+              class="select-wrapper sm"
+              *ngIf="authService.isManager() || authService.isAdmin()">
+
+              <select
+                class="status-select"
+                (change)="updateStatus(o.id, $any($event.target).value)">
+
+                <option value="">Update Status</option>
+                <option value="PROCESSING">Processing</option>
+                <option value="DELIVERED">Delivered</option>
+                <option value="CANCELLED">Cancelled</option>
+
+              </select>
+
+              <span class="select-arrow">▾</span>
+            </div>
+
+          </td>
+
+        </tr>
+
+        <!-- ✅ EMPTY STATE -->
+        <!-- ⚠ shows because backend returned empty -->
+        <tr *ngIf="pagedOrders.length === 0">
+          <td colspan="8" class="empty-row">
+            No orders found.
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+  </div>
+
+  <!-- PAGINATION -->
+  <div class="pagination" *ngIf="totalPages > 1">
+
+    <!-- ✅ using TS functions -->
+    <button
+      class="btn-page"
+      [disabled]="currentPage === 1"
+      (click)="prevPage()">
+      &#8249;
+    </button>
+
+    <div class="page-numbers">
+
+      <!-- ✅ page numbers -->
+      <button
+        *ngFor="let p of [].constructor(totalPages); let i = index"
+        class="page-dot"
+        [class.active]="currentPage === i + 1"
+        (click)="goToPage(i + 1)">
+        {{ i + 1 }}
+      </button>
+
+    </div>
+
+    <button
+      class="btn-page"
+      [disabled]="currentPage === totalPages"
+      (click)="nextPage()">
+      &#8250;
+    </button>
+
+  </div>
+
+</div>

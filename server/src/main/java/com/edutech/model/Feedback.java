@@ -1,35 +1,41 @@
 package com.edutech.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="feedback")
 public class Feedback {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-
   private Long id;
 
   private String customerName;
 
   private String comment;
 
+  @Max(value = 5)
+  @Min(value = 1)
   private int rating;
-  
+
+  // ✅ Admin reply / response field
+  @Column(length = 1000)
+  private String response;
+
   @ManyToOne
   @JoinColumn(name = "menu_item_id")
   @JsonBackReference
   private MenuItem menuItem;
 
-  
   @ManyToOne
   @JoinColumn(name = "restaurant_id")
   private Restaurant restaurant;
@@ -86,6 +92,16 @@ public class Feedback {
     this.rating = rating;
   }
 
+  // ✅ Getter for admin response
+  public String getResponse() {
+    return response;
+  }
+
+  // ✅ Setter for admin response
+  public void setResponse(String response) {
+    this.response = response;
+  }
+
   public MenuItem getMenuItem() {
     return menuItem;
   }
@@ -101,5 +117,4 @@ public class Feedback {
   public void setRestaurant(Restaurant restaurant) {
     this.restaurant = restaurant;
   }
-
 }

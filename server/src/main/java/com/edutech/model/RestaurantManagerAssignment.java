@@ -6,21 +6,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.PrePersist;
+
+// import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "restaurant_manager_assignment")
 public class RestaurantManagerAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // private Long restaurantId;
+    private Long managerId;
     private Long assignedBy;
 
     private LocalDateTime assignedAt;
+
+    @PrePersist
+    public void assignedTime(){
+        this.assignedAt = LocalDateTime.now();
+    }
 
     // Many assignments → One Restaurant
     @ManyToOne
@@ -29,38 +37,42 @@ public class RestaurantManagerAssignment {
 
     // Many assignments → One User (manager)
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
-    private User manager;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    // Constructors
-    public RestaurantManagerAssignment() {}
-
-    public RestaurantManagerAssignment(Restaurant restaurant, User manager, Long assignedBy, LocalDateTime assignedAt) {
-        this.restaurant = restaurant;
-        this.manager = manager;
+    public RestaurantManagerAssignment(Long id, Long managerId, Long assignedBy, LocalDateTime assignedAt,
+            Restaurant restaurant, User user) {
+        this.id = id;
+        this.managerId = managerId;
         this.assignedBy = assignedBy;
         this.assignedAt = assignedAt;
+        this.restaurant = restaurant;
+        this.user = user;
     }
 
-    // Getters & Setters
+    public RestaurantManagerAssignment(Long managerId, Long assignedBy, LocalDateTime assignedAt, Restaurant restaurant,
+            User user) {
+        this.managerId = managerId;
+        this.assignedBy = assignedBy;
+        this.assignedAt = assignedAt;
+        this.restaurant = restaurant;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public Long getManagerId() {
+        return managerId;
     }
 
-    public User getManager() {
-        return manager;
-    }
-
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setManagerId(Long managerId) {
+        this.managerId = managerId;
     }
 
     public Long getAssignedBy() {
@@ -78,4 +90,25 @@ public class RestaurantManagerAssignment {
     public void setAssignedAt(LocalDateTime assignedAt) {
         this.assignedAt = assignedAt;
     }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public RestaurantManagerAssignment() {
+    }
+
+    
 }

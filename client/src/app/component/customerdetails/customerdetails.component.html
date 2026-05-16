@@ -1,140 +1,150 @@
-<div class="page-shell">
+<div class="page-shell" [class.light-theme]="isLight">
 
-  <!-- Background geometry -->
-  <span class="geo geo-1"></span>
-  <span class="geo geo-2"></span>
+  <!-- Background geometry -->
+  <span class="geo geo-1"></span>
+  <span class="geo geo-2"></span>
 
-  <!-- ── Top Navbar ── -->
-  <nav class="top-nav d-flex align-items-center justify-content-between px-4 px-lg-5">
-    <div class="nav-brand">
-      <span class="brand-star">✦</span>
-      <span class="brand-name">Admin Panel</span>
-    </div>
-    <div class="nav-actions d-flex align-items-center gap-3">
-      <span class="nav-badge">Customers</span>
-      <button class="btn-logout" (click)="logout()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-        Logout
-      </button>
-    </div>
-  </nav>
+  <!-- ── Top Navbar ── -->
+  <nav class="top-nav d-flex align-items-center justify-content-between px-4 px-lg-5">
 
-  <!-- ── Main Content ── -->
-  <main class="page-content px-4 px-lg-5 pb-5">
+    <div class="nav-brand">
 
-    <!-- Page header -->
-    <div class="page-header mb-4">
-      <span class="header-eyebrow">Management</span>
-      <h1 class="header-title">Customer Details</h1>
-      <p class="header-sub">Browse and manage all registered customers on the platform.</p>
-    </div>
+      <!-- 🔙 Back Button -->
+      <button class="btn-back" (click)="goBack()">
+        <svg width="16" height="16" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
 
-    <!-- Stats strip -->
-    <div class="row g-3 mb-4">
-      <div class="col-6 col-md-3">
-        <div class="stat-card">
-          <span class="stat-icon">:busts_in_silhouette:</span>
-          <div>
-            <p class="stat-value">{{ customers.length }}</p>
-            <p class="stat-label">Total Customers</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="stat-card">
-          <span class="stat-icon">:white_check_mark:</span>
-          <div>
-            <p class="stat-value">{{ customers.length }}</p>
-            <p class="stat-label">Active Accounts</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <span class="brand-star">✦</span>
+      <span class="brand-name">Admin Panel</span>
+    </div>
 
-    <!-- Empty state -->
-    <div *ngIf="customers.length === 0" class="empty-state text-center py-5">
-      <div class="empty-icon">:bust_in_silhouette:</div>
-      <h3 class="empty-title">No customers found</h3>
-      <p class="empty-sub">Customer data will appear here once available.</p>
-    </div>
+    <div class="nav-actions d-flex align-items-center gap-3">
 
-    <!-- ── Customers Table (desktop) ── -->
-    <div class="table-card d-none d-md-block" *ngIf="customers.length > 0">
-      <div class="table-header d-flex align-items-center justify-content-between px-4 py-3">
-        <span class="table-title">All Customers</span>
-        <span class="table-count">{{ customers.length }} records</span>
-      </div>
-      <div class="table-responsive">
-        <table class="data-table w-100">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let customer of customers; let i = index" class="table-row">
-              <td class="td-index">{{ i + 1 }}</td>
-              <td class="td-name">
-                <div class="avatar-cell">
-                  <span class="avatar">{{ (customer.username || customer.email || '?')[0] | uppercase }}</span>
-                  <span>{{ customer.username || '—' }}</span>
-                </div>
-              </td>
-              <td class="td-username">{{ customer.username || '—' }}</td>
-              <td class="td-email">{{ customer.email || '—' }}</td>
-              <td>
-                <span class="role-badge" [ngClass]="'role-' + (customer.role | lowercase)">
-                  {{ customer.role || 'CUSTOMER' }}
-                </span>
-              </td>
-              <td>
-                <span class="status-dot active"></span>
-                <span class="status-text">Active</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <span class="nav-badge">Customers</span>
 
-    <!-- ── Customer Cards (mobile) ── -->
-    <div class="d-md-none" *ngIf="customers.length > 0">
-      <div class="customer-card mb-3"
-           *ngFor="let customer of customers; let i = index">
-        <div class="cc-top d-flex align-items-center gap-3">
-          <span class="avatar lg">{{ (customer.username || customer.email || '?')[0] | uppercase }}</span>
-          <div>
-            <p class="cc-name">{{ customer.username || '—' }}</p>
-            <p class="cc-email">{{ customer.email || '—' }}</p>
-          </div>
-          <span class="role-badge ms-auto"
-                [ngClass]="'role-' + (customer.role | lowercase)">
-            {{ customer.role || 'CUSTOMER' }}
-          </span>
-        </div>
-        <div class="cc-divider"></div>
-        <div class="cc-meta d-flex gap-3">
-          <span class="cc-meta-item">
-            <span class="cc-meta-label">ID</span>
-            <span class="cc-meta-value">#{{ i + 1 }}</span>
-          </span>
-          <span class="cc-meta-item">
-            <span class="cc-meta-label">Status</span>
-            <span class="cc-meta-value status-active">Active</span>
-          </span>
-        </div>
-      </div>
-    </div>
+      <!-- Theme Toggle -->
+      <button class="btn-theme" (click)="toggleTheme()">
+        <span *ngIf="!isLight">🌙</span>
+        <span *ngIf="isLight">☀️</span>
+      </button>
 
-  </main>
+      <!-- Logout -->
+      <button class="btn-logout" (click)="logout()">
+        <svg width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Logout
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ── Main Content ── -->
+  <main class="page-content px-4 px-lg-5 pb-5">
+
+    <div class="page-header mb-4">
+      <span class="header-eyebrow">Management</span>
+      <h1 class="header-title">Customer Details</h1>
+      <p class="header-sub">
+        Browse and manage all registered customers on the platform.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <span class="stat-icon">👥</span>
+          <div>
+            <p class="stat-value">{{ customers.length }}</p>
+            <p class="stat-label">Total Customers</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <span class="stat-icon">✅</span>
+          <div>
+            <p class="stat-value">{{ customers.length }}</p>
+            <p class="stat-label">Active Accounts</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="customers.length === 0" class="empty-state text-center py-5">
+      <div class="empty-icon">👤</div>
+      <h3 class="empty-title">No customers found</h3>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card d-none d-md-block" *ngIf="customers.length > 0">
+
+      <div class="table-header d-flex justify-content-between px-4 py-3">
+        <span class="table-title">All Customers</span>
+        <span class="table-count">{{ customers.length }} records</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table w-100">
+
+          <thead>
+            <tr>
+              <th>#</th><th>Name</th><th>Username</th>
+              <th>Email</th><th>Role</th><th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let customer of customers; let i = index">
+
+              <td>{{ i + 1 }}</td>
+
+              <td>
+                <div class="avatar-cell">
+                  <span class="avatar">
+                    {{ (customer.username || customer.email || '?')[0] | uppercase }}
+                  </span>
+                  {{ customer.username || '—' }}
+                </div>
+              </td>
+
+              <td>{{ customer.username || '—' }}</td>
+              <td>{{ customer.email || '—' }}</td>
+
+              <td>
+                <span class="role-badge"
+                  [ngClass]="'role-' + (customer.role | lowercase)">
+                  {{ customer.role }}
+                </span>
+              </td>
+
+              <td>
+                <span class="status-dot active"></span>
+                Active
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+  </main>
 </div>
+
+
+
+
+

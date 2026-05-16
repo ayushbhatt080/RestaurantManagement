@@ -1,279 +1,553 @@
-<div class="dash-shell">
-  <!-- Background geometry -->
-  <span class="geo geo-1"></span>
-  <span class="geo geo-2"></span>
-  <!-- ══════════════════════════════════════
-       TOP NAVBAR
-  ══════════════════════════════════════ -->
-  <nav class="top-nav d-flex align-items-center justify-content-between px-4 px-lg-5">
-    <div class="nav-brand d-flex align-items-center gap-2">
-      <span class="brand-star">✦</span>
-      <span class="brand-name">Dashboard</span>
-    </div>
-    <div class="nav-center d-none d-md-flex align-items-center gap-2">
-      <span class="nav-link-item" [class.active]="isAdmin()">Admin</span>
-      <span class="nav-sep">·</span>
-      <span class="nav-link-item" [class.active]="isManager()">Manager</span>
-      <span class="nav-sep">·</span>
-      <span class="nav-link-item" [class.active]="isCustomer()">Customer</span>
-    </div>
-    <div class="nav-right d-flex align-items-center gap-3">
-      <div class="nav-user d-none d-sm-flex align-items-center gap-2">
-        <span class="user-avatar">{{ username ? username[0].toUpperCase() : '?' }}</span>
-        <span class="user-name">{{ username }}</span>
+<!-- dashboard.component.html -->
+<div class="dashboard-shell" [ngClass]="'role-' + currentRole.toLowerCase()"
+  [class.sidebar-collapsed]="sidebarCollapsed">
+
+  <!-- ═══════════════════════════════════════════ SIDEBAR ═══════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <span class="brand-icon">⚜</span>
+        <span class="brand-name">Let Me Dine</span>
       </div>
-      <button class="btn-logout" (click)="logout()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-        Logout
+
+      <!-- Collapse Toggle -->
+      <button class="sidebar-toggle" (click)="toggleSidebar()" title="Toggle Sidebar">
+        <span class="toggle-icon">{{ sidebarCollapsed ? '›' : '‹' }}</span>
       </button>
-    </div>
-  </nav>
-  <!-- ══════════════════════════════════════
-       MAIN CONTENT
-  ══════════════════════════════════════ -->
-  <main class="dash-content px-4 px-lg-5 pb-5">
-    <!-- ── Welcome Hero ── -->
-    <div class="welcome-hero d-flex flex-column flex-md-row
-                align-items-start align-items-md-center
-                justify-content-between gap-3 mb-5">
-      <div>
-        <span class="hero-eyebrow">
-          {{ isAdmin() ? '🛡️ Administrator' : isManager() ? '🏢 Manager' : '🛒 Customer' }}
-        </span>
-        <h1 class="hero-title">
-          Welcome back,<br>
-          <span class="hero-name">{{ username }}</span>
-        </h1>
-        <p class="hero-sub">Here's what's happening on your platform today.</p>
-      </div>
-      <div class="hero-badge-wrap">
-        <span class="hero-role-badge"
-              [ngClass]="isAdmin() ? 'badge-admin' :
-                         isManager() ? 'badge-manager' : 'badge-customer'">
-          {{ role }}
-        </span>
-      </div>
-    </div>
-    <!-- ── Stats Row ── -->
-    <div class="row g-3 mb-4">
-      <!-- Stat 1 -->
-      <div class="col-6 col-lg-3">
-        <div class="stat-card" style="--delay:0s">
-          <div class="stat-top d-flex justify-content-between align-items-start">
-            <span class="stat-icon-wrap">📦</span>
-            <span class="stat-trend up">↑ 12%</span>
-          </div>
-          <p class="stat-value">1,284</p>
-          <p class="stat-label">Total Orders</p>
-          <div class="stat-bar"><span style="width:72%"></span></div>
-        </div>
-      </div>
-      <!-- Stat 2 -->
-      <div class="col-6 col-lg-3">
-        <div class="stat-card" style="--delay:0.08s">
-          <div class="stat-top d-flex justify-content-between align-items-start">
-            <span class="stat-icon-wrap">🍽️</span>
-            <span class="stat-trend up">↑ 5%</span>
-          </div>
-          <p class="stat-value">48</p>
-          <p class="stat-label">Restaurants</p>
-          <div class="stat-bar"><span style="width:48%"></span></div>
-        </div>
-      </div>
-      <!-- Stat 3 -->
-      <div class="col-6 col-lg-3">
-        <div class="stat-card" style="--delay:0.16s">
-          <div class="stat-top d-flex justify-content-between align-items-start">
-            <span class="stat-icon-wrap">👥</span>
-            <span class="stat-trend up">↑ 8%</span>
-          </div>
-          <p class="stat-value">3,910</p>
-          <p class="stat-label">Customers</p>
-          <div class="stat-bar"><span style="width:91%"></span></div>
-        </div>
-      </div>
-      <!-- Stat 4 -->
-      <div class="col-6 col-lg-3">
-        <div class="stat-card" style="--delay:0.24s">
-          <div class="stat-top d-flex justify-content-between align-items-start">
-            <span class="stat-icon-wrap">💰</span>
-            <span class="stat-trend down">↓ 2%</span>
-          </div>
-          <p class="stat-value">$24.6k</p>
-          <p class="stat-label">Revenue</p>
-          <div class="stat-bar"><span style="width:60%"></span></div>
-        </div>
-      </div>
-    </div>
-    <!-- ── Role-based panels row ── -->
-    <div class="row g-4 mb-4">
-      <!-- Quick Actions panel -->
-      <div class="col-12 col-lg-5">
-        <div class="panel-card h-100">
-          <div class="panel-head d-flex align-items-center justify-content-between mb-3">
-            <span class="panel-title">Quick Actions</span>
-            <span class="panel-icon">⚡</span>
-          </div>
-          <!-- ADMIN actions -->
-          <div *ngIf="isAdmin()" class="action-list d-flex flex-column gap-2">
-            <a class="action-item" routerLink="/customers">
-              <span class="action-icon">👤</span>
-              <div class="action-text">
-                <p class="action-name">Manage Customers</p>
-                <p class="action-desc">View and manage all registered users</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-            <a class="action-item" routerLink="/restaurants">
-              <span class="action-icon">🍽️</span>
-              <div class="action-text">
-                <p class="action-name">Manage Restaurants</p>
-                <p class="action-desc">Approve or suspend restaurant listings</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-            <a class="action-item" routerLink="/orders">
-              <span class="action-icon">📦</span>
-              <div class="action-text">
-                <p class="action-name">View All Orders</p>
-                <p class="action-desc">Monitor platform-wide order activity</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-          </div>
-          <!-- MANAGER actions -->
-          <div *ngIf="isManager()" class="action-list d-flex flex-column gap-2">
-            <a class="action-item" routerLink="/orders">
-              <span class="action-icon">📋</span>
-              <div class="action-text">
-                <p class="action-name">Manage Orders</p>
-                <p class="action-desc">View and update order statuses</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-            <a class="action-item" routerLink="/menu">
-              <span class="action-icon">📝</span>
-              <div class="action-text">
-                <p class="action-name">Edit Menu</p>
-                <p class="action-desc">Update items, prices, and availability</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-          </div>
-          <!-- CUSTOMER actions -->
-          <div *ngIf="isCustomer()" class="action-list d-flex flex-column gap-2">
-            <a class="action-item" routerLink="/restaurants">
-              <span class="action-icon">🔍</span>
-              <div class="action-text">
-                <p class="action-name">Browse Restaurants</p>
-                <p class="action-desc">Explore menus and place orders</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-            <a class="action-item" routerLink="/orders">
-              <span class="action-icon">🕐</span>
-              <div class="action-text">
-                <p class="action-name">My Orders</p>
-                <p class="action-desc">Track your current and past orders</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
-            <a class="action-item" routerLink="/profile">
-              <span class="action-icon">⚙️</span>
-              <div class="action-text">
-                <p class="action-name">My Profile</p>
-                <p class="action-desc">Update your account details</p>
-              </div>
-              <span class="action-arrow">→</span>
-            </a>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+
+        <!-- ADMIN NAV -->
+        <ng-container *ngIf="isAdmin()">
+          <div class="nav-group-label">Overview</div>
+          <a class="nav-item" [class.active]="activeTab === 'admin-overview'" (click)="setTab('admin-overview')">
+            <span class="nav-icon">◈</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <div class="nav-group-label">Management</div>
+          <a class="nav-item" (click)="goToRestaurant()">
+            <span class="nav-icon">🏛</span>
+            <span class="nav-label">Restaurants</span>
+          </a>
+          <a class="nav-item" (click)="goToAssignManager()">
+            <span class="nav-icon">👔</span>
+            <span class="nav-label">Assign Managers</span>
+          </a>
+          <div class="nav-group-label">Activity</div>
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Orders</span>
+          </a>
+          <a class="nav-item" (click)="goToFeedback()">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container>
+
+        <!-- MANAGER NAV -->
+        <ng-container *ngIf="isManager()">
+          <div class="nav-group-label">Overview</div>
+          <a class="nav-item" [class.active]="activeTab === 'manager-overview'" (click)="setTab('manager-overview')">
+            <span class="nav-icon">◈</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <div class="nav-group-label">Operations</div>
+          <a class="nav-item" (click)="goToMenuItems()">
+            <span class="nav-icon">🍽</span>
+            <span class="nav-label">Menu Items</span>
+          </a>
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Orders</span>
+          </a>
+          <a class="nav-item" (click)="goToFeedback()">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container>
+
+        <!-- CUSTOMER NAV -->
+        <ng-container *ngIf="isCustomer()">
+          <div class="nav-group-label">My Account</div>
+          <a class="nav-item" [class.active]="activeTab === 'customer-order'" (click)="setTab('customer-order')">
+            <span class="nav-icon">🍴</span>
+            <span class="nav-label">Order</span>
+          </a>
+          <a class="nav-item" [class.active]="activeTab === 'customer-feedback'" (click)="setTab('customer-feedback')">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container>
+
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="user-mini">
+          <div class="user-avatar-sm">{{ userInitial }}</div>
+          <div class="user-info-sm">
+            <span class="user-name-sm">{{ username }}</span>
+            <span class="user-role-sm">{{ roleBadgeLabel }}</span>
           </div>
         </div>
-      </div>
-      <!-- Recent Activity panel -->
-      <div class="col-12 col-lg-7">
-        <div class="panel-card h-100">
-          <div class="panel-head d-flex align-items-center justify-content-between mb-3">
-            <span class="panel-title">Recent Activity</span>
-            <span class="activity-see-all">See all</span>
-          </div>
-          <div class="activity-list d-flex flex-column">
-            <div class="activity-row d-flex align-items-center gap-3">
-              <span class="activity-dot green"></span>
-              <div class="flex-grow-1 min-w-0">
-                <p class="activity-text">New order <strong>#ORD-1042</strong> placed</p>
-                <p class="activity-time">2 minutes ago</p>
-              </div>
-              <span class="activity-tag tag-order">Order</span>
-            </div>
-            <div class="activity-divider"></div>
-            <div class="activity-row d-flex align-items-center gap-3">
-              <span class="activity-dot gold"></span>
-              <div class="flex-grow-1 min-w-0">
-                <p class="activity-text">Restaurant <strong>Sakura Garden</strong> approved</p>
-                <p class="activity-time">18 minutes ago</p>
-              </div>
-              <span class="activity-tag tag-restaurant">Restaurant</span>
-            </div>
-            <div class="activity-divider"></div>
-            <div class="activity-row d-flex align-items-center gap-3">
-              <span class="activity-dot blue"></span>
-              <div class="flex-grow-1 min-w-0">
-                <p class="activity-text">New customer <strong>@james_k</strong> registered</p>
-                <p class="activity-time">45 minutes ago</p>
-              </div>
-              <span class="activity-tag tag-user">User</span>
-            </div>
-            <div class="activity-divider"></div>
-            <div class="activity-row d-flex align-items-center gap-3">
-              <span class="activity-dot red"></span>
-              <div class="flex-grow-1 min-w-0">
-                <p class="activity-text">Order <strong>#ORD-1038</strong> was cancelled</p>
-                <p class="activity-time">1 hour ago</p>
-              </div>
-              <span class="activity-tag tag-cancel">Cancelled</span>
-            </div>
-            <div class="activity-divider"></div>
-            <div class="activity-row d-flex align-items-center gap-3">
-              <span class="activity-dot green"></span>
-              <div class="flex-grow-1 min-w-0">
-                <p class="activity-text">Order <strong>#ORD-1035</strong> delivered successfully</p>
-                <p class="activity-time">2 hours ago</p>
-              </div>
-              <span class="activity-tag tag-order">Order</span>
-            </div>
-          </div>
-        </div>
+        <button class="logout-btn" (click)="logout()" title="Logout">
+          <span class="logout-icon">⏻</span>
+          <span class="logout-label">Logout</span>
+        </button>
       </div>
     </div>
-    <!-- ── Bottom info strip ── -->
-    <div class="info-strip d-flex flex-column flex-md-row
-                align-items-start align-items-md-center
-                justify-content-between gap-3 px-4 py-3">
-      <div class="d-flex align-items-center gap-2">
-        <span class="strip-dot"></span>
-        <span class="strip-text">Platform is running normally</span>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════ MAIN CONTENT ═══════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" (click)="toggleSidebar()">☰</button>
+        <div class="topbar-title">
+          <h1 class="page-title">{{ pageTitle }}</h1>
+          <span class="page-date">{{ currentDate }}</span>
+        </div>
       </div>
-      <span class="strip-version">v2.4.1 · {{ role }} access</span>
+      <div class="topbar-right">
+        <div class="role-badge" [ngClass]="'badge-' + currentRole.toLowerCase()">
+          <span class="badge-dot"></span>
+          {{ roleBadgeLabel }}
+        </div>
+        <div class="topbar-user">
+          <div class="user-avatar">{{ userInitial }}</div>
+          <span class="topbar-username">{{ username }}</span>
+        </div>
+        <button class="topbar-logout" (click)="logout()">⏻</button>
+      </div>
+    </header>
+
+    <!-- ═══════════════ PAGE BODY ═══════════════ -->
+    <div class="page-body">
+
+      <!-- ─────────────────────── ADMIN DASHBOARD ─────────────────────── -->
+      <ng-container *ngIf="isAdmin() && activeTab === 'admin-overview'">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Good to see you,</p>
+            <h2 class="welcome-name">{{ username }} <span class="welcome-role">/ Administrator</span></h2>
+            <p class="welcome-sub">Full system access · Manage restaurants, staff, and operations from here.</p>
+          </div>
+          <div class="welcome-deco">⚜</div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="section-header">
+          <span class="section-label">Overview</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-gold">🏛</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ restaurants.length }}</span>
+              <span class="kpi-label">Total Restaurants</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-blue">📋</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ orders.length }}</span>
+              <span class="kpi-label">Total Orders</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-success">💬</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ feedback.length }}</span>
+              <span class="kpi-label">Total Feedback</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-purple">👔</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ assignments.length }}</span>
+              <span class="kpi-label">Assigned Managers</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-header">
+          <span class="section-label">Quick Actions</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="action-grid">
+          <div class="action-card" (click)="goToRestaurant()">
+            <div class="action-icon">🏛</div>
+            <div class="action-content">
+              <h3 class="action-title">Manage Restaurants</h3>
+              <p class="action-desc">Add, edit, and manage all restaurant profiles and details.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToAssignManager()">
+            <div class="action-icon">👔</div>
+            <div class="action-content">
+              <h3 class="action-title">Assign Managers</h3>
+              <p class="action-desc">Assign and manage restaurant managers across locations.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToOrders()">
+            <div class="action-icon">📋</div>
+            <div class="action-content">
+              <h3 class="action-title">View Orders</h3>
+              <p class="action-desc">Browse all customer orders and track their status.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToFeedback()">
+            <div class="action-icon">💬</div>
+            <div class="action-content">
+              <h3 class="action-title">View Feedback</h3>
+              <p class="action-desc">Review customer ratings and comments for all outlets.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+        </div>
+
+        <!-- Recent Panels -->
+        <div class="section-header">
+          <span class="section-label">Recent Activity</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="panels-grid">
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Recent Restaurants</span>
+              <button class="panel-link" (click)="goToRestaurant()">View All →</button>
+            </div>
+            <div class="panel-body">
+              <ng-container *ngIf="restaurants.length > 0; else noRestaurants">
+                <div class="panel-row" *ngFor="let r of restaurants | slice:0:5">
+                  <span class="row-icon">🏛</span>
+                  <span class="row-label">{{ r.name }}</span>
+                  <span class="row-badge active">Active</span>
+                </div>
+              </ng-container>
+              <ng-template #noRestaurants>
+                <div class="panel-empty">
+                  <span class="empty-icon">🏛</span>
+                  <p>No restaurants yet. <button class="inline-link" (click)="goToRestaurant()">Add one →</button></p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Recent Orders</span>
+              <button class="panel-link" (click)="goToOrders()">View All →</button>
+            </div>
+            <div class="panel-body">
+              <ng-container *ngIf="orders.length > 0; else noOrders">
+                <div class="panel-row" *ngFor="let o of orders | slice:0:5">
+                  <span class="row-icon">📋</span>
+                  <span class="row-label">Order #{{ o.id }}</span>
+                  <span class="row-badge">{{ o.status }}</span>
+                </div>
+              </ng-container>
+              <ng-template #noOrders>
+                <div class="panel-empty">
+                  <span class="empty-icon">📋</span>
+                  <p>No recent orders. <button class="inline-link" (click)="goToOrders()">View orders →</button></p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Recent Feedback</span>
+              <button class="panel-link" (click)="goToFeedback()">View All →</button>
+            </div>
+            <div class="panel-body">
+              <ng-container *ngIf="feedback.length > 0; else noFeedback">
+                <div class="panel-row" *ngFor="let f of feedback | slice:0:5">
+                  <span class="row-icon">💬</span>
+                  <span class="row-label">{{ f.comment || 'Feedback' }}</span>
+                  <span class="row-badge success">{{ f.rating }}/5</span>
+                </div>
+              </ng-container>
+              <ng-template #noFeedback>
+                <div class="panel-empty">
+                  <span class="empty-icon">💬</span>
+                  <p>No feedback yet. <button class="inline-link" (click)="goToFeedback()">View feedback →</button></p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+
+
+      <!-- ─────────────────────── MANAGER DASHBOARD ─────────────────────── -->
+      <ng-container *ngIf="isManager() && activeTab === 'manager-overview'">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner welcome-manager">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Welcome back,</p>
+            <h2 class="welcome-name">{{ username }} <span class="welcome-role">/ Manager</span></h2>
+            <p class="welcome-sub">Manage menu items, track orders, and monitor customer satisfaction.</p>
+          </div>
+          <div class="welcome-deco">🍽</div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="section-header">
+          <span class="section-label">Operations Overview</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-gold">🍽</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ menuItems.length }}</span>
+              <span class="kpi-label">Total Menu Items</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-blue">📋</div>
+            <div class="kpi-data">
+              <span class="kpi-value">{{ orders.length }}</span>
+              <span class="kpi-label">Total Orders</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-danger">⏳</div>
+            <div class="kpi-data">
+              <span class="kpi-value">0</span>
+              <span class="kpi-label">Pending Orders</span>
+            </div>
+            <div class="kpi-trend">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon kpi-success">✓</div>
+            <div class="kpi-data">
+              <span class="kpi-value">0</span>
+              <span class="kpi-label">Delivered Orders</span>
+            </div>
+            <div class="kpi-trend">↗</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-header">
+          <span class="section-label">Quick Actions</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="action-grid action-grid-3">
+          <div class="action-card" (click)="goToMenuItems()">
+            <div class="action-icon">🍽</div>
+            <div class="action-content">
+              <h3 class="action-title">Manage Menu Items</h3>
+              <p class="action-desc">Add, update, or remove items from the menu. Control availability and pricing.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToOrders()">
+            <div class="action-icon">📋</div>
+            <div class="action-content">
+              <h3 class="action-title">View Orders</h3>
+              <p class="action-desc">Monitor incoming orders, update statuses, and manage delivery flow.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+          <div class="action-card" (click)="goToFeedback()">
+            <div class="action-icon">💬</div>
+            <div class="action-content">
+              <h3 class="action-title">View Feedback</h3>
+              <p class="action-desc">Read customer reviews and ratings to improve service quality.</p>
+            </div>
+            <div class="action-arrow">→</div>
+          </div>
+        </div>
+
+        <!-- Operations Preview -->
+        <div class="section-header">
+          <span class="section-label">Operations Summary</span>
+          <span class="section-line"></span>
+        </div>
+        <div class="panels-grid panels-grid-2">
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Order Status Breakdown</span>
+              <button class="panel-link" (click)="goToOrders()">Manage →</button>
+            </div>
+            <div class="panel-body">
+              <div class="status-row">
+                <span class="status-label">Pending</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar pending" style="width: 0%"></div>
+                </div>
+                <span class="status-count">0</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Processing</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar processing" style="width: 0%"></div>
+                </div>
+                <span class="status-count">0</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Delivered</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar delivered" style="width: 0%"></div>
+                </div>
+                <span class="status-count">0</span>
+              </div>
+              <div class="status-row">
+                <span class="status-label">Cancelled</span>
+                <div class="status-bar-wrap">
+                  <div class="status-bar cancelled" style="width: 0%"></div>
+                </div>
+                <span class="status-count">0</span>
+              </div>
+              <div class="panel-empty" *ngIf="orders.length === 0">
+                <span class="empty-icon">📋</span>
+                <p>No order data. <button class="inline-link" (click)="goToOrders()">Go to Orders →</button></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Menu Availability</span>
+              <button class="panel-link" (click)="goToMenuItems()">Manage →</button>
+            </div>
+            <div class="panel-body">
+              <ng-container *ngIf="menuItems.length > 0; else noMenu">
+                <div class="panel-row" *ngFor="let m of menuItems | slice:0:5">
+                  <span class="row-icon">🍽</span>
+                  <span class="row-label">{{ m.name }}</span>
+                  <span class="row-badge success">Available</span>
+                </div>
+              </ng-container>
+              <ng-template #noMenu>
+                <div class="panel-empty">
+                  <span class="empty-icon">🍽</span>
+                  <p>No menu items. <button class="inline-link" (click)="goToMenuItems()">Add items →</button></p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+
+
+      <!-- ─────────────────────── CUSTOMER DASHBOARD ─────────────────────── -->
+      <ng-container *ngIf="isCustomer()">
+
+        <!-- Customer Welcome -->
+        <div class="welcome-banner welcome-customer">
+          <div class="welcome-text">
+            <p class="welcome-greeting">Hello,</p>
+            <h2 class="welcome-name">{{ username }}</h2>
+            <p class="welcome-sub">Your personal dining portal. Order, track, and share your experience.</p>
+          </div>
+          <div class="welcome-deco">🍴</div>
+        </div>
+
+        <!-- Customer Tabs -->
+        <div class="customer-tabs">
+          <button class="cust-tab" [class.active]="activeTab === 'customer-order'" (click)="setTab('customer-order')">
+            <span class="tab-icon">🍴</span> Order
+          </button>
+          <button class="cust-tab" [class.active]="activeTab === 'customer-feedback'"
+            (click)="setTab('customer-feedback')">
+            <span class="tab-icon">💬</span> Feedback
+          </button>
+        </div>
+
+        <!-- ORDER TAB -->
+        <ng-container *ngIf="activeTab === 'customer-order'">
+          <div class="customer-card-wrap">
+            <div class="customer-feature-card">
+              <div class="cfc-header">
+                <div class="cfc-icon">🍴</div>
+                <div class="cfc-head-text">
+                  <h2 class="cfc-title">Place Your Order</h2>
+                  <p class="cfc-subtitle">Explore menus and order your favourites</p>
+                </div>
+              </div>
+              <div class="cfc-body">
+                <ul class="feature-list">
+                  <li><span class="fl-icon">🏛</span> Browse available restaurants near you</li>
+                  <li><span class="fl-icon">🍽</span> Explore curated menu items with pricing</li>
+                  <li><span class="fl-icon">🛒</span> Place your order effortlessly</li>
+                  <li><span class="fl-icon">📦</span> Track your order status in real time</li>
+                  <li><span class="fl-icon">✕</span> Cancel placed orders before processing</li>
+                  <li><span class="fl-icon">📋</span> View your full order history</li>
+                </ul>
+              </div>
+              <div class="cfc-footer">
+                <button class="cfc-btn primary-btn" (click)="goToOrders()">
+                  <span>Go to Orders</span>
+                  <span class="btn-arrow">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- FEEDBACK TAB -->
+        <ng-container *ngIf="activeTab === 'customer-feedback'">
+          <div class="customer-card-wrap">
+            <div class="customer-feature-card">
+              <div class="cfc-header">
+                <div class="cfc-icon">💬</div>
+                <div class="cfc-head-text">
+                  <h2 class="cfc-title">Share Your Experience</h2>
+                  <p class="cfc-subtitle">Help us improve with your honest feedback</p>
+                </div>
+              </div>
+              <div class="cfc-body">
+                <ul class="feature-list">
+                  <li><span class="fl-icon">⭐</span> Submit star ratings for your dining experience</li>
+                  <li><span class="fl-icon">✏</span> Write detailed comments and reviews</li>
+                  <li><span class="fl-icon">📋</span> View all your previously submitted feedback</li>
+                  <li><span class="fl-icon">🏛</span> Rate individual restaurants independently</li>
+                  <li><span class="fl-icon">🙏</span> Help the community with honest insights</li>
+                </ul>
+              </div>
+              <div class="cfc-footer">
+                <button class="cfc-btn primary-btn" (click)="goToFeedback()">
+                  <span>Give Feedback</span>
+                  <span class="btn-arrow">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+      </ng-container>
+      <!-- END CUSTOMER -->
+
     </div>
+    <!-- END page-body -->
+
   </main>
 </div>
-Collapse
-
-
-
-
-
-
-
-
-
-
-
-
-
-
