@@ -12,13 +12,28 @@ public interface MenuItemRepository extends JpaRepository<MenuItem,Long> {
 
     List<MenuItem> findByRestaurantId(Long restaurantId);
 	
-	//eee
+	
  @Modifying
     @Query(
         value = "DELETE FROM order_items WHERE menu_item_id = ?1",
         nativeQuery = true
     )
     void deleteFromOrderItems(Long menuItemId);
+    
+@Modifying
+@Query(
+    value = "DELETE FROM menu_item WHERE restaurant_id = ?1",
+    nativeQuery = true
+)
+void deleteMenuItemsByRestaurantId(Long restaurantId);
+
+@Modifying@Query(
+    value = "DELETE FROM order_items WHERE menu_item_id IN " +
+            "(SELECT id FROM menu_item WHERE restaurant_id = ?1)",
+    nativeQuery = true
+)
+void deleteOrderItemsByRestaurantId(Long restaurantId);
+
 
     
 }

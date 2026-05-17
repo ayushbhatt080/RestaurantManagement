@@ -63,8 +63,8 @@ addMenuItem(data: any): Observable<any> {
 
 
   // Create menu item
-  createMenuItem(menuItem: MenuItem): Observable<MenuItem> {
-    return this.http.post<MenuItem>(
+  createMenuItem(menuItem: MenuItem): Observable<any> {
+    return this.http.post<any>(
       this.apiUrl,
       menuItem,
       this.getHeaders()
@@ -72,8 +72,8 @@ addMenuItem(data: any): Observable<any> {
   }
 
   // Update menu item
-  updateMenuItem(id: number, menuItem: MenuItem): Observable<MenuItem> {
-    return this.http.put<MenuItem>(
+  updateMenuItem(id: number, menuItem: MenuItem): Observable<any> {
+    return this.http.put<any>(
       `${this.apiUrl}/${id}`,
       menuItem,
       this.getHeaders()

@@ -45,19 +45,66 @@ export class MenuItemComponent implements OnInit {
     this.showForm = true;
   }
 
-  save(): void {
-    if (this.menuForm.invalid) return;
-    const obs = this.isEditing
-      ? this.menuItemService.updateMenuItem(this.selectedItem.id, this.menuForm.value)
-      : this.menuItemService.addMenuItem(this.menuForm.value);
-    obs.subscribe({
-      next: () => { this.message = this.isEditing ? 'Updated!' : 'Added!'; this.menuItemService.getAllMenuItems().subscribe({ next: d => this.menuItems = d }); this.showForm = false; },
-      error: () => this.error = 'Save failed'
-    });
-  }
+save(): void {
+  if (this.menuForm.invalid) return;
 
-  delete(id: number): void {
-    if (!confirm('Delete?')) return;
-    this.menuItemService.deleteMenuItem(id).subscribe({ next: () => { this.message = 'Deleted!'; this.menuItemService.getAllMenuItems().subscribe({ next: d => this.menuItems = d }); } });
-  }
+  const payload:any = {
+    name: this.menuForm.value.name,
+    menuType: this.menuForm.value.menuType,
+    price: this.menuForm.value.price,
+    quantity: this.menuForm.value.quantity,
+    restaurant: {
+      id: this.menuForm.value.restaurantId
+    }
+  };
+
+  const obs = this.isEditing
+    ? this.menuItemService.updateMenuItem(this.selectedItem.id, payload)
+    : this.menuItemService.addMenuItem(payload);
+
+  obs.subscribe({
+    next: () => {
+      this.message = this.isEditing ? 'Updated!' : 'Added!';
+
+      this.menuItemService.getAllMenuItems().subscribe({
+        next: d => this.menuItems = d
+      });
+
+      this.showForm = false;
+    },
+    error: (err) => {
+      console.error('SAVE ERROR:', err);
+      this.error = err.error?.error || 'Save failed';
+    }
+  });
+}
+
+
+delete(id: number): void {
+  if (!confirm('Delete?')) return;
+
+  this.message = '';
+  this.error = '';
+
+  // ✅ Remove from UI instantly
+  this.menuItems = this.menuItems.filter(item => item.id !== id);
+
+  // ✅ Then call backend
+  this.menuItemService.deleteMenuItem(id).subscribe({
+    next: () => {
+      this.message = 'Deleted!';
+    },
+    error: (err) => {
+      console.error('DELETE ERROR:', err);
+
+      this.error = err.error?.error || 'Delete failed';
+
+      // ❗ if delete fails, reload to restore correct data
+      this.menuItemService.getAllMenuItems().subscribe({
+        next: d => this.menuItems = d
+      });
+    }
+  });
+}
+
 }

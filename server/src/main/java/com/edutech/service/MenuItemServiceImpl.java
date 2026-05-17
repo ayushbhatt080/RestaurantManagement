@@ -2,6 +2,8 @@ package com.edutech.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,12 +43,22 @@ public class MenuItemServiceImpl implements MenuItemService {
         return repository.save(existingItem);
     }
 
-    @Override
-    public void deleteMenuItem(Long id) {
-        MenuItem existingItem = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("MenuItem not found with id: " + id));
-        repository.delete(existingItem);
-    }
+   @Override
+@Transactional
+public void deleteMenuItem(Long id) {
 
+    MenuItem existingItem = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("MenuItem not found with id: " + id));
+
+    // ✅ First delete menu item references from order_items
+    repository.deleteFromOrderItems(id);
+
+    // ✅ Then delete feedback linked to this menu item
+    // repository.deleteFromFeedback(id);
+
+    // ✅ Finally delete the menu item itself
+    repository.delete(existingItem);
+}
    
 @Override
 public List<MenuItem> getMenuItemsByRestaurant(Long restaurantId) {
