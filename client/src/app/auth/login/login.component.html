@@ -1,240 +1,248 @@
 <div class="login-wrapper">
 
+  <!-- Ambient Background -->
+  <div class="ambient-layer" aria-hidden="true">
+    <div class="ambient-orb ambient-orb--top"></div>
+    <div class="ambient-orb ambient-orb--right"></div>
+    <div class="grid-texture"></div>
+  </div>
 
+  <!-- Left Luxury Panel -->
   <div class="login-panel">
+
+    <div class="panel-ornament" aria-hidden="true">
+      <span class="ornament-line ornament-line--left"></span>
+      <span class="ornament-crest">
+        <span class="crest-diamond">◆</span>
+        <span class="crest-dot"></span>
+        <span class="crest-dot"></span>
+      </span>
+      <span class="ornament-line ornament-line--right"></span>
+    </div>
+
     <div class="panel-content">
+
       <div class="panel-logo">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="48" rx="14" fill="rgba(255,255,255,0.15)"/>
-          <path d="M12 34 Q24 14 36 34" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="24" cy="16" r="4" fill="white"/>
+        <svg width="52" height="52" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="14" fill="rgba(212,168,67,0.14)" />
+          <rect x="0.7" y="0.7" width="46.6" height="46.6" rx="13.3" stroke="rgba(212,168,67,0.45)" stroke-width="1.4"/>
+          <path d="M12 34 Q24 14 36 34" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="24" cy="16" r="4" fill="currentColor"/>
         </svg>
       </div>
-      <h1 class="panel-title">Restaurant<br>Management</h1>
-      <p class="panel-subtitle">Streamline your operations, delight your customers.</p>
+
+      <p class="panel-eyebrow">Premium Dashboard</p>
+
+      <h1 class="panel-title">
+        Restaurant<br />
+        Management
+      </h1>
+
+      <div class="title-underline" aria-hidden="true">
+        <span class="underline-segment"></span>
+        <span class="underline-diamond">◆</span>
+        <span class="underline-segment"></span>
+      </div>
+
+      <p class="panel-subtitle">
+        Streamline your operations, manage menus, track orders and elevate customer experience.
+      </p>
+
       <div class="panel-features">
+
         <div class="feature-item">
-          <span class="feature-icon">&#127978;</span>
+          <span class="feature-icon">◆</span>
           <span>Manage restaurants & menus</span>
         </div>
+
         <div class="feature-item">
-          <span class="feature-icon">&#128203;</span>
+          <span class="feature-icon">◆</span>
           <span>Real-time order tracking</span>
         </div>
+
         <div class="feature-item">
-          <span class="feature-icon">&#11088;</span>
+          <span class="feature-icon">◆</span>
           <span>Customer feedback insights</span>
         </div>
+
       </div>
-    </div>
-    <div class="panel-circles">
-      <div class="circle circle-1"></div>
-      <div class="circle circle-2"></div>
-      <div class="circle circle-3"></div>
+
     </div>
   </div>
 
-
+  <!-- Right Form Area -->
   <div class="login-form-area">
+
     <div class="login-card">
 
-      <div class="card-header">
-        <div class="card-logo">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="48" height="48" rx="14" fill="#01696f"/>
-            <path d="M12 34 Q24 14 36 34" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="24" cy="16" r="4" fill="white"/>
-          </svg>
-        </div>
-        <div>
-          <h2 class="card-title">Welcome back</h2>
-          <p class="card-subtitle">Sign in to your account</p>
-        </div>
+      <div class="card-accent-bar" aria-hidden="true">
+        <span class="accent-bar-fill"></span>
       </div>
 
-      <div class="error-banner" *ngIf="error">
-        <span class="error-icon">&#9888;</span>
+      <div class="card-header">
+
+        <div class="card-logo">
+          <svg width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="14" fill="rgba(212,168,67,0.14)" />
+            <rect x="0.7" y="0.7" width="46.6" height="46.6" rx="13.3" stroke="rgba(212,168,67,0.45)" stroke-width="1.4"/>
+            <path d="M12 34 Q24 14 36 34" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="24" cy="16" r="4" fill="currentColor"/>
+          </svg>
+        </div>
+
+        <div>
+          <span class="card-eyebrow">Secure Access</span>
+          <h2 class="card-title">Welcome Back</h2>
+          <p class="card-subtitle">Sign in to continue to your dashboard</p>
+        </div>
+
+      </div>
+
+      <div class="modal-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-diamond">◆</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- Error Banner -->
+      <div class="error-banner" *ngIf="error" role="alert">
+        <span class="error-icon">
+          <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
+            <path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </span>
         <span>{{ error }}</span>
+        <span class="alert-shimmer" aria-hidden="true"></span>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
 
-        <div class="field-group" [class.field-error]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
-          <label class="field-label" for="username">Username</label>
+        <!-- Username -->
+        <div
+          class="field-group"
+          [class.field-error]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
+
+          <label class="field-label" for="username">
+            <span class="label-index">01</span>
+            <span>Username</span>
+          </label>
+
           <div class="field-wrapper">
             <span class="field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
               </svg>
             </span>
-            <input id="username" formControlName="username" type="text" class="field-input" placeholder="Enter your username" autocomplete="username">
+
+            <input
+              id="username"
+              formControlName="username"
+              type="text"
+              class="field-input"
+              placeholder="Enter your username"
+              autocomplete="username" />
+
+            <span class="input-focus-border"></span>
           </div>
-          <p class="field-error-msg" *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
+
+          <p
+            class="field-error-msg"
+            *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
             Username is required
           </p>
         </div>
 
-        <div class="field-group" [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-          <label class="field-label" for="password">Password</label>
+        <!-- Password -->
+        <div
+          class="field-group"
+          [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+
+          <label class="field-label" for="password">
+            <span class="label-index">02</span>
+            <span>Password</span>
+          </label>
+
           <div class="field-wrapper">
             <span class="field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
             </span>
-            <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" class="field-input" placeholder="Enter your password" autocomplete="current-password">
-            <button type="button" class="toggle-password" (click)="togglePassword()" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-              <svg *ngIf="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+
+            <input
+              id="password"
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="field-input"
+              placeholder="Enter your password"
+              autocomplete="current-password" />
+
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+
+              <svg *ngIf="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
               </svg>
-              <svg *ngIf="showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+              <svg *ngIf="showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
                 <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
             </button>
+
+            <span class="input-focus-border"></span>
           </div>
-          <p class="field-error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+
+          <p
+            class="field-error-msg"
+            *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
             Password is required
           </p>
         </div>
 
-        <button type="submit" class="submit-btn" [class.loading]="loading" [disabled]="loading || loginForm.invalid">
-          <span class="btn-text" *ngIf="!loading">Sign In</span>
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [class.loading]="loading"
+          [disabled]="loading || loginForm.invalid">
+
+          <span class="btn-text" *ngIf="!loading">
+            Sign In
+          </span>
+
           <span class="btn-loader" *ngIf="loading">
-            <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
               <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
             </svg>
             Signing in...
           </span>
+
+          <span class="btn-diamond" aria-hidden="true">◆</span>
         </button>
 
       </form>
 
       <div class="card-footer">
-        <p>Don't have an account? <a routerLink="/register" class="register-link">Create account</a></p>
+        <p>
+          Don't have an account?
+          <a routerLink="/register" class="register-link">Create account</a>
+        </p>
       </div>
 
     </div>
-  </div>
 
-</div>
-<div class="login-wrapper">
-
-
-  <div class="login-panel">
-    <div class="panel-content">
-      <div class="panel-logo">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="48" rx="14" fill="rgba(255,255,255,0.15)"/>
-          <path d="M12 34 Q24 14 36 34" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="24" cy="16" r="4" fill="white"/>
-        </svg>
-      </div>
-      <h1 class="panel-title">Restaurant<br>Management</h1>
-      <p class="panel-subtitle">Streamline your operations, delight your customers.</p>
-      <div class="panel-features">
-        <div class="feature-item">
-          <span class="feature-icon">&#127978;</span>
-          <span>Manage restaurants & menus</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-icon">&#128203;</span>
-          <span>Real-time order tracking</span>
-        </div>
-        <div class="feature-item">
-          <span class="feature-icon">&#11088;</span>
-          <span>Customer feedback insights</span>
-        </div>
-      </div>
-    </div>
-    <div class="panel-circles">
-      <div class="circle circle-1"></div>
-      <div class="circle circle-2"></div>
-      <div class="circle circle-3"></div>
-    </div>
-  </div>
-
-
-  <div class="login-form-area">
-    <div class="login-card">
-
-      <div class="card-header">
-        <div class="card-logo">
-          <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="48" height="48" rx="14" fill="#01696f"/>
-            <path d="M12 34 Q24 14 36 34" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <circle cx="24" cy="16" r="4" fill="white"/>
-          </svg>
-        </div>
-        <div>
-          <h2 class="card-title">Welcome back</h2>
-          <p class="card-subtitle">Sign in to your account</p>
-        </div>
-      </div>
-
-      <div class="error-banner" *ngIf="error">
-        <span class="error-icon">&#9888;</span>
-        <span>{{ error }}</span>
-      </div>
-
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
-
-        <div class="field-group" [class.field-error]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
-          <label class="field-label" for="username">Username</label>
-          <div class="field-wrapper">
-            <span class="field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-            </span>
-            <input id="username" formControlName="username" type="text" class="field-input" placeholder="Enter your username" autocomplete="username">
-          </div>
-          <p class="field-error-msg" *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
-            Username is required
-          </p>
-        </div>
-
-        <div class="field-group" [class.field-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-          <label class="field-label" for="password">Password</label>
-          <div class="field-wrapper">
-            <span class="field-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </span>
-            <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" class="field-input" placeholder="Enter your password" autocomplete="current-password">
-            <button type="button" class="toggle-password" (click)="togglePassword()" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-              <svg *ngIf="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-              <svg *ngIf="showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            </button>
-          </div>
-          <p class="field-error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-            Password is required
-          </p>
-        </div>
-
-        <button type="submit" class="submit-btn" [class.loading]="loading" [disabled]="loading || loginForm.invalid">
-          <span class="btn-text" *ngIf="!loading">Sign In</span>
-          <span class="btn-loader" *ngIf="loading">
-            <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-            </svg>
-            Signing in...
-          </span>
-        </button>
-
-      </form>
-
-      <div class="card-footer">
-        <p>Don't have an account? <a routerLink="/register" class="register-link">Create account</a></p>
-      </div>
-
-    </div>
   </div>
 
 </div>

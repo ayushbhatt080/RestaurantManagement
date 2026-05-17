@@ -85,8 +85,11 @@ export class RestaurantService {
 
   // ✅ user details (no auth required in test)
   getUserDetails(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`);
-  }
+  return this.http.get<User[]>(
+    `${this.apiUrl}/users`,
+    this.getHeaders()
+  );
+}
 
  assignManager(request: any): Observable<any> {
   return this.http.post(

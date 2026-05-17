@@ -2,7 +2,7 @@ import { Order } from "./order";
 
 export enum Role {
   CUSTOMER = 'CUSTOMER',
-  OWNER = 'MANAGER',
+  MANAGER = 'MANAGER',
   ADMIN = 'ADMIN'
 }
 

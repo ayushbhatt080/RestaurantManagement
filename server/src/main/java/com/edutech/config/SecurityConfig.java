@@ -51,13 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             
             
             // Restaurant access
+                .antMatchers(HttpMethod.GET, "/api/restaurants/users").hasAnyAuthority("ADMIN","MANAGER")
             .antMatchers(HttpMethod.GET, "/api/restaurants/**").hasAnyAuthority("ADMIN","MANAGER","CUSTOMER")
             .antMatchers(HttpMethod.POST, "/api/restaurants/assignmanager").hasAnyAuthority("ADMIN")
             .antMatchers(HttpMethod.GET, "/api/restaurants/assignmanager").hasAnyAuthority("ADMIN")
             .antMatchers(HttpMethod.POST, "/api/restaurants").hasAnyAuthority("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/restaurants/**").hasAuthority("ADMIN")
             .antMatchers(HttpMethod.DELETE, "/api/restaurants/**").hasAuthority("ADMIN")
-            
+        
             // Order access
 // Order access
 

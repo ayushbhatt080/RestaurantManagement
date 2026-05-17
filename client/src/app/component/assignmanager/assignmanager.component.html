@@ -1,4 +1,3 @@
-
 <div class="page-container">
 
     <!-- Header -->
@@ -113,9 +112,15 @@
                             <span class="restaurant-badge">{{ a.restaurantName }}</span>
                         </td>
                         <td>
-                            <div class="manager-cell">
+                            <!-- <div class="manager-cell">
                                 <span class="manager-avatar">{{ a.managerName?.charAt(0)?.toUpperCase() }}</span>
                                 <span>{{ a.managerName }}</span>
+                            </div> -->
+                            <div class="manager-cell">
+                                <span class="manager-avatar">
+                                    {{ a.managerUsername?.charAt(0)?.toUpperCase() }}
+                                </span>
+                                <span>{{ a.managerUsername }}</span>
                             </div>
                         </td>
                         <td>
@@ -137,4 +142,3 @@
     </div>
 
 </div>
-

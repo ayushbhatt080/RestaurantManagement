@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { RestaurantService } from '../../shared/services/restaurant.service';
 import { OrderService } from '../../shared/services/order.service';
 import { FeedbackService } from '../../shared/services/feedback-service.service';
 import { MenuItemService } from '../../shared/services/menu-item.service';
 
-// ─── Import your services ────────────────────────────────────────────────────
-// Replace paths with your actual service locations if different
-
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,11 +27,16 @@ export class DashboardComponent implements OnInit {
   menuItems: any[] = [];
   assignments: any[] = [];
 
-  constructor(private router: Router,
-              private restaurantService: RestaurantService,
-              private orderService: OrderService,
-              private feedbackService: FeedbackService,
-              private menuItemService: MenuItemService) { }
+  // ✅ NEW: Customers
+  customers: User[] = [];
+
+  constructor(
+    private router: Router,
+    private restaurantService: RestaurantService,
+    private orderService: OrderService,
+    private feedbackService: FeedbackService,
+    private menuItemService: MenuItemService
+  ) {}
 
   ngOnInit(): void {
     this.resolveUserAndRole();
@@ -41,15 +45,12 @@ export class DashboardComponent implements OnInit {
     this.loadDashboardData();
   }
 
-  // ─── Resolve username and role from localStorage (supports multiple key names + JWT) ───
   private resolveUserAndRole(): void {
-    // Username: try multiple possible keys
     this.username =
       localStorage.getItem('username') ||
       localStorage.getItem('userName') ||
       'User';
 
-    // Role: try multiple possible keys
     const rawRole =
       localStorage.getItem('role') ||
       localStorage.getItem('userRole') ||
@@ -57,27 +58,31 @@ export class DashboardComponent implements OnInit {
 
     this.currentRole = this.normalizeRole(rawRole);
 
-    // If role still not resolved, try decoding JWT token
     if (!this.currentRole || this.currentRole === 'CUSTOMER') {
-      const token = localStorage.getItem('token') || localStorage.getItem('jwtToken') || '';
+      const token =
+        localStorage.getItem('token') ||
+        localStorage.getItem('jwtToken') ||
+        '';
+
       if (token) {
         const decoded = this.decodeJwt(token);
+
         if (decoded) {
-          // Common JWT claim keys for role
           const jwtRole =
             decoded['role'] ||
             decoded['roles'] ||
             decoded['userRole'] ||
             decoded['authorities'] ||
             '';
+
           const resolvedFromJwt = this.normalizeRole(
             Array.isArray(jwtRole) ? jwtRole[0] : jwtRole
           );
+
           if (resolvedFromJwt) {
             this.currentRole = resolvedFromJwt;
           }
 
-          // Also try username from JWT if not found yet
           if (this.username === 'User') {
             this.username =
               decoded['sub'] ||
@@ -90,19 +95,21 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ─── Normalize role string to uppercase plain role ───────────────────────
   private normalizeRole(raw: string): string {
     if (!raw) return 'CUSTOMER';
-    const upper = raw.trim().toUpperCase();
-    // Strip ROLE_ prefix if present
-    const stripped = upper.startsWith('ROLE_') ? upper.replace('ROLE_', '') : upper;
+
+    const upper = String(raw).trim().toUpperCase();
+    const stripped = upper.startsWith('ROLE_')
+      ? upper.replace('ROLE_', '')
+      : upper;
+
     if (['ADMIN', 'MANAGER', 'CUSTOMER'].includes(stripped)) {
       return stripped;
     }
+
     return 'CUSTOMER';
   }
 
-  // ─── Decode JWT without a library ────────────────────────────────────────
   private decodeJwt(token: string): any {
     try {
       const payload = token.split('.')[1];
@@ -113,7 +120,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ─── Set the default active tab based on role ─────────────────────────────
   private setActiveTabForRole(): void {
     if (this.isAdmin()) {
       this.activeTab = 'admin-overview';
@@ -124,9 +130,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // ─── Set current date string ──────────────────────────────────────────────
   private setCurrentDate(): void {
     const now = new Date();
+
     this.currentDate = now.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -135,52 +141,93 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // ─── Fetch all backend data ───────────────────────────────────────────────
   private loadDashboardData(): void {
-    // ── Restaurants + Assignments (Admin / Manager) ──
     if (this.isAdmin() || this.isManager()) {
-      // NOTE: Replace 'getAll()' with the actual method name in your RestaurantService
       this.restaurantService.getAll().subscribe({
-        next: (data: any[]) => { this.restaurants = data || []; },
-        error: (err: any) => { console.error('RestaurantService error:', err); this.restaurants = []; }
+        next: (data: any[]) => {
+          this.restaurants = data || [];
+        },
+        error: (err: any) => {
+          console.error('RestaurantService error:', err);
+          this.restaurants = [];
+        }
       });
 
-      // NOTE: Replace 'getAssignments()' with the actual method name for manager assignments
+      // ✅ NEW: Load customers for Admin and Manager
+      this.loadCustomers();
+
       if (this.isAdmin()) {
         this.restaurantService.getAssignments().subscribe({
-          next: (data: any[]) => { this.assignments = data || []; },
-          error: (err: any) => { console.error('Assignments error:', err); this.assignments = []; }
+          next: (data: any[]) => {
+            this.assignments = data || [];
+          },
+          error: (err: any) => {
+            console.error('Assignments error:', err);
+            this.assignments = [];
+          }
         });
       }
     }
 
-    // ── Orders (Admin + Manager + Customer) ──
-    // NOTE: Replace 'getAll()' or 'getOrders()' with the actual method name in your OrderService
     this.orderService.getAllOrders().subscribe({
-      next: (data: any[]) => { this.orders = data || []; },
-      error: (err: any) => { console.error('OrderService error:', err); this.orders = []; }
+      next: (data: any[]) => {
+        this.orders = data || [];
+      },
+      error: (err: any) => {
+        console.error('OrderService error:', err);
+        this.orders = [];
+      }
     });
 
-    // ── Feedback (Admin + Manager) ──
     if (this.isAdmin() || this.isManager()) {
-      // NOTE: Replace 'getAll()' with the actual method name in your FeedbackService
       this.feedbackService.getAllFeedbacks().subscribe({
-        next: (data: any[]) => { this.feedback = data || []; },
-        error: (err: any) => { console.error('FeedbackService error:', err); this.feedback = []; }
+        next: (data: any[]) => {
+          this.feedback = data || [];
+        },
+        error: (err: any) => {
+          console.error('FeedbackService error:', err);
+          this.feedback = [];
+        }
       });
     }
 
-    // ── Menu Items (Manager) ──
     if (this.isManager()) {
-      // NOTE: Replace 'getAll()' with the actual method name in your MenuItemService
       this.menuItemService.getAll().subscribe({
-        next: (data: any[]) => { this.menuItems = data || []; },
-        error: (err: any) => { console.error('MenuItemService error:', err); this.menuItems = []; }
+        next: (data: any[]) => {
+          this.menuItems = data || [];
+        },
+        error: (err: any) => {
+          console.error('MenuItemService error:', err);
+          this.menuItems = [];
+        }
       });
     }
   }
 
-  // ─── Role checks ─────────────────────────────────────────────────────────
+  // ✅ NEW: Load only customer users
+  private loadCustomers(): void {
+  this.restaurantService.getUserDetails().subscribe({
+    next: (data: User[]) => {
+      console.log('All users from backend:', data);
+
+      this.customers = data.filter((user: User) => {
+        const role = String(user.role || '')
+          .trim()
+          .toUpperCase()
+          .replace('ROLE_', '');
+
+        return role === 'CUSTOMER';
+      });
+
+      console.log('Filtered customers:', this.customers);
+    },
+    error: (err: any) => {
+      console.error('Customer loading error:', err);
+      this.customers = [];
+    }
+  });
+}
+
   isAdmin(): boolean {
     return this.currentRole === 'ADMIN';
   }
@@ -193,7 +240,6 @@ export class DashboardComponent implements OnInit {
     return this.currentRole === 'CUSTOMER';
   }
 
-  // ─── Navigation ───────────────────────────────────────────────────────────
   setTab(tab: string): void {
     this.activeTab = tab;
   }
@@ -227,27 +273,34 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/feedback']);
   }
 
-  // ─── Computed getters ─────────────────────────────────────────────────────
+  // ✅ Optional route if you have separate Customer Details page
+  goToCustomers(): void {
+    this.activeTab = 'manager-customers';
+  }
+
   get userInitial(): string {
     return this.username ? this.username.charAt(0).toUpperCase() : 'U';
   }
 
   get roleBadgeLabel(): string {
     switch (this.currentRole) {
-      case 'ADMIN': return 'Administrator';
-      case 'MANAGER': return 'Manager';
-      case 'CUSTOMER': return 'Customer';
-      default: return this.currentRole;
+      case 'ADMIN':
+        return 'Administrator';
+      case 'MANAGER':
+        return 'Manager';
+      case 'CUSTOMER':
+        return 'Customer';
+      default:
+        return this.currentRole;
     }
   }
 
   get pageTitle(): string {
     if (this.isAdmin()) return 'Admin Control Center';
     if (this.isManager()) return 'Manager Operations';
-    return 'My Dashboard';
+    return 'Let Me Dine';
   }
 
-  // ─── Recent lists (sliced from full arrays) ───────────────────────────────
   get recentRestaurants(): any[] {
     return this.restaurants.slice(0, 5);
   }
@@ -264,37 +317,56 @@ export class DashboardComponent implements OnInit {
     return this.menuItems.slice(0, 5);
   }
 
-  // ─── Order status counts ──────────────────────────────────────────────────
+  // ✅ NEW
+  get recentCustomers(): User[] {
+    return this.customers.slice(0, 5);
+  }
+
   get pendingOrdersCount(): number {
-    return this.orders.filter(o => o.status?.toUpperCase() === 'PENDING').length;
+    return this.orders.filter(
+      o => o.status?.toUpperCase() === 'PENDING'
+    ).length;
   }
 
   get processingOrdersCount(): number {
-    return this.orders.filter(o => o.status?.toUpperCase() === 'PROCESSING').length;
+    return this.orders.filter(
+      o => o.status?.toUpperCase() === 'PROCESSING'
+    ).length;
   }
 
   get deliveredOrdersCount(): number {
-    return this.orders.filter(o => o.status?.toUpperCase() === 'DELIVERED').length;
+    return this.orders.filter(
+      o => o.status?.toUpperCase() === 'DELIVERED'
+    ).length;
   }
 
   get cancelledOrdersCount(): number {
-    return this.orders.filter(o => o.status?.toUpperCase() === 'CANCELLED').length;
+    return this.orders.filter(
+      o => o.status?.toUpperCase() === 'CANCELLED'
+    ).length;
   }
 
-  // ─── Order status percentages ─────────────────────────────────────────────
   get pendingOrdersPercent(): number {
-    return this.orders.length ? Math.round((this.pendingOrdersCount / this.orders.length) * 100) : 0;
+    return this.orders.length
+      ? Math.round((this.pendingOrdersCount / this.orders.length) * 100)
+      : 0;
   }
 
   get processingOrdersPercent(): number {
-    return this.orders.length ? Math.round((this.processingOrdersCount / this.orders.length) * 100) : 0;
+    return this.orders.length
+      ? Math.round((this.processingOrdersCount / this.orders.length) * 100)
+      : 0;
   }
 
   get deliveredOrdersPercent(): number {
-    return this.orders.length ? Math.round((this.deliveredOrdersCount / this.orders.length) * 100) : 0;
+    return this.orders.length
+      ? Math.round((this.deliveredOrdersCount / this.orders.length) * 100)
+      : 0;
   }
 
   get cancelledOrdersPercent(): number {
-    return this.orders.length ? Math.round((this.cancelledOrdersCount / this.orders.length) * 100) : 0;
+    return this.orders.length
+      ? Math.round((this.cancelledOrdersCount / this.orders.length) * 100)
+      : 0;
   }
 }

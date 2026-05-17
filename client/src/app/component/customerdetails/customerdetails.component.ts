@@ -3,7 +3,7 @@ import { Role, User } from '../../model/user';
 import { RestaurantService } from '../../shared/services/restaurant.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common'; // ✅ ADD THIS
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-customerdetails',
@@ -21,7 +21,7 @@ export class CustomerdetailsComponent implements OnInit {
     private restaurantService: RestaurantService,
     private authService: AuthService,
     private router: Router,
-    private location: Location   // ✅ ADD THIS
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -35,26 +35,42 @@ export class CustomerdetailsComponent implements OnInit {
   }
 
   // ✅ LOAD CUSTOMER DATA
-  loadCustomers() {
-    this.restaurantService.getUserDetails()
-      .subscribe((data: User[]) => {
-        this.customers = data.filter(user => user.role === Role.CUSTOMER);
-      });
-  }
+loadCustomers(): void {
+  console.log('LOAD CUSTOMERS CALLED ✅');
+
+  this.restaurantService.getUserDetails().subscribe({
+    next: (data: any[]) => {
+      console.log('✅ API RESPONSE:', data);
+
+      this.customers = data.filter((user: any) =>
+        user.role?.toString().includes('CUSTOMER')
+      );
+
+      console.log('✅ FILTERED:', this.customers);
+    },
+    error: (error) => {
+      console.error('❌ API ERROR:', error);
+      console.error('STATUS:', error.status);
+      console.error('BODY:', error.error);
+    }
+  });
+}
+
+
 
   // ✅ THEME TOGGLE
-  toggleTheme() {
+  toggleTheme(): void {
     this.isLight = !this.isLight;
     localStorage.setItem('theme', this.isLight ? 'light' : 'dark');
   }
 
   // ✅ BACK BUTTON FUNCTION
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 
   // ✅ LOGOUT
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }

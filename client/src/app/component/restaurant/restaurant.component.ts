@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { RestaurantService } from '../../shared/services/restaurant.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -11,29 +12,38 @@ import { AuthService } from '../../shared/services/auth.service';
   styleUrls: ['./restaurant.component.scss']
 })
 export class RestaurantComponent implements OnInit {
-  //Write your logic here
 
-  // ✅ REQUIRED VARIABLES
   restaurants: any[] = [];
   users: any[] = [];
 
   restaurantForm!: FormGroup;
   editingId: number | null = null;
 
-  // ✅ MESSAGE VARIABLES
   successMessage: string = '';
   errorMessage: string = '';
   isSubmitting: boolean = false;
+
+  // ✅ Theme state
+  isLight: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private restaurantService: RestaurantService,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private location: Location
+  ) {}
 
-  // ✅ REQUIRED
   ngOnInit(): void {
+
+    // ✅ Restore saved theme
+    const savedTheme = localStorage.getItem('restaurant-theme');
+
+    if (savedTheme === 'light') {
+      this.isLight = true;
+    } else {
+      this.isLight = false;
+    }
 
     this.restaurantForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -48,37 +58,45 @@ export class RestaurantComponent implements OnInit {
     this.getUserRoleDetails();
   }
 
-  toggleTheme() {
-    document.body.classList.toggle('light-theme');
+  // ✅ Back button
+  goBack(): void {
+    this.location.back();
   }
 
-  // ✅ EASY ACCESS FOR VALIDATIONS IN HTML
+  // ✅ Theme toggle
+  toggleTheme(): void {
+    this.isLight = !this.isLight;
+
+    localStorage.setItem(
+      'restaurant-theme',
+      this.isLight ? 'light' : 'dark'
+    );
+  }
+
+  // ✅ Easy access for validations in HTML
   get f() {
     return this.restaurantForm.controls;
   }
 
-  // ✅ CLEAR MESSAGE
-  clearMessages() {
+  clearMessages(): void {
     this.successMessage = '';
     this.errorMessage = '';
   }
 
-  // ✅ LOAD RESTAURANTS - READ OPERATION
-  loadRestaurants() {
+  loadRestaurants(): void {
     this.restaurantService.getAll().subscribe({
       next: (data: any) => {
         console.log('RESTAURANTS LOADED:', data);
         this.restaurants = data;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('LOAD RESTAURANTS ERROR:', error);
         this.errorMessage = 'Unable to load restaurants from backend.';
       }
     });
   }
 
-  // ✅ CREATE / UPDATE
-  onSubmit() {
+  onSubmit(): void {
     this.clearMessages();
 
     if (this.restaurantForm.invalid) {
@@ -94,7 +112,7 @@ export class RestaurantComponent implements OnInit {
     console.log('SENDING RESTAURANT DATA:', data);
 
     if (this.editingId !== null) {
-      // ✅ UPDATE OPERATION
+
       this.restaurantService.update(this.editingId, data).subscribe({
         next: (response: any) => {
           console.log('RESTAURANT UPDATED:', response);
@@ -105,33 +123,32 @@ export class RestaurantComponent implements OnInit {
 
           this.isSubmitting = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('UPDATE RESTAURANT ERROR:', error);
 
           this.errorMessage = 'Failed to update restaurant. Please try again.';
           this.isSubmitting = false;
         }
       });
+
     } else {
-      // ✅ CREATE OPERATION
+
       this.restaurantService.create(data).subscribe({
         next: (response: any) => {
           console.log('RESTAURANT ADDED:', response);
 
           this.successMessage = 'Restaurant added successfully.';
 
-          // If backend returns saved restaurant, add it instantly
           if (response) {
             this.restaurants.push(response);
           }
 
-          // Also reload from backend to keep list fresh
           this.loadRestaurants();
 
           this.restaurantForm.reset();
           this.isSubmitting = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('ADD RESTAURANT ERROR:', error);
 
           this.errorMessage = 'Failed to add restaurant. Please check backend connection.';
@@ -141,8 +158,7 @@ export class RestaurantComponent implements OnInit {
     }
   }
 
-  // ✅ EDIT
-  editRestaurant(restaurant: any) {
+  editRestaurant(restaurant: any): void {
     this.clearMessages();
 
     this.editingId = restaurant.id;
@@ -159,14 +175,12 @@ export class RestaurantComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ✅ CANCEL EDIT
-  cancelEdit() {
+  cancelEdit(): void {
     this.editingId = null;
     this.restaurantForm.reset();
   }
 
-  // ✅ DELETE OPERATION
-  deleteRestaurant(id: number) {
+  deleteRestaurant(id: number): void {
     this.clearMessages();
 
     const confirmDelete = confirm('Are you sure you want to delete this restaurant?');
@@ -182,7 +196,7 @@ export class RestaurantComponent implements OnInit {
         this.restaurants = this.restaurants.filter(r => r.id !== id);
         this.successMessage = 'Restaurant deleted successfully.';
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('DELETE RESTAURANT ERROR:', error);
 
         this.errorMessage = 'Failed to delete restaurant. Please try again.';
@@ -190,20 +204,18 @@ export class RestaurantComponent implements OnInit {
     });
   }
 
-  // ✅ LOGOUT
-  logout() {
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  // ✅ GET USERS
-  getUserRoleDetails() {
+  getUserRoleDetails(): void {
     this.restaurantService.getUserDetails()
       .subscribe({
         next: (data: any) => {
           this.users = data;
         },
-        error: (error) => {
+        error: (error: any) => {
           // console.error('GET USERS ERROR:', error);
         }
       });

@@ -83,9 +83,9 @@ export class AssignmanagerComponent implements OnInit {
         this.loadAssignments();
 
         // ✅ Redirect to dashboard after short delay
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 1500);
+        // setTimeout(() => {
+        //   this.router.navigate(['/dashboard']);
+        // }, 1500);
       },
       error: err => {
         this.error = err?.error?.error || '❌ Assignment failed';

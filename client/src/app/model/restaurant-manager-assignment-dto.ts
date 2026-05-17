@@ -1,7 +1,8 @@
 export interface RestaurantManagerAssignmentDTO {
-   id:number;
-   restaurantId:number;
-   managerId:number;
-   assignedAt:Date;
-
+  assignmentId: number;
+  restaurantName: string;
+  restaurantLocation: string;
+  managerUsername?: string;
+  managerEmail: string;
+  assignedAt: Date;
 }
