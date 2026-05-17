@@ -46,5 +46,12 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem existingItem = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("MenuItem not found with id: " + id));
         repository.delete(existingItem);
     }
+
+   
+@Override
+public List<MenuItem> getMenuItemsByRestaurant(Long restaurantId) {
+    return repository.findByRestaurantId(restaurantId);
+}
+
 }
 

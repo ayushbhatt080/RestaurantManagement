@@ -43,7 +43,7 @@ public class Restaurant {
     private User manager;
 
     // One restaurant → Many menu items
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private List<MenuItem> menuItems;
 

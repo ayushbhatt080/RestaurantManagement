@@ -1,5 +1,3 @@
-
-
 <div class="page-container">
 
   <!-- HEADER -->
@@ -9,16 +7,12 @@
       <h1 class="page-title">Orders</h1>
     </div>
 
-    <!-- ✅ ISSUE: Button not visible if NOT customer -->
-    <!-- 🔧 TEMP FIX: remove *ngIf for testing -->
-    <!-- ✅ Uncomment below line to test UI -->
-    <!-- class="btn btn-primary" (click)="showForm=true"> -->
-    
-    <!-- ⚠ Only visible if role = CUSTOMER -->
+    <!-- Only visible if role = CUSTOMER -->
     <button
-    *ngIf="authService.isCustomer()"   
-    class="btn btn-primary"
-    (click)="showForm=true; message=''; error=''">
+      type="button"
+      *ngIf="authService.isCustomer()"
+      class="btn btn-primary"
+      (click)="showForm=true; message=''; error=''">
       <span class="btn-icon">✦</span> Place Order
     </button>
   </div>
@@ -38,13 +32,11 @@
     <input
       [(ngModel)]="searchText"
       type="text"
-      placeholder="Search by customer or status…"
+      placeholder="Search by customer, restaurant or status…"
       class="form-control">
   </div>
 
   <!-- MODAL -->
-  <!-- ✅ DEBUG: force open to test -->
-  <!-- 🔧 change *ngIf="showForm" to *ngIf="true" to test -->
   <div class="modal-overlay" *ngIf="showForm" (click)="showForm=false">
 
     <div class="modal-card" (click)="$event.stopPropagation()">
@@ -54,7 +46,13 @@
           <span class="modal-eyebrow">New Order</span>
           <h3 class="modal-title">Place Your Order</h3>
         </div>
-        <button class="modal-close" (click)="showForm=false">&#10005;</button>
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="showForm=false">
+          &#10005;
+        </button>
       </div>
 
       <!-- RESTAURANT SELECT -->
@@ -72,8 +70,6 @@
 
               <option value="">— Choose a Restaurant —</option>
 
-              <!-- ✅ DEBUG: check if restaurants loaded -->
-              <!-- 👉 add this temporarily in TS: console.log(restaurants) -->
               <option *ngFor="let r of restaurants" [value]="r.id">
                 {{ r.name }} · {{ r.location }}
               </option>
@@ -110,22 +106,26 @@
             </div>
 
             <h5 class="item-name">{{ item.name }}</h5>
-            <p class="item-price">Rs. {{ item.price }}</p>
+
+            <p class="item-price">
+              Rs. {{ item.price }}
+            </p>
 
             <div class="check-icon" *ngIf="isSelected(item)">✦</div>
           </div>
 
         </div>
 
-        <!-- ✅ TOTAL -->
-        <!-- ⚠ Will NOT show if no items selected -->
+        <!-- TOTAL -->
         <div class="order-total" *ngIf="selectedItems.length > 0">
           <div class="total-inner">
             <span class="total-label">Order Total</span>
+
             <span class="total-amount">
               Rs. {{ getTotal() | number:'1.2-2' }}
             </span>
           </div>
+
           <span class="total-count">
             {{ selectedItems.length }} item(s) selected
           </span>
@@ -134,22 +134,26 @@
       </div>
 
       <!-- EMPTY MENU -->
-      <div *ngIf="orderForm.value.restaurantId && menuItems.length === 0"
-           class="empty-menu">
+      <div
+        *ngIf="orderForm.value.restaurantId && menuItems.length === 0"
+        class="empty-menu">
         No menu items available for this restaurant.
       </div>
 
       <!-- ACTIONS -->
       <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="showForm=false">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="showForm=false">
           Cancel
         </button>
 
         <button
+          type="button"
           class="btn btn-primary"
           (click)="placeOrder()"
           [disabled]="orderForm.invalid || selectedItems.length === 0">
-
           <span class="btn-icon">✦</span> Confirm Order
         </button>
       </div>
@@ -176,27 +180,35 @@
 
       <tbody>
 
-        <!-- ✅ CORRECT: using pagedOrders only -->
         <tr *ngFor="let o of pagedOrders" class="table-row">
 
-          <td class="id-cell">{{ o.id }}</td>
-          <td>{{ o.customerName }}</td>
-          <td>{{ o.restaurant?.name }}</td>
+          <td class="id-cell">
+            {{ o.id }}
+          </td>
 
-          <!-- ✅ safe item count -->
+          <td>
+            {{ o.customerName || '—' }}
+          </td>
+
+          <!-- Supports DTO and entity response -->
+          <td>
+            {{ o.restaurantName || o.restaurant?.name || '—' }}
+          </td>
+
+          <!-- Supports DTO and entity response -->
           <td class="center">
-            {{ o.items ? o.items.length : (o.menuItem ? 1 : 0) }}
+            {{ o.itemCount || (o.items ? o.items.length : (o.menuItem ? 1 : 0)) }}
           </td>
 
           <td class="amount">
-            Rs. {{ o.totalAmount | number:'1.2-2' }}
+            Rs. {{ o.totalAmount || 0 | number:'1.2-2' }}
           </td>
 
           <td>
             <span
               class="status-badge"
-              [ngClass]="'status-' + (o.status?.toLowerCase())">
-              {{ o.status }}
+              [ngClass]="'status-' + (o.status?.toLowerCase() || 'unknown')">
+              {{ o.status || '—' }}
             </span>
           </td>
 
@@ -207,6 +219,7 @@
           <td class="action-cell">
 
             <button
+              type="button"
               *ngIf="authService.isCustomer() && o.status === 'PLACED'"
               class="btn-sm btn-danger"
               (click)="cancelOrder(o.id)">
@@ -215,7 +228,8 @@
 
             <div
               class="select-wrapper sm"
-              *ngIf="authService.isManager() || authService.isAdmin()">
+              *ngIf="authService.isManager()">
+              
 
               <select
                 class="status-select"
@@ -235,8 +249,7 @@
 
         </tr>
 
-        <!-- ✅ EMPTY STATE -->
-        <!-- ⚠ shows because backend returned empty -->
+        <!-- EMPTY STATE -->
         <tr *ngIf="pagedOrders.length === 0">
           <td colspan="8" class="empty-row">
             No orders found.
@@ -251,8 +264,8 @@
   <!-- PAGINATION -->
   <div class="pagination" *ngIf="totalPages > 1">
 
-    <!-- ✅ using TS functions -->
     <button
+      type="button"
       class="btn-page"
       [disabled]="currentPage === 1"
       (click)="prevPage()">
@@ -261,8 +274,8 @@
 
     <div class="page-numbers">
 
-      <!-- ✅ page numbers -->
       <button
+        type="button"
         *ngFor="let p of [].constructor(totalPages); let i = index"
         class="page-dot"
         [class.active]="currentPage === i + 1"
@@ -273,6 +286,7 @@
     </div>
 
     <button
+      type="button"
       class="btn-page"
       [disabled]="currentPage === totalPages"
       (click)="nextPage()">

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.edutech.exception.ResourceNotFoundException;
 import com.edutech.model.User;
 import com.edutech.repository.UserRepository;
 
@@ -34,7 +35,7 @@ public class UserService implements UserDetailsService {
     public User getUserByUsername(String username) {
 
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with username: " + username));
     }
 
@@ -47,7 +48,7 @@ public class UserService implements UserDetailsService {
     public User getUserProfile(Long userId) {
 
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with id: " + userId));
     }
 
@@ -56,7 +57,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found with username: " + username));
 
         return new org.springframework.security.core.userdetails.User(
@@ -64,5 +65,10 @@ public class UserService implements UserDetailsService {
                 user.getPassword(),
                 List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );
+    }
+
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

@@ -40,6 +40,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 		r.setManager(restaurant.getManager());
 		r.setName(restaurant.getName());
 		r.setPhoneNumber(restaurant.getPhoneNumber());
+		r.setCusine(restaurant.getCusine());
 
 		return restaurantRepository.save(r);
 
@@ -50,5 +51,5 @@ public class RestaurantServiceImpl implements RestaurantService{
 		restaurantRepository.deleteById(id);
 	}
 	
-	//Write your logic here
+	
 }

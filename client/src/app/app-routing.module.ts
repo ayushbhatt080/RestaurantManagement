@@ -22,16 +22,16 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent, 
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
    },
   { path: 'restaurant', component: RestaurantComponent, 
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
    },
   { path: 'assign-manager', component: AssignmanagerComponent, 
-    // canActivate: [AdminGuard]
+    canActivate: [AuthGuard]
    },
   { path: 'menu-item', component: MenuItemComponent,
-    //  canActivate: [AuthGuard]
+     canActivate: [AuthGuard]
      },
      {path:'customerdetails',component:CustomerdetailsComponent},
   { path: 'order', component: OrderComponent, canActivate: [AuthGuard] },

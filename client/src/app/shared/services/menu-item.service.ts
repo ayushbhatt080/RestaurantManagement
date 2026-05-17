@@ -43,10 +43,11 @@ export class MenuItemService {
   // Get menu items by restaurant
   getMenuItemsByRestaurant(restaurantId: number): Observable<MenuItem[]> {
     return this.http.get<MenuItem[]>(
-      `${this.apiUrl}/restaurants/${restaurantId}`,
+      `${this.apiUrl}/restaurant/${restaurantId}`,
       this.getHeaders()
     );
   }
+
 
   // Get menu item by ID
   getMenuItemById(id: number): Observable<MenuItem> {

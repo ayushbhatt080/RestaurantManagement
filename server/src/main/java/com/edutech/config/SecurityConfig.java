@@ -59,11 +59,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.DELETE, "/api/restaurants/**").hasAuthority("ADMIN")
             
             // Order access
-            .antMatchers(HttpMethod.POST, "/api/orders").hasAuthority("CUSTOMER")
-            .antMatchers(HttpMethod.GET, "/api/orders/**").hasAnyAuthority("CUSTOMER", "MANAGER")
-            .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyAuthority("MANAGER","CUSTOMER")
-            .antMatchers(HttpMethod.GET, "/api/orders/userId/*").hasAnyAuthority("CUSTOMER")
-            .antMatchers(HttpMethod.GET, "/api/auth/userDetails/**").hasAnyAuthority("MANAGER","ADMIN","CUSTOMER")
+// Order access
+
+.antMatchers(HttpMethod.POST, "/api/orders")
+.hasAuthority("CUSTOMER")
+
+.antMatchers(HttpMethod.GET, "/api/orders")
+.hasAnyAuthority("ADMIN", "MANAGER", "CUSTOMER")
+
+.antMatchers(HttpMethod.GET, "/api/orders/**")
+.hasAnyAuthority("ADMIN", "MANAGER", "CUSTOMER")
+
+.antMatchers(HttpMethod.PUT, "/api/orders/*/cancel")
+.hasAuthority("CUSTOMER")
+
+.antMatchers(HttpMethod.PUT, "/api/orders/*/status/*")
+.hasAuthority("MANAGER")
+
+.antMatchers(HttpMethod.GET, "/api/auth/userDetails/**")
+.hasAnyAuthority("MANAGER", "ADMIN", "CUSTOMER")
+            
+
 
             // MenuItem access
             .antMatchers(HttpMethod.GET, "/api/menu-items/**").hasAnyAuthority("CUSTOMER","MANAGER")
