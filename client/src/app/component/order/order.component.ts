@@ -5,6 +5,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { MenuItemService } from '../../shared/services/menu-item.service';
 import { OrderService } from '../../shared/services/order.service';
 import { RestaurantService } from '../../shared/services/restaurant.service';
+import { PaymentService } from '../../shared/services/paymentservice';
 
 @Component({
   selector: 'app-order',
@@ -44,7 +45,8 @@ export class OrderComponent implements OnInit {
     private orderService: OrderService,
     private restaurantService: RestaurantService,
     private menuItemService: MenuItemService,
-    public authService: AuthService
+    public authService: AuthService,
+    public paymentService:PaymentService
   ) { }
 
   ngOnInit(): void {
@@ -599,4 +601,44 @@ else if (this.authService.isManager()) {
 
     this.currentPage = page;
   }
+  payNow(): void {
+  this.message = '';
+  this.error = '';
+
+  if (this.orderForm.invalid || this.selectedItems.length === 0) {
+    this.error = 'Please select a restaurant and at least one menu item.';
+    return;
+  }
+
+  const totalPaise = this.getTotal(); 
+
+  this.paymentService.createOrder(totalPaise).subscribe({
+    next: (response: any) => {
+      const options = {
+        key: 'rzp_test_Sr3Wysqx5rbOFB', 
+        amount: response.amount,
+        currency: response.currency || 'INR',
+        name: 'Restaurant System',
+        description: 'Food Order',
+        order_id: response.id,
+        handler: (paymentResponse: any) => {
+          console.log('Payment success:', paymentResponse);
+          // Auto place the order after successful payment
+          this.placeOrder();
+        },
+        modal: {
+          ondismiss: () => {
+            this.error = 'Payment was cancelled.';
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    },
+    error: () => {
+      this.error = 'Could not initiate payment. Please try again.';
+    }
+  });
+}
 }

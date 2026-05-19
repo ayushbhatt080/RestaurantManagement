@@ -1,22 +1,5 @@
 <!-- ============================================================
-     INTEGRATED RESTAURANT WORKFLOW & ORDER MANAGEMENT SYSTEM
-     Landing Page Component
-     ============================================================ -->
-
-<!-- Loading Overlay -->
-<div class="loading-overlay" [class.hidden]="!isLoading">
-  <div class="loader-ring">
-    <div></div><div></div><div></div><div></div>
-  </div>
-  <p class="loader-text">Preparing your experience...</p>
-</div>
-
-<!-- Back to Top -->
-<button class="back-to-top" [class.visible]="showBackToTop" (click)="scrollToTop()" aria-label="Back to top">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-    <polyline points="18 15 12 9 6 15"></polyline>
-  </svg>
-</button>
+     INTEGRATED RESTAURANT WORKFLOW & ORDER============ -->
 
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar" [class.scrolled]="isScrolled" [class.dark]="isDark">
@@ -25,74 +8,111 @@
     <div class="nav-brand" (click)="scrollTo('home')">
       <div class="brand-icon">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#brandGrad)"/>
-          <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#brandGrad)" />
+          <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <defs>
             <linearGradient id="brandGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#ff6b35"/>
-              <stop offset="100%" stop-color="#f7c59f"/>
+              <stop offset="0%" stop-color="#ff6b35" />
+              <stop offset="100%" stop-color="#f7c59f" />
             </linearGradient>
           </defs>
         </svg>
       </div>
-      <span class="brand-name">LetMeDine!!!</span>
+
+      <span class="brand-name sparkle-text">LetMeDine!!!</span>
     </div>
 
     <!-- Desktop Nav Links -->
     <ul class="nav-links" [class.mobile-open]="mobileMenuOpen">
-      <li><a (click)="scrollTo('home')" [class.active]="activeSection === 'home'">Home</a></li>
-      <li><a (click)="scrollTo('about')" [class.active]="activeSection === 'about'">About</a></li>
-      <li><a (click)="scrollTo('features')" [class.active]="activeSection === 'features'">Features</a></li>
-      <li><a (click)="scrollTo('roles')" [class.active]="activeSection === 'roles'">Roles</a></li>
-      <li><a (click)="scrollTo('gallery')" [class.active]="activeSection === 'gallery'">Gallery</a></li>
-      <li><a (click)="scrollTo('contact')" [class.active]="activeSection === 'contact'">Contact</a></li>
+      <li>
+        <a (click)="scrollTo('home')" [class.active]="activeSection === 'home'">
+          Home
+        </a>
+      </li>
+
+      <li>
+        <a (click)="scrollTo('about')" [class.active]="activeSection === 'about'">
+          About
+        </a>
+      </li>
+
+      <li>
+        <a (click)="scrollTo('gallery')" [class.active]="activeSection === 'gallery'">
+          Gallery
+        </a>
+      </li>
+
+      <li>
+        <a (click)="scrollTo('features')" [class.active]="activeSection === 'features'">
+          Features
+        </a>
+      </li>
+
+      <li>
+        <a (click)="scrollTo('roles')" [class.active]="activeSection === 'roles'">
+          Roles
+        </a>
+      </li>
+
+      <li>
+        <a (click)="scrollTo('contact')" [class.active]="activeSection === 'contact'">
+          Contact
+        </a>
+      </li>
     </ul>
 
     <!-- Nav Actions -->
     <div class="nav-actions">
-      <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
+      <button class="theme-toggle" (click)="toggleTheme()"
+        [attr.aria-label]="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
         <span class="theme-icon sun">☀️</span>
         <span class="theme-icon moon">🌙</span>
       </button>
+
       <button class="nav-btn login-btn" (click)="goToLogin()">Login</button>
       <button class="nav-btn register-btn" (click)="goToRegister()">Register</button>
+
       <button class="hamburger" (click)="toggleMobileMenu()" [class.open]="mobileMenuOpen" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </div>
 </nav>
 
-<!-- ===== HERO SECTION (from hero-section-7 pattern) ===== -->
+<!-- ===== HERO SECTION ===== -->
 <section id="home" class="hero-section" [class.dark]="isDark">
-
   <!-- Background Swirls SVG -->
   <div class="hero-bg-swirls" aria-hidden="true">
-    <svg class="swirl swirl-left" width="700" height="700" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="swirl swirl-left" width="700" height="700" viewBox="0 0 600 600" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
       <path d="M515.266 181.33C377.943 51.564 128.537 136.256 50.8123 293.565C-26.9127 450.874 125.728 600 125.728 600"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
-    <svg class="swirl swirl-right" width="800" height="800" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M26.8838 528.274C193.934 689.816 480.051 637.218 594.397 451.983C708.742 266.748 543.953 2.22235 543.953 2.22235"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+    <svg class="swirl swirl-right" width="800" height="800" viewBox="0 0 700 700" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M26.8838 528.274C193.934 689.816 480.051 637.218 594.397 451.983C708.742 266.748 543.953 2.22235 543.953 2.22235"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
     </svg>
+
     <div class="hero-gradient-mesh"></div>
   </div>
 
-  <!-- Floating Food Images -->
-  <div class="floating-images-layer" aria-hidden="true">
-    <img *ngFor="let item of carouselItems; let i = index"
-         [src]="item.image"
-         [alt]="item.name"
-         class="floating-food"
-         [ngClass]="'food-pos-' + i"
-         [style.animation-delay]="(i * 300) + 'ms'"
-    />
+  <!-- 3D Floating Food Images -->
+  <div class="floating-3d-layer" aria-hidden="true">
+    <div *ngFor="let image of floatingHeroImages; let i = index" class="float-3d" [ngClass]="image.objectClass"
+      [style.animation-delay]="(i * 300) + 'ms'">
+      <img [src]="image.src" [alt]="image.alt" />
+    </div>
   </div>
 
   <!-- Decorative Particles -->
   <div class="hero-particles" aria-hidden="true">
-    <span class="particle" *ngFor="let p of particles" [style.left]="p.left" [style.top]="p.top" [style.animation-delay]="p.delay"></span>
+    <span class="particle" *ngFor="let p of particles" [style.left]="p.left" [style.top]="p.top"
+      [style.animation-delay]="p.delay"></span>
   </div>
 
   <!-- Hero Content -->
@@ -105,29 +125,37 @@
     <h1 class="hero-title" data-reveal>
       <span class="title-line">Better food,</span>
       <span class="title-line accent">
-        <span class="typing-text">{{ typingText }}</span><span class="cursor">|</span>
+        <span class="typing-text">{{ typingText }}</span>
+        <span class="cursor">|</span>
       </span>
       <span class="title-line">for everyone.</span>
     </h1>
 
     <p class="hero-description" data-reveal>
-      The all-in-one integrated workflow & order management system for modern restaurants —
+      The all-in-one integrated workflow &amp; order management system for modern restaurants —
       empowering customers, managers, and administrators on one seamless platform.
     </p>
 
     <div class="hero-stats" data-reveal>
       <div class="stat-item">
-        <span class="stat-number" data-count="500">0</span><span class="stat-suffix">+</span>
+        <span class="stat-number" data-count="500">0</span>
+        <span class="stat-suffix">+</span>
         <span class="stat-label">Restaurants</span>
       </div>
+
       <div class="stat-divider"></div>
+
       <div class="stat-item">
-        <span class="stat-number" data-count="50000">0</span><span class="stat-suffix">+</span>
+        <span class="stat-number" data-count="50000">0</span>
+        <span class="stat-suffix">+</span>
         <span class="stat-label">Orders Daily</span>
       </div>
+
       <div class="stat-divider"></div>
+
       <div class="stat-item">
-        <span class="stat-number" data-count="98">0</span><span class="stat-suffix">%</span>
+        <span class="stat-number" data-count="98">0</span>
+        <span class="stat-suffix">%</span>
         <span class="stat-label">Satisfaction</span>
       </div>
     </div>
@@ -140,6 +168,7 @@
           <polyline points="12 5 19 12 12 19"></polyline>
         </svg>
       </button>
+
       <button class="cta-secondary" (click)="goToLogin()">
         Sign In
       </button>
@@ -147,6 +176,7 @@
 
     <div class="hero-trust" data-reveal>
       <span class="trust-text">Trusted by teams at</span>
+
       <div class="trust-logos">
         <span>LTIMindtree</span>
         <span>TechMahindra</span>
@@ -164,6 +194,60 @@
   </div>
 </section>
 
+<!-- ===== DISCOUNT MARQUEE ===== -->
+<div class="discount-marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <!-- Duplicate for smooth infinite loop -->
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+
+    <span class="marquee-item">
+      <span class="discount-small">Today's Discount</span>
+      15% OFF
+      <span class="discount-separator">•</span>
+    </span>
+  </div>
+</div>
+
 <!-- ===== ABOUT SECTION ===== -->
 <section id="about" class="about-section" [class.dark]="isDark">
   <div class="section-container">
@@ -171,7 +255,7 @@
       <span class="section-tag">Our Story</span>
       <h2 class="section-title">Redefining Restaurant Operations</h2>
       <p class="section-subtitle">
-        IRWOMS was built to solve the chaos behind restaurant management —
+        LetMeDine was built to solve the chaos behind restaurant management —
         connecting every stakeholder through a single, elegant platform.
       </p>
     </div>
@@ -179,8 +263,14 @@
     <div class="about-grid">
       <div class="about-visual" data-reveal>
         <div class="about-image-stack">
-          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&auto=format&fit=crop&q=80" alt="Restaurant kitchen" class="about-img about-img-back"/>
-          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&auto=format&fit=crop&q=80" alt="Restaurant dining" class="about-img about-img-front"/>
+          <img
+            src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&amp;auto=format&amp;fit=crop&amp;q=80"
+            alt="Restaurant kitchen" class="about-img about-img-back" />
+
+          <img
+            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&amp;auto=format&amp;fit=crop&amp;q=80"
+            alt="Restaurant dining" class="about-img about-img-front" />
+
           <div class="about-badge-float">
             <span class="badge-num">10+</span>
             <span class="badge-lbl">Years of Innovation</span>
@@ -193,6 +283,7 @@
           For over a decade, we've enabled restaurants to thrive — streamlining orders,
           empowering staff, and delighting customers with technology that just works.
         </p>
+
         <div class="about-pillars">
           <div class="pillar">
             <div class="pillar-icon">🧑‍🍳</div>
@@ -201,6 +292,7 @@
               <p>Real-time order routing and workflow automation for culinary teams.</p>
             </div>
           </div>
+
           <div class="pillar">
             <div class="pillar-icon">📊</div>
             <div>
@@ -208,6 +300,7 @@
               <p>Deep business insights, menu performance, and sales reporting.</p>
             </div>
           </div>
+
           <div class="pillar">
             <div class="pillar-icon">🔐</div>
             <div>
@@ -216,28 +309,104 @@
             </div>
           </div>
         </div>
-        <button class="btn-outline" (click)="scrollTo('features')">Explore Features →</button>
+
+        <button class="btn-outline" (click)="scrollTo('gallery')">
+          Explore Gallery →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY / CUISINE CAROUSEL ===== -->
+<!-- FOOD THAT INSPIRES IS NOW ABOVE EVERYTHING YOU NEED -->
+<section id="gallery" class="gallery-section" [class.dark]="isDark">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-tag">Our Cuisine World</span>
+      <h2 class="section-title">Food That Inspires</h2>
+      <p class="section-subtitle">
+        From street-style burgers to fine-dining pasta — the platform handles every cuisine category.
+      </p>
+    </div>
+
+    <!-- Primary Carousel -->
+    <div class="cuisine-track-wrap" data-reveal>
+      <div class="cuisine-track track-forward">
+        <div class="cuisine-card" *ngFor="let item of carouselItems">
+          <div class="cuisine-img-wrap">
+            <img [src]="item.image" [alt]="item.name" loading="lazy" />
+          </div>
+
+          <div class="cuisine-info">
+            <h4>{{ item.name }}</h4>
+            <span>{{ item.category }}</span>
+          </div>
+        </div>
+
+        <!-- Duplicate for seamless loop -->
+        <div class="cuisine-card" *ngFor="let item of carouselItems">
+          <div class="cuisine-img-wrap">
+            <img [src]="item.image" [alt]="item.name" loading="lazy" />
+          </div>
+
+          <div class="cuisine-info">
+            <h4>{{ item.name }}</h4>
+            <span>{{ item.category }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Carousel Reverse -->
+    <div class="cuisine-track-wrap" data-reveal>
+      <div class="cuisine-track track-reverse">
+        <div class="cuisine-card" *ngFor="let item of secondCuisineItems">
+          <div class="cuisine-img-wrap">
+            <img [src]="item.image" [alt]="item.name" loading="lazy" />
+          </div>
+
+          <div class="cuisine-info">
+            <h4>{{ item.name }}</h4>
+            <span>{{ item.category }}</span>
+          </div>
+        </div>
+
+        <!-- Duplicate for seamless loop -->
+        <div class="cuisine-card" *ngFor="let item of secondCuisineItems">
+          <div class="cuisine-img-wrap">
+            <img [src]="item.image" [alt]="item.name" loading="lazy" />
+          </div>
+
+          <div class="cuisine-info">
+            <h4>{{ item.name }}</h4>
+            <span>{{ item.category }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===== FEATURES SECTION ===== -->
+<!-- EVERYTHING YOU NEED IS NOW BELOW FOOD THAT INSPIRES -->
 <section id="features" class="features-section" [class.dark]="isDark">
   <div class="section-container">
     <div class="section-header" data-reveal>
       <span class="section-tag">Capabilities</span>
       <h2 class="section-title">Everything You Need</h2>
-      <p class="section-subtitle">A comprehensive suite of tools designed for every layer of your restaurant business.</p>
+      <p class="section-subtitle">
+        A comprehensive suite of tools designed for every layer of your restaurant business.
+      </p>
     </div>
 
     <div class="features-grid">
-      <div class="feature-card" *ngFor="let feature of features; let i = index"
-           data-reveal
-           [style.animation-delay]="(i * 100) + 'ms'">
+      <div class="feature-card" *ngFor="let feature of features; let i = index" data-reveal
+        [style.animation-delay]="(i * 100) + 'ms'">
         <div class="feature-icon-wrap">
           <span class="feature-icon">{{ feature.icon }}</span>
         </div>
+
         <h3 class="feature-title">{{ feature.title }}</h3>
         <p class="feature-desc">{{ feature.description }}</p>
         <div class="feature-tag">{{ feature.tag }}</div>
@@ -252,87 +421,35 @@
     <div class="section-header" data-reveal>
       <span class="section-tag">Who It's For</span>
       <h2 class="section-title">Built for Every Role</h2>
-      <p class="section-subtitle">Tailored experiences for each stakeholder in your restaurant ecosystem.</p>
+      <p class="section-subtitle">
+        Tailored experiences for each stakeholder in your restaurant ecosystem.
+      </p>
     </div>
 
     <div class="roles-grid">
-      <div class="role-card" *ngFor="let role of roles; let i = index"
-           data-reveal
-           [style.animation-delay]="(i * 150) + 'ms'">
+      <div class="role-card" *ngFor="let role of roles; let i = index" data-reveal
+        [style.animation-delay]="(i * 150) + 'ms'">
         <div class="role-header">
           <div class="role-avatar">{{ role.icon }}</div>
+
           <div>
             <h3 class="role-name">{{ role.title }}</h3>
             <span class="role-badge">{{ role.badge }}</span>
           </div>
         </div>
+
         <p class="role-desc">{{ role.description }}</p>
+
         <ul class="role-perks">
           <li *ngFor="let perk of role.perks">
-            <span class="perk-check">✓</span> {{ perk }}
+            <span class="perk-check">✓</span>
+            {{ perk }}
           </li>
         </ul>
-        <button class="role-cta" (click)="goToRegister()">Get Access →</button>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== GALLERY / CUISINE CAROUSEL ===== -->
-<section id="gallery" class="gallery-section" [class.dark]="isDark">
-  <div class="section-container">
-    <div class="section-header" data-reveal>
-      <span class="section-tag">Our Cuisine World</span>
-      <h2 class="section-title">Food That Inspires</h2>
-      <p class="section-subtitle">From street-style burgers to fine-dining pasta — the platform handles every cuisine category.</p>
-    </div>
-
-    <!-- Primary Carousel -->
-    <div class="cuisine-track-wrap" data-reveal>
-      <div class="cuisine-track track-forward">
-        <div class="cuisine-card" *ngFor="let item of carouselItems">
-          <div class="cuisine-img-wrap">
-            <img [src]="item.image" [alt]="item.name" loading="lazy"/>
-          </div>
-          <div class="cuisine-info">
-            <h4>{{ item.name }}</h4>
-            <span>{{ item.category }}</span>
-          </div>
-        </div>
-        <!-- Duplicate for seamless loop -->
-        <div class="cuisine-card" *ngFor="let item of carouselItems">
-          <div class="cuisine-img-wrap">
-            <img [src]="item.image" [alt]="item.name" loading="lazy"/>
-          </div>
-          <div class="cuisine-info">
-            <h4>{{ item.name }}</h4>
-            <span>{{ item.category }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Secondary Carousel (reverse) -->
-    <div class="cuisine-track-wrap" data-reveal>
-      <div class="cuisine-track track-reverse">
-        <div class="cuisine-card" *ngFor="let item of secondCuisineItems">
-          <div class="cuisine-img-wrap">
-            <img [src]="item.image" [alt]="item.name" loading="lazy"/>
-          </div>
-          <div class="cuisine-info">
-            <h4>{{ item.name }}</h4>
-            <span>{{ item.category }}</span>
-          </div>
-        </div>
-        <div class="cuisine-card" *ngFor="let item of secondCuisineItems">
-          <div class="cuisine-img-wrap">
-            <img [src]="item.image" [alt]="item.name" loading="lazy"/>
-          </div>
-          <div class="cuisine-info">
-            <h4>{{ item.name }}</h4>
-            <span>{{ item.category }}</span>
-          </div>
-        </div>
+        <button class="role-cta" (click)="goToRegister()">
+          Get Access →
+        </button>
       </div>
     </div>
   </div>
@@ -343,12 +460,16 @@
   <div class="section-container">
     <div class="contact-card" data-reveal>
       <div class="contact-glow"></div>
+
       <span class="section-tag">Let's Get Started</span>
+
       <h2 class="contact-title">Ready to Transform Your Restaurant?</h2>
+
       <p class="contact-desc">
-        Join hundreds of restaurants already using IRWOMS to streamline operations,
+        Join hundreds of restaurants already using LetMeDine to streamline operations,
         delight customers, and grow revenue.
       </p>
+
       <div class="contact-actions">
         <button class="cta-primary pulse-btn" (click)="goToRegister()">
           Create Free Account
@@ -357,7 +478,10 @@
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </button>
-        <button class="cta-secondary" (click)="goToLogin()">Sign In Instead</button>
+
+        <button class="cta-secondary" (click)="goToLogin()">
+          Sign In Instead
+        </button>
       </div>
     </div>
   </div>
@@ -367,20 +491,27 @@
 <footer class="footer" [class.dark]="isDark">
   <div class="footer-container">
     <div class="footer-brand">
-      <div class="brand-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#footerGrad)"/>
-          <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <defs>
-            <linearGradient id="footerGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#ff6b35"/>
-              <stop offset="100%" stop-color="#f7c59f"/>
-            </linearGradient>
-          </defs>
-        </svg>
+      <div class="footer-brand-inline" style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#footerGrad)" />
+            <path d="M8 12l2.5 2.5L16 9" stroke="white" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="footerGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#ff6b35" />
+                <stop offset="100%" stop-color="#f7c59f" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <span class="brand-name">LetMeDine</span>
       </div>
-      <span class="brand-name">IRWOMS</span>
-      <p class="footer-tagline">Integrated Restaurant Workflow &amp; Order Management System</p>
+
+      <p class="footer-tagline">
+        Integrated Restaurant Workflow &amp; Order Management System
+      </p>
     </div>
 
     <div class="footer-links">
@@ -388,9 +519,11 @@
         <h5>Navigate</h5>
         <a (click)="scrollTo('home')">Home</a>
         <a (click)="scrollTo('about')">About</a>
+        <a (click)="scrollTo('gallery')">Gallery</a>
         <a (click)="scrollTo('features')">Features</a>
         <a (click)="scrollTo('roles')">Roles</a>
       </div>
+
       <div class="footer-col">
         <h5>Quick Access</h5>
         <a (click)="goToLogin()">Login</a>
@@ -398,6 +531,7 @@
         <a (click)="scrollTo('gallery')">Gallery</a>
         <a (click)="scrollTo('contact')">Contact</a>
       </div>
+
       <div class="footer-col">
         <h5>Platform</h5>
         <a>Customer Portal</a>
@@ -409,8 +543,30 @@
   </div>
 
   <div class="footer-bottom">
-    <p>© 2024 IRWOMS. Built for LTIMindtree project showcase.</p>
+    <p>© 2024 LetMeDine. Built for LTIMindtree project showcase.</p>
     <p>Crafted with ❤️ for the modern food industry.</p>
   </div>
 </footer>
+
+<!-- ===== FLOATING CHATBOT ===== -->
 <app-floating-chatbot></app-floating-chatbot>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div class="loading-overlay" [class.hidden]="!isLoading">
+  <div class="loader-ring">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <p class="loader-text">Preparing your experience...</p>
+</div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="back-to-top" [class.visible]="showBackToTop" (click)="scrollToTop()" aria-label="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <line x1="12" y1="19" x2="12" y2="5"></line>
+    <polyline points="5 12 12 5 19 12"></polyline>
+  </svg>
+</button>

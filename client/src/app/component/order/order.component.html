@@ -1,457 +1,405 @@
-<div class="page-container">
+<div class="orders-page">
 
-  <!-- HEADER -->
-  <div class="page-header">
+  <!-- FOOD WALLPAPER BACKGROUND -->
+  <div class="food-wallpaper" aria-hidden="true">
 
-    <div class="header-left">
-      <span class="header-eyebrow">Manage</span>
-      <h1 class="page-title">Orders</h1>
-    </div>
+    <div class="wallpaper-overlay"></div>
 
-    <!-- PLACE ORDER -->
-    <button
-      type="button"
-      *ngIf="authService.isCustomer()"
-      class="btn btn-primary"
-      (click)="showForm = true; message=''; error=''"
-    >
-      <span class="btn-icon">✦</span>
-      Place Order
-    </button>
+    <!-- COLUMN 1 -->
+    <div class="food-bg-col food-bg-col--1">
+      <div class="food-bg-strip">
 
-  </div>
-
-  <!-- SUCCESS -->
-  <div *ngIf="message" class="alert alert-success">
-    <span class="alert-icon">✔</span>
-    {{ message }}
-  </div>
-
-  <!-- ERROR -->
-  <div *ngIf="error" class="alert alert-danger">
-    <span class="alert-icon">✕</span>
-    {{ error }}
-  </div>
-
-  <!-- ORDER SEARCH -->
-  <div class="search-bar">
-
-    <span class="search-icon">⌕</span>
-
-    <input
-      type="text"
-      [(ngModel)]="searchText"
-      placeholder="Search by customer, restaurant, status or menu item..."
-    />
-
-  </div>
-
-  <!-- MODAL -->
-  <div
-    class="modal-overlay"
-    *ngIf="showForm"
-    (click)="showForm = false"
-  >
-
-    <div
-      class="modal-card"
-      (click)="$event.stopPropagation()"
-    >
-
-      <!-- MODAL HEADER -->
-      <div class="modal-header">
-
-        <div class="modal-title-group">
-          <span class="modal-eyebrow">New Order</span>
-          <h3 class="modal-title">
-            Place Your Order
-          </h3>
+        <!-- SET A -->
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=60');"></div>
         </div>
 
-        <button
-          type="button"
-          class="modal-close"
-          (click)="showForm = false"
-        >
-          &#10005;
-        </button>
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1675252369719-dd52bc69c3df?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <!-- SET B DUPLICATE FOR SEAMLESS LOOP -->
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1675252369719-dd52bc69c3df?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
 
       </div>
+    </div>
 
-      <!-- FORM -->
+    <!-- COLUMN 2 -->
+    <div class="food-bg-col food-bg-col--2">
+      <div class="food-bg-strip">
+
+        <!-- SET A -->
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1559742811-822873691df8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://img.magnific.com/free-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_2829-19744.jpg?semt=ais_hybrid&w=740&q=80');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJgQJLUPhlJ4Vk6t_ujr-E4n4pGkfX5Jia0g&s');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <!-- SET B DUPLICATE FOR SEAMLESS LOOP -->
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1559742811-822873691df8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://img.magnific.com/free-photo/penne-pasta-tomato-sauce-with-chicken-tomatoes-wooden-table_2829-19744.jpg?semt=ais_hybrid&w=740&q=80');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJgQJLUPhlJ4Vk6t_ujr-E4n4pGkfX5Jia0g&s');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COLUMN 3 -->
+    <div class="food-bg-col food-bg-col--3">
+      <div class="food-bg-strip">
+
+        <!-- SET A -->
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <!-- SET B DUPLICATE FOR SEAMLESS LOOP -->
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--wide">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card food-bg-card--tall">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+        <div class="food-bg-card">
+          <div class="food-bg-img" style="background-image: url('https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&auto=format&fit=crop&q=60');"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="order-wrapper">
+
+    <!-- SUCCESS / ERROR MESSAGES -->
+    <div class="alert alert-success" *ngIf="message">{{ message }}</div>
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h2 class="page-title">Orders</h2>
+
+      <button
+        *ngIf="authService.isCustomer()"
+        class="btn btn-primary"
+        (click)="showForm = !showForm">
+        {{ showForm ? 'Close' : '+ New Order' }}
+      </button>
+    </div>
+
+    <!-- ORDER FORM -->
+    <div class="card order-form-card" *ngIf="showForm && authService.isCustomer()">
+      <h3 class="card-title">Place a New Order</h3>
+
       <form [formGroup]="orderForm">
 
-        <!-- RESTAURANT -->
         <div class="form-group">
+          <label class="form-label">Select Restaurant</label>
 
-          <label class="form-label">
-            Select Restaurant
-            <span class="required">*</span>
-          </label>
+          <select
+            class="form-control"
+            formControlName="restaurantId"
+            (change)="onRestaurantChange($event)">
+            <option value="">-- Choose a Restaurant --</option>
 
-          <div class="select-wrapper">
+            <option *ngFor="let r of restaurants" [value]="r.id">
+              {{ r.name }}
+            </option>
+          </select>
+        </div>
 
-            <select
-              formControlName="restaurantId"
+        <ng-container *ngIf="orderForm.value.restaurantId">
+
+          <div class="form-group" *ngIf="menuItems.length > 0">
+            <label class="form-label">Search Menu Items</label>
+
+            <input
+              type="text"
               class="form-control"
-              (change)="onRestaurantChange($event)"
-            >
-
-              <option value="">
-                — Choose a Restaurant —
-              </option>
-
-              <option
-                *ngFor="let r of restaurants"
-                [value]="r.id"
-              >
-                {{ r.name }} · {{ r.location }}
-              </option>
-
-            </select>
-
-            <span class="select-arrow">▾</span>
-
+              placeholder="Search by name or type..."
+              [(ngModel)]="menuSearchText"
+              [ngModelOptions]="{ standalone: true }" />
           </div>
 
+          <p class="empty-text" *ngIf="menuItems.length === 0">
+            No menu items available for this restaurant.
+          </p>
+
+          <p
+            class="empty-text"
+            *ngIf="menuItems.length > 0 && filteredMenuItems().length === 0">
+            No items match "{{ menuSearchText }}".
+          </p>
+
+          <div class="menu-grid" *ngIf="filteredMenuItems().length > 0">
+            <div
+              class="menu-card"
+              *ngFor="let item of filteredMenuItems()"
+              [class.selected]="isSelected(item)"
+              (click)="toggleItem(item)">
+
+              <span class="check-badge" *ngIf="isSelected(item)">✓</span>
+
+              <div class="menu-name">{{ item.name }}</div>
+              <div class="menu-type">{{ item.menuType }}</div>
+              <div class="menu-price">₹{{ item.price }}</div>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <div class="summary-box" *ngIf="selectedItems.length > 0">
+          <div class="summary-header">Selected Items</div>
+
+          <div class="summary-row" *ngFor="let item of selectedItems">
+            <span>{{ item.name }}</span>
+            <span>₹{{ item.price }}</span>
+          </div>
+
+          <div class="summary-total">
+            <span>Total</span>
+            <span>₹{{ getTotal() }}</span>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="form-actions" *ngIf="orderForm.value.restaurantId">
+          <button
+            class="btn btn-pay"
+            type="button"
+            (click)="payNow()"
+            [disabled]="selectedItems.length === 0">
+            💳 Pay Now — ₹{{ getTotal() }}
+          </button>
         </div>
 
       </form>
+    </div>
 
-      <!-- MENU ITEMS -->
-      <div
-        *ngIf="menuItems.length > 0"
-        class="menu-section"
-      >
+    <!-- ORDERS TABLE -->
+    <div class="card orders-card">
 
-        <!-- TITLE -->
-        <h4 class="section-label">
-          <span class="label-line"></span>
-          Select Items
-          <span class="label-line"></span>
-        </h4>
+      <div class="table-toolbar">
+        <h3 class="card-title">
+          {{ authService.isCustomer() ? 'My Orders' : 'All Orders' }}
+        </h3>
 
-        <!-- MENU SEARCH -->
-        <div class="search-bar">
-
-          <span class="search-icon">⌕</span>
-
-          <input
-            type="text"
-            [(ngModel)]="menuSearchText"
-            placeholder="Search menu items before ordering..."
-          />
-
-        </div>
-
-        <!-- MENU GRID -->
-        <div class="menu-select-grid">
-
-          <div
-            class="menu-select-card"
-            *ngFor="let item of filteredMenuItems()"
-            [class.selected]="isSelected(item)"
-            (click)="toggleItem(item)"
-          >
-
-            <!-- TYPE -->
-            <div
-              class="menu-badge"
-              [class.veg]="item.menuType === 'Veg'"
-              [class.nonveg]="item.menuType !== 'Veg'"
-            >
-              {{ item.menuType }}
-            </div>
-
-            <!-- NAME -->
-            <h5 class="item-name">
-              {{ item.name }}
-            </h5>
-
-            <!-- PRICE -->
-            <p class="item-price">
-              Rs. {{ item.price }}
-            </p>
-
-            <!-- CHECK -->
-            <div
-              class="check-icon"
-              *ngIf="isSelected(item)"
-            >
-              ✦
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- TOTAL -->
-        <div
-          class="order-total"
-          *ngIf="selectedItems.length > 0"
-        >
-
-          <div class="total-inner">
-
-            <span class="total-label">
-              Order Total
-            </span>
-
-            <span class="total-amount">
-              Rs. {{ getTotal() | number:'1.2-2' }}
-            </span>
-
-          </div>
-
-          <span class="total-count">
-            {{ selectedItems.length }} item(s) selected
-          </span>
-
-        </div>
-
+        <input
+          type="text"
+          class="form-control search-box"
+          placeholder="Search orders..."
+          [(ngModel)]="searchText"
+          [ngModelOptions]="{ standalone: true }" />
       </div>
 
-      <!-- EMPTY MENU -->
-      <div
-        *ngIf="orderForm.value.restaurantId && menuItems.length === 0"
-        class="empty-menu"
-      >
-        No menu items available for this restaurant.
+      <div class="table-responsive" *ngIf="pagedOrders.length > 0">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Customer</th>
+              <th>Restaurant</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let order of pagedOrders; let i = index">
+
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+
+              <td>{{ order.customerName || '—' }}</td>
+
+              <td>{{ order.restaurantName || order.restaurant?.name || '—' }}</td>
+
+              <td class="items-cell">
+                <span *ngFor="let n of order.menuItemNames; let last = last">
+                  {{ n }}{{ last ? '' : ', ' }}
+                </span>
+                <span *ngIf="!order.menuItemNames || order.menuItemNames.length === 0">—</span>
+              </td>
+
+              <td>₹{{ order.totalAmount || order.total || '—' }}</td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [ngClass]="{
+                    'badge-pending': order.status === 'PENDING',
+                    'badge-confirmed': order.status === 'CONFIRMED',
+                    'badge-preparing': order.status === 'PREPARING',
+                    'badge-delivered': order.status === 'DELIVERED',
+                    'badge-cancelled': order.status === 'CANCELLED'
+                  }">
+                  {{ order.status }}
+                </span>
+              </td>
+
+              <td>
+                <button
+                  *ngIf="authService.isCustomer() && order.status === 'PENDING'"
+                  class="btn btn-sm btn-danger"
+                  (click)="cancelOrder(order.id)">
+                  Cancel
+                </button>
+
+                <select
+                  #statusSel
+                  *ngIf="!authService.isCustomer()"
+                  class="form-control status-select"
+                  (change)="updateStatus(order.id, statusSel.value)">
+                  <option value="">Update Status</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="PREPARING">Preparing</option>
+                  <option value="DELIVERED">Delivered</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- ACTIONS -->
-      <div class="modal-actions">
+      <p class="empty-text center" *ngIf="pagedOrders.length === 0">
+        No orders found.
+      </p>
 
+      <div class="pagination" *ngIf="totalPages > 1">
         <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="showForm = false"
-        >
-          Cancel
+          class="btn btn-sm btn-outline"
+          (click)="prevPage()"
+          [disabled]="currentPage === 1">
+          ‹ Prev
         </button>
 
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="placeOrder()"
-          [disabled]="orderForm.invalid || selectedItems.length === 0"
-        >
-          <span class="btn-icon">✦</span>
-          Confirm Order
-        </button>
+        <span class="page-info">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
 
+        <button
+          class="btn btn-sm btn-outline"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages">
+          Next ›
+        </button>
       </div>
 
     </div>
-
-  </div>
-
-  <!-- TABLE -->
-  <div class="table-wrapper">
-
-    <table class="data-table">
-
-      <!-- TABLE HEADER -->
-      <thead>
-
-        <tr>
-          <th>#</th>
-          <th>Customer</th>
-          <th>Restaurant</th>
-          <th>Menu Items</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th>Time</th>
-          <th>Actions</th>
-        </tr>
-
-      </thead>
-
-      <!-- TABLE BODY -->
-      <tbody>
-
-        <tr
-          *ngFor="let o of pagedOrders"
-          class="table-row"
-        >
-
-          <!-- ID -->
-          <td class="id-cell">
-            {{ o.id }}
-          </td>
-
-          <!-- CUSTOMER -->
-          <td>
-            {{ o.customerName || o.user?.username || '—' }}
-          </td>
-
-          <!-- RESTAURANT -->
-          <td>
-            {{ o.restaurantName || o.restaurant?.name || '—' }}
-          </td>
-
-          <!-- MENU ITEMS -->
-          <td class="menu-items-cell">
-
-            <ng-container
-              *ngIf="o.menuItemNames && o.menuItemNames.length > 0"
-            >
-
-              <span
-                class="menu-item-badge"
-                *ngFor="let item of o.menuItemNames"
-              >
-                {{ item }}
-              </span>
-
-            </ng-container>
-
-            <ng-container
-              *ngIf="!o.menuItemNames || o.menuItemNames.length === 0"
-            >
-              —
-            </ng-container>
-
-          </td>
-
-          <!-- TOTAL -->
-          <td class="amount">
-            Rs. {{ o.totalAmount || 0 | number:'1.2-2' }}
-          </td>
-
-          <!-- STATUS -->
-          <td>
-
-            <span
-              class="status-badge"
-              [ngClass]="
-                'status-' + (o.status?.toLowerCase() || 'unknown')
-              "
-            >
-              {{ o.status || '—' }}
-            </span>
-
-          </td>
-
-          <!-- TIME -->
-          <td class="time-cell">
-            {{ o.orderTime | date:'short' }}
-          </td>
-
-          <!-- ACTIONS -->
-          <td class="action-cell">
-
-            <!-- CUSTOMER CANCEL -->
-            <button
-              type="button"
-              *ngIf="
-                authService.isCustomer() &&
-                o.status === 'PLACED'
-              "
-              class="btn-sm btn-danger"
-              (click)="cancelOrder(o.id)"
-            >
-              Cancel
-            </button>
-
-            <!-- MANAGER STATUS -->
-            <div
-              class="select-wrapper sm"
-              *ngIf="authService.isManager()"
-            >
-
-              <select
-                class="status-select"
-                (change)="updateStatus(
-                  o.id,
-                  $any($event.target).value
-                )"
-              >
-
-                <option value="">
-                  Update Status
-                </option>
-
-                <option value="PROCESSING">
-                  Processing
-                </option>
-
-                <option value="DELIVERED">
-                  Delivered
-                </option>
-
-                <option value="CANCELLED">
-                  Cancelled
-                </option>
-
-              </select>
-
-              <span class="select-arrow">▾</span>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-        <!-- EMPTY -->
-        <tr *ngIf="pagedOrders.length === 0">
-
-          <td colspan="8" class="empty-row">
-            No orders found.
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-  <!-- PAGINATION -->
-  <div
-    class="pagination"
-    *ngIf="totalPages > 1"
-  >
-
-    <!-- PREVIOUS -->
-    <button
-      type="button"
-      class="btn-page"
-      [disabled]="currentPage === 1"
-      (click)="prevPage()"
-    >
-      &#8249;
-    </button>
-
-    <!-- PAGE NUMBERS -->
-    <div class="page-numbers">
-
-      <button
-        type="button"
-        *ngFor="
-          let p of [].constructor(totalPages);
-          let i = index
-        "
-        class="page-dot"
-        [class.active]="currentPage === i + 1"
-        (click)="goToPage(i + 1)"
-      >
-        {{ i + 1 }}
-      </button>
-
-    </div>
-
-    <!-- NEXT -->
-    <button
-      type="button"
-      class="btn-page"
-      [disabled]="currentPage === totalPages"
-      (click)="nextPage()"
-    >
-      &#8250;
-    </button>
 
   </div>
 

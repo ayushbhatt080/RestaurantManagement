@@ -40,6 +40,12 @@ interface Particle {
     delay: string;
 }
 
+interface FloatingHeroImage {
+    src: string;
+    alt: string;
+    objectClass: string;
+}
+
 // ─── Component ─────────────────────────────────────────────────────────────────
 
 @Component({
@@ -75,6 +81,49 @@ export class LandingpageComponent implements OnInit, AfterViewInit, OnDestroy {
     private charIndex = 0;
     private typingTimer: ReturnType<typeof setTimeout> | null = null;
     private isDeleting = false;
+
+    // ── 3D Parallax State ────────────────────────────────────────────────────────
+    private parallaxFrame: number | null = null;
+    private latestMouseEvent: MouseEvent | null = null;
+
+    private readonly isTouchDevice =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(pointer: coarse)').matches;
+
+    // ── Floating 3D Hero Images ──────────────────────────────────────────────────
+    floatingHeroImages: FloatingHeroImage[] = [
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/110a09a9d81f0e5305041c1b507d0f391743058910.png',
+            alt: 'A delicious cheeseburger',
+            objectClass: 'obj-1',
+        },
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/b4f62434088b0ddfa9b370991f58ca601743060218.png',
+            alt: 'A bamboo steamer with dumplings',
+            objectClass: 'obj-2',
+        },
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/316495f4ba2a9c9d9aa97fed9fe61cf71743059024.png',
+            alt: 'A slice of pizza',
+            objectClass: 'obj-3',
+        },
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/70b50e1a48a82437bfa2bed925b862701742892555.png',
+            alt: 'A basil leaf',
+            objectClass: 'obj-4',
+        },
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/9ef1cc6ecf1d92798507ffad71e9492d1742892584.png',
+            alt: 'A slice of tomato',
+            objectClass: 'obj-5',
+        },
+        {
+            src: 'https://b.zmtcdn.com/data/o2_assets/9ef1cc6ecf1d92798507ffad71e9492d1742892584.png',
+            alt: 'A slice of tomato',
+            objectClass: 'obj-6',
+        },
+    ];
 
     // ── Particles ────────────────────────────────────────────────────────────────
     particles: Particle[] = Array.from({ length: 14 }, (_, i) => ({
@@ -289,6 +338,10 @@ export class LandingpageComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.typingTimer) {
             clearTimeout(this.typingTimer);
         }
+
+        if (this.parallaxFrame) {
+            cancelAnimationFrame(this.parallaxFrame);
+        }
     }
 
     // ─── Routing Methods ─────────────────────────────────────────────────────────
@@ -370,6 +423,99 @@ export class LandingpageComponent implements OnInit, AfterViewInit, OnDestroy {
     onWindowScroll(): void {
         this.isScrolled = window.scrollY > 40;
         this.showBackToTop = window.scrollY > 500;
+    }
+
+    @HostListener('window:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent): void {
+        if (this.isTouchDevice) {
+            return;
+        }
+
+        const hero = document.querySelector<HTMLElement>('.hero-section');
+
+        if (!hero) {
+            return;
+        }
+
+        const rect = hero.getBoundingClientRect();
+
+        const isInsideHero =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+
+        if (!isInsideHero) {
+            return;
+        }
+
+        this.latestMouseEvent = event;
+
+        if (this.parallaxFrame) {
+            return;
+        }
+
+        this.parallaxFrame = requestAnimationFrame(() => {
+            this.updateFloatingParallax();
+            this.parallaxFrame = null;
+        });
+    }
+
+    @HostListener('window:mouseleave')
+    onWindowMouseLeave(): void {
+        this.resetFloatingParallax();
+    }
+
+    // ─── Floating 3D Parallax ────────────────────────────────────────────────────
+
+    private updateFloatingParallax(): void {
+        if (!this.latestMouseEvent) {
+            return;
+        }
+
+        const hero = document.querySelector<HTMLElement>('.hero-section');
+
+        if (!hero) {
+            return;
+        }
+
+        const rect = hero.getBoundingClientRect();
+
+        const normalizedX =
+            (this.latestMouseEvent.clientX - rect.left) / rect.width - 0.5;
+
+        const normalizedY =
+            (this.latestMouseEvent.clientY - rect.top) / rect.height - 0.5;
+
+        const floatingObjects =
+            document.querySelectorAll<HTMLElement>('.float-3d');
+
+        floatingObjects.forEach((el, index) => {
+            const depth = index + 1;
+
+            const moveX = normalizedX * depth * 10;
+            const moveY = normalizedY * depth * 8;
+
+            const rotateX = normalizedY * -10;
+            const rotateY = normalizedX * 14;
+
+            el.style.setProperty('--tx', `${moveX}px`);
+            el.style.setProperty('--ty', `${moveY}px`);
+            el.style.setProperty('--mouse-rx', `${rotateX}deg`);
+            el.style.setProperty('--mouse-ry', `${rotateY}deg`);
+        });
+    }
+
+    private resetFloatingParallax(): void {
+        const floatingObjects =
+            document.querySelectorAll<HTMLElement>('.float-3d');
+
+        floatingObjects.forEach((el) => {
+            el.style.setProperty('--tx', '0px');
+            el.style.setProperty('--ty', '0px');
+            el.style.setProperty('--mouse-rx', '0deg');
+            el.style.setProperty('--mouse-ry', '0deg');
+        });
     }
 
     // ─── Typing Animation ─────────────────────────────────────────────────────────

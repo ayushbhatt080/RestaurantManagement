@@ -1,6 +1,5 @@
 // ============================================================
-//  GROOV GASTROBAR — Premium Login Page
-//  FINAL OPTIMIZED FULLSCREEN VERSION
+//  GROOV GASTROBAR — FINAL PREMIUM LOGIN PAGE
 // ============================================================
 
 // ─── Design Tokens ───────────────────────────────────────────
@@ -390,7 +389,7 @@ $bp-mobile: 600px;
   align-items: center;
   justify-content: center;
 
-  padding: 18px 24px;
+  padding: 8px 24px;
 
   position: relative;
   z-index: 10;
@@ -400,12 +399,12 @@ $bp-mobile: 600px;
   animation: cardReveal 0.9s $ease-smooth both;
 
   @media (max-width: $bp-tablet) {
-    padding: 230px 20px 30px;
+    padding: 220px 20px 24px;
     align-items: flex-start;
   }
 
   @media (max-width: $bp-mobile) {
-    padding: 190px 14px 24px;
+    padding: 180px 14px 20px;
   }
 }
 
@@ -427,7 +426,7 @@ $bp-mobile: 600px;
   overflow: hidden;
   position: relative;
 
-  transform: scale(0.94);
+  transform: scale(0.91);
   transform-origin: center;
 
   &::before {
@@ -446,7 +445,7 @@ $bp-mobile: 600px;
   }
 
   @media (max-width: $bp-mobile) {
-    transform: scale(1);
+    transform: scale(0.96);
   }
 }
 
@@ -475,12 +474,12 @@ $bp-mobile: 600px;
   align-items: center;
   gap: 16px;
 
-  padding: 22px 28px 14px;
+  padding: 18px 28px 10px;
 
   @media (max-width: $bp-mobile) {
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px 20px 12px;
+    padding: 18px 20px 10px;
   }
 }
 
@@ -560,12 +559,12 @@ $bp-mobile: 600px;
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 
-  padding: 16px 28px 0;
+  padding: 10px 28px 0;
 
   @media (max-width: $bp-mobile) {
-    padding: 14px 20px 0;
+    padding: 10px 20px 0;
   }
 }
 
@@ -690,6 +689,36 @@ $bp-mobile: 600px;
   }
 }
 
+// ─── CAPTCHA ────────────────────────────────────────────────
+.captcha-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.captcha-label {
+  margin-bottom: 2px;
+}
+
+.captcha-wrapper {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2px;
+
+  border-radius: 14px;
+
+  transform: scale(0.88);
+  transform-origin: center;
+
+  iframe {
+    border-radius: 12px;
+  }
+}
+
 // ─── Submit Button ───────────────────────────────────────────
 .submit-btn {
   position: relative;
@@ -779,7 +808,7 @@ $bp-mobile: 600px;
 
 // ─── Footer ──────────────────────────────────────────────────
 .card-footer {
-  padding: 0 28px 18px;
+  padding: 0 28px 10px;
   text-align: center;
 
   p {
@@ -789,7 +818,7 @@ $bp-mobile: 600px;
   }
 
   @media (max-width: $bp-mobile) {
-    padding: 0 20px 20px;
+    padding: 0 20px 12px;
   }
 }
 
@@ -840,6 +869,10 @@ $bp-mobile: 600px;
 
   .food-card {
     border-radius: 14px;
+  }
+
+  .captcha-wrapper {
+    transform: scale(0.78);
   }
 }
 

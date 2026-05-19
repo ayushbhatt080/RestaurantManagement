@@ -1,19 +1,19 @@
-// package com.edutech.dto;
+package com.edutech.dto;
 
-// import com.fasterxml.jackson.annotation.JsonProperty;
-// import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-// public class RecaptchaResponse {
-//     private boolean success;
+public class RecaptchaResponse {
+    private boolean success;
 
-//     @JsonProperty("error-codes")
-//     private List<String> errorCodes;
+    @JsonProperty("error-codes")
+    private List<String> errorCodes;
 
-//     public boolean isSuccess() {
-//         return success;
-//     }
+    public boolean isSuccess() {
+        return success;
+    }
 
-//     public List<String> getErrorCodes() {
-//         return errorCodes;
-//     }
-// }
+    public List<String> getErrorCodes() {
+        return errorCodes;
+    }
+}
