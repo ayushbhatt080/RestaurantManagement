@@ -133,7 +133,7 @@ public class AuthController {
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAll() {
-        List<User> users = userService.getAllUsers();
+        List<User> users = userService.getAllManagers();
         return ResponseEntity.ok(users);
     }
 

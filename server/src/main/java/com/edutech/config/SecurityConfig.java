@@ -46,12 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/auth/send-otp").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/verify-otp").permitAll()
 
-
-                //Forget Password APIs
+                // Forget Password APIs
                 .antMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
-                
-        
 
                 .antMatchers(HttpMethod.GET, "/api/auth/user/**").hasAnyAuthority("ADMIN", "MANAGER", "CUSTOMER")
 
@@ -65,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // Order access
                 .antMatchers(HttpMethod.POST, "/api/orders").hasAuthority("CUSTOMER")
-                .antMatchers(HttpMethod.GET, "/api/orders/**").hasAnyAuthority("CUSTOMER", "MANAGER")
+                .antMatchers(HttpMethod.GET, "/api/orders").hasAuthority("ADMIN")  // updated by gorkha
+                .antMatchers(HttpMethod.GET, "/api/orders/**").hasAnyAuthority("CUSTOMER", "MANAGER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyAuthority("MANAGER", "CUSTOMER")
                 .antMatchers(HttpMethod.GET, "/api/orders/userId/*").hasAnyAuthority("CUSTOMER")
                 .antMatchers(HttpMethod.GET, "/api/auth/userDetails/**").hasAnyAuthority("MANAGER", "ADMIN", "CUSTOMER")

@@ -25,15 +25,22 @@ public class OrderController {
         private JwtUtil jwtUtil;
 
 
+
 @GetMapping("/my")
-        public ResponseEntity<?> getMyOrders(@RequestHeader("Authorization") String header) {
+public ResponseEntity<List<OrderResponseDTO>> getMyOrders(@RequestHeader("Authorization") String header) {
 
-                String token = header.replace("Bearer ", "");
-                String username = jwtUtil.extractUsername(token);
+    String token = header.replace("Bearer ", "");
+    String username = jwtUtil.extractUsername(token);
 
-                return ResponseEntity.ok(
-                                orderService.getOrdersForManager(username));
-        }
+    List<Order> orders = orderService.getOrdersForManager(username);
+
+    List<OrderResponseDTO> response = orders.stream()
+            .map(this::mapToDTO)
+            .collect(Collectors.toList());
+
+    return ResponseEntity.ok(response);
+}
+
 
     // =========================
     // PLACE ORDER

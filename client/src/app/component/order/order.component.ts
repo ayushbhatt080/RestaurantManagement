@@ -150,7 +150,8 @@ export class OrderComponent implements OnInit {
 
         });
 
-    } else if (this.authService.isManager()) {
+    } 
+else if (this.authService.isManager()) {
 
   this.orderService
     .getMyOrders()   // ✅ sirf assigned restaurants ke orders
@@ -183,8 +184,7 @@ export class OrderComponent implements OnInit {
 
     });
 
-  }
-    else {
+  }else {
 
       this.orderService
         .getAllOrders()

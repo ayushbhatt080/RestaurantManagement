@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.edutech.exception.ResourceNotFoundException;
+import com.edutech.model.Role;
 import com.edutech.model.User;
 import com.edutech.repository.UserRepository;
 
@@ -56,7 +57,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String username) {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -92,8 +93,12 @@ public class UserService implements UserDetailsService {
         return user.getResetTokenExpiry().isAfter(LocalDateTime.now());
     }
 
-     public List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<User> getAllManagers() {
+        return userRepository.findByRole(Role.MANAGER);
     }
 
 }

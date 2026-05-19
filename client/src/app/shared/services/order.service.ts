@@ -15,14 +15,29 @@ export class OrderService {
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
+  // private getHeaders() {
+  //   return {
+  //     headers: new HttpHeaders({
+  //       Authorization: `Bearer ${this.authService.getToken()}`
+  //     })
+  //   };
+  // }
   private getHeaders() {
+
+    const token = this.authService.getToken();
+
+    if (!token) {
+      return {}; // ❗ header hi mat bhej
+    }
+
     return {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${this.authService.getToken()}`
+        Authorization: `Bearer ${token}`
       })
     };
+
   }
 
   // ✅ Place order
@@ -37,8 +52,8 @@ export class OrderService {
   // ✅ Get all orders
   getAllOrders(): Observable<any[]> {
     return this.http.get<any[]>(
-      this.baseUrl,
-      this.getHeaders()
+      this.baseUrl
+      ,this.getHeaders()
     );
   }
 
@@ -83,10 +98,11 @@ export class OrderService {
   }
   getMyOrders(): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.baseUrl}/my`,
-      this.getHeaders()
+      `${this.baseUrl}/my`
+      ,this.getHeaders()
     );
   }
+
 }
 
 

@@ -1,0 +1,111 @@
+<div class="chatbot-wrapper">
+
+  <!-- Chat Window -->
+  <div class="chat-window" *ngIf="isOpen">
+
+    <!-- Header -->
+    <div class="chat-header" [ngClass]="getGradientClass(currentAgent.gradient)">
+
+      <div class="agent-info">
+
+        <div class="avatar-wrapper">
+          <div class="avatar">
+            {{ currentAgent.icon }}
+          </div>
+
+          <span class="status-dot" [ngClass]="getStatusClass(currentAgent.status)">
+          </span>
+        </div>
+
+        <div>
+          <h3>{{ currentAgent.name }}</h3>
+          <p>{{ currentAgent.role }}</p>
+        </div>
+
+      </div>
+
+      <button class="close-btn" type="button" (click)="closeChat()">
+        ×
+      </button>
+
+    </div>
+
+    <!-- Chat Body -->
+    <div class="chat-body">
+
+      <!-- Messages -->
+      <div class="message-row" *ngFor="let chat of messages"
+        [ngClass]="chat.sender === 'user' ? 'user-row' : 'bot-row'">
+
+        <!-- Bot Avatar -->
+        <div class="message-avatar" *ngIf="chat.sender === 'bot'">
+          {{ currentAgent.icon }}
+        </div>
+
+        <!-- Message Content -->
+        <div class="message-content">
+
+          <span class="sender-name" *ngIf="chat.sender === 'bot'">
+            {{ chat.agentName || currentAgent.name }}
+          </span>
+
+          <div class="message-bubble" [ngClass]="chat.sender === 'user' ? 'user-bubble' : 'bot-bubble'">
+            {{ chat.text }}
+          </div>
+
+        </div>
+
+        <!-- User Avatar -->
+        <div class="message-avatar user-avatar" *ngIf="chat.sender === 'user'">
+          ME
+        </div>
+
+      </div>
+
+      <!-- Typing Indicator -->
+      <div class="message-row bot-row" *ngIf="isLoading">
+
+        <div class="message-avatar">
+          {{ currentAgent.icon }}
+        </div>
+
+        <div class="message-content">
+
+          <span class="sender-name">
+            {{ currentAgent.name }}
+          </span>
+
+          <div class="message-bubble bot-bubble typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Input Area -->
+    <form class="chat-input-area" (ngSubmit)="sendMessage()">
+      <input type="text" name="message" [(ngModel)]="message" placeholder="Ask RAIma how to use the website..."
+        autocomplete="off" [disabled]="isLoading" />
+
+      <button type="submit" [disabled]="isLoading || !message.trim()">
+        ➤
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- Floating Button -->
+  <button type="button" class="floating-chat-btn" [ngClass]="{ 'open': isOpen }" (click)="toggleChat()">
+
+    <span *ngIf="!isOpen">💬</span>
+    <span *ngIf="isOpen">×</span>
+
+  </button>
+
+</div>
