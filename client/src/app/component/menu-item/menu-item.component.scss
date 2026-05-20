@@ -1545,3 +1545,310 @@
     &:hover { background: var(--g-600); }
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+//  SELECT ALL + BULK DELETE FUNCTIONALITY STYLES
+// ═══════════════════════════════════════════════════════════
+
+.col-select {
+  width: 54px;
+  text-align: center !important;
+}
+
+.checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  width: 26px;
+  height: 26px;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .custom-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--r-sm);
+    border: 1px solid rgba(212, 168, 67, 0.35);
+    background: var(--c-800);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    box-shadow: inset 0 1px 0 rgba(212, 168, 67, 0.08);
+
+    &::after {
+      content: '';
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid var(--c-900);
+      border-bottom: 2px solid var(--c-900);
+      transform: rotate(-45deg) scale(0);
+      margin-top: -2px;
+      transition: transform var(--transition-spring);
+    }
+  }
+
+  input:checked + .custom-checkbox {
+    background: linear-gradient(
+      135deg,
+      var(--g-600) 0%,
+      var(--g-500) 40%,
+      var(--g-400) 70%,
+      var(--g-300) 100%
+    );
+    border-color: var(--g-300);
+    box-shadow:
+      0 0 14px rgba(212, 168, 67, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    &::after {
+      transform: rotate(-45deg) scale(1);
+    }
+  }
+
+  input:indeterminate + .custom-checkbox {
+    background: linear-gradient(
+      135deg,
+      var(--g-600) 0%,
+      var(--g-500) 40%,
+      var(--g-400) 70%,
+      var(--g-300) 100%
+    );
+    border-color: var(--g-300);
+    box-shadow:
+      0 0 14px rgba(212, 168, 67, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+
+    &::after {
+      content: '';
+      width: 9px;
+      height: 2px;
+      border: none;
+      background: var(--c-900);
+      transform: scale(1);
+      margin-top: 0;
+    }
+  }
+
+  &:hover .custom-checkbox {
+    border-color: var(--g-400);
+    box-shadow:
+      0 0 12px rgba(212, 168, 67, 0.18),
+      inset 0 1px 0 rgba(212, 168, 67, 0.1);
+  }
+}
+
+.select-all-wrap {
+  margin: 0 auto;
+}
+
+.table-row.row-selected {
+  background: rgba(212, 168, 67, 0.06);
+
+  &:hover {
+    background: rgba(212, 168, 67, 0.09);
+  }
+
+  .row-num {
+    border-color: var(--g-400);
+    color: var(--g-300);
+  }
+
+  .item-name {
+    color: var(--g-200);
+  }
+}
+
+// Because we added checkbox column
+.data-table {
+  min-width: 760px;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BULK SELECTION BAR
+// ═══════════════════════════════════════════════════════════
+
+.bulk-selection-bar {
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--s-5);
+  padding: var(--s-3) var(--s-5);
+  border-radius: var(--r-lg);
+  border: 1px solid rgba(212, 168, 67, 0.22);
+  background:
+    linear-gradient(135deg, rgba(212, 168, 67, 0.08), rgba(212, 168, 67, 0.025)),
+    var(--c-750);
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(212, 168, 67, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  animation: fadeSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.bulk-selection-info {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--g-300);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bulk-selection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--g-400);
+  box-shadow: 0 0 10px rgba(212, 168, 67, 0.45);
+}
+
+.bulk-selection-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--s-3);
+
+  @media (max-width: 600px) {
+    justify-content: stretch;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BULK DELETE BUTTON
+// ═══════════════════════════════════════════════════════════
+
+.btn-bulk-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  border: 1px solid rgba(192, 74, 74, 0.45);
+  background: rgba(192, 74, 74, 0.1);
+  color: #ffb3b3;
+  border-radius: var(--r-md);
+  font-family: var(--font-body);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.78rem var(--s-5);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(192, 74, 74, 0.18);
+    border-color: rgba(192, 74, 74, 0.75);
+    box-shadow: 0 0 18px rgba(192, 74, 74, 0.22);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.bulk-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--s-2);
+  border-radius: var(--r-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(192, 74, 74, 0.25);
+  border: 1px solid rgba(192, 74, 74, 0.45);
+  color: #ffd0d0;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CLEAR SELECTION BUTTON
+// ═══════════════════════════════════════════════════════════
+
+.btn-clear-selection {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--c-500);
+  background: transparent;
+  color: var(--ivory-50);
+  border-radius: var(--r-md);
+  font-family: var(--font-body);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.78rem var(--s-5);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+
+  &:hover {
+    border-color: var(--g-600);
+    color: var(--g-300);
+    background: rgba(212, 168, 67, 0.06);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MOBILE RESPONSIVE SUPPORT FOR CHECKBOX COLUMN
+// ═══════════════════════════════════════════════════════════
+
+@media (max-width: 680px) {
+  .data-table {
+    min-width: unset;
+
+    .col-select {
+      justify-content: flex-start !important;
+      gap: var(--s-3);
+    }
+
+    .col-select::before {
+      content: attr(data-label);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--g-500);
+      opacity: 0.7;
+      flex-shrink: 0;
+      margin-right: var(--s-4);
+    }
+
+    thead .col-select::before {
+      content: none;
+    }
+  }
+
+  .toolbar-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .btn-bulk-delete,
+  .btn-clear-selection {
+    padding: 0.72rem var(--s-4);
+  }
+}
