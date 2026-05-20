@@ -17,7 +17,7 @@ export class PaymentService {
   createOrder(amount: number): Observable<any> {
 
     return this.http.post(
-      `${this.baseUrl}/createOrder?amount=${amount}`,
+      `${this.baseUrl}/createOrder?amount=${amount * 100}`,
       {}
     );
   }

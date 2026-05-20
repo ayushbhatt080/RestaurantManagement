@@ -1,6 +1,7 @@
 package com.edutech.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +74,21 @@ public class RestaurantController {
       return new ResponseEntity<>(restaurantService.updateRestaurant(id, restaurant), HttpStatus.OK);
    }
 
+   // @DeleteMapping("/{id}")
+   // public ResponseEntity<?> deleteRestaurant(@PathVariable long id) {
+   //    restaurantService.deleteRestaurant(id);
+   //    return new ResponseEntity<>(HttpStatus.OK);
+   // }
    @DeleteMapping("/{id}")
    public ResponseEntity<?> deleteRestaurant(@PathVariable long id) {
-      restaurantService.deleteRestaurant(id);
-      return new ResponseEntity<>(HttpStatus.OK);
+
+      try {
+         restaurantService.deleteRestaurant(id);
+         return ResponseEntity.ok().body(Map.of("message", "Deleted successfully"));
+      } catch (Exception e) {
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+               .body(e.getMessage());
+      }
+
    }
 }

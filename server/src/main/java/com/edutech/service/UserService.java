@@ -100,5 +100,7 @@ public class UserService implements UserDetailsService {
     public List<User> getAllManagers() {
         return userRepository.findByRole(Role.MANAGER);
     }
-
+    public List<User> getAllCustomers() {
+        return userRepository.findByRole(Role.CUSTOMER);
+    }
 }

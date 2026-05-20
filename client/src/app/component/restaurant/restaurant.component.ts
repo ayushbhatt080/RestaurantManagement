@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 import { RestaurantService } from '../../shared/services/restaurant.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -25,6 +26,9 @@ export class RestaurantComponent implements OnInit {
 
   // ✅ Theme state
   isLight: boolean = false;
+
+  // ✅ Bulk selection state
+  selectedIds: Set<number> = new Set<number>();
 
   constructor(
     private fb: FormBuilder,
@@ -88,6 +92,9 @@ export class RestaurantComponent implements OnInit {
       next: (data: any) => {
         console.log('RESTAURANTS LOADED:', data);
         this.restaurants = data;
+
+        // ✅ Reload ke baad selected checkbox clear
+        this.selectedIds.clear();
       },
       error: (error: any) => {
         console.error('LOAD RESTAURANTS ERROR:', error);
@@ -194,12 +201,96 @@ export class RestaurantComponent implements OnInit {
         console.log('RESTAURANT DELETED:', id);
 
         this.restaurants = this.restaurants.filter(r => r.id !== id);
+
+        // ✅ Agar selected hai to selectedIds se bhi remove
+        this.selectedIds.delete(id);
+
         this.successMessage = 'Restaurant deleted successfully.';
       },
       error: (error: any) => {
         console.error('DELETE RESTAURANT ERROR:', error);
 
         this.errorMessage = 'Failed to delete restaurant. Please try again.';
+      }
+    });
+  }
+
+  // ✅ Select one restaurant
+  toggleSelectItem(id: number, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    if (checked) {
+      this.selectedIds.add(id);
+    } else {
+      this.selectedIds.delete(id);
+    }
+  }
+
+  // ✅ Select all restaurants
+  toggleSelectAll(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+
+    this.selectedIds.clear();
+
+    if (checked) {
+      this.restaurants.forEach(r => {
+        if (r.id !== undefined && r.id !== null) {
+          this.selectedIds.add(r.id);
+        }
+      });
+    }
+  }
+
+  // ✅ Check row selected or not
+  isSelected(id: number): boolean {
+    return this.selectedIds.has(id);
+  }
+
+  // ✅ Header checkbox checked state
+  isAllSelected(): boolean {
+    return this.restaurants.length > 0 && this.selectedIds.size === this.restaurants.length;
+  }
+
+  // ✅ Header checkbox indeterminate state
+  isSomeSelected(): boolean {
+    return this.selectedIds.size > 0 && !this.isAllSelected();
+  }
+
+  // ✅ Clear selected checkboxes
+  clearSelection(): void {
+    this.selectedIds.clear();
+  }
+
+  // ✅ Delete selected restaurants
+  deleteSelected(): void {
+    const ids = Array.from(this.selectedIds);
+
+    if (ids.length === 0) {
+      return;
+    }
+
+    const confirmDelete = confirm(`Delete ${ids.length} selected restaurant(s)?`);
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.clearMessages();
+
+    forkJoin(ids.map(id => this.restaurantService.deleteById(id))).subscribe({
+      next: () => {
+        this.successMessage = `${ids.length} restaurant(s) deleted successfully.`;
+
+        this.restaurants = this.restaurants.filter(r => !this.selectedIds.has(r.id));
+
+        this.selectedIds.clear();
+      },
+      error: (error: any) => {
+        console.error('BULK DELETE RESTAURANTS ERROR:', error);
+
+        this.errorMessage = 'Failed to delete selected restaurants. Please try again.';
+
+        this.loadRestaurants();
       }
     });
   }

@@ -18,5 +18,7 @@ public interface RestaurantManagerAssignmentRepository extends JpaRepository<Res
 	Optional<RestaurantManagerAssignment> findByManagerId(Long managerId);
 
 	List<RestaurantManagerAssignment> findByUser_Id(Long userId);
+	
+	void deleteByRestaurant_Id(Long id);
 
 }

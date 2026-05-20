@@ -232,7 +232,7 @@
 
         <!-- CONTACT DETAILS -->
         <div class="section-block">
-          <p class="form-section-label">Contact & Details</p>
+          <p class="form-section-label">Contact &amp; Details</p>
 
           <div class="form-row-4">
 
@@ -387,6 +387,30 @@
       </div>
     </div>
 
+    <!-- ✅ BULK DELETE BOX - NOW SHOWS HERE ABOVE TABLE -->
+    <div class="bulk-selection-bar" *ngIf="selectedIds.size > 0">
+      <div class="bulk-selection-info">
+        <span class="bulk-selection-dot"></span>
+        <span>{{ selectedIds.size }} restaurant(s) selected</span>
+      </div>
+
+      <div class="bulk-selection-actions">
+        <button
+          type="button"
+          class="btn-clear-selection"
+          (click)="clearSelection()">
+          Clear Selection
+        </button>
+
+        <button
+          type="button"
+          class="btn-bulk-delete"
+          (click)="deleteSelected()">
+          Delete Selected
+        </button>
+      </div>
+    </div>
+
     <div class="table-wrapper" role="region" aria-label="Restaurants table" tabindex="0">
 
       <div class="table-shimmer-bar" aria-hidden="true"></div>
@@ -395,13 +419,27 @@
 
         <thead>
           <tr>
-            <th class="col-index">#</th>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Cuisine</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th class="col-actions">Actions</th>
+
+            <!-- ✅ Select All Checkbox -->
+            <th class="col-select" scope="col">
+              <label class="checkbox-wrap select-all-wrap" title="Select all restaurants">
+                <input
+                  type="checkbox"
+                  [checked]="isAllSelected()"
+                  [indeterminate]="isSomeSelected()"
+                  (change)="toggleSelectAll($event)"
+                  aria-label="Select all restaurants" />
+                <span class="custom-checkbox"></span>
+              </label>
+            </th>
+
+            <th class="col-index" scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Cuisine</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th class="col-actions" scope="col">Actions</th>
           </tr>
         </thead>
 
@@ -410,7 +448,20 @@
           <tr
             class="table-row"
             *ngFor="let r of restaurants; let i = index"
+            [class.row-selected]="isSelected(r.id)"
             [attr.style]="'--row-index:' + i">
+
+            <!-- ✅ Row Checkbox -->
+            <td class="col-select" data-label="Select">
+              <label class="checkbox-wrap" [attr.title]="'Select ' + r.name">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(r.id)"
+                  (change)="toggleSelectItem(r.id, $event)"
+                  [attr.aria-label]="'Select ' + r.name" />
+                <span class="custom-checkbox"></span>
+              </label>
+            </td>
 
             <td class="col-index" data-label="#">
               <span class="row-num">{{ i + 1 }}</span>
@@ -490,7 +541,7 @@
           </tr>
 
           <tr class="empty-row" *ngIf="restaurants.length === 0">
-            <td colspan="7">
+            <td colspan="8">
               <div class="empty-state empty-state--blank">
                 <div class="empty-icon-wrap" aria-hidden="true">
                   <svg width="36" height="36" viewBox="0 0 36 36" fill="none">

@@ -36,6 +36,8 @@ void deleteOrderItemsByRestaurantId(Long restaurantId);
 
 List<MenuItem> findByRestaurant_IdIn(List<Long> restaurantIds);
 
+void deleteByRestaurant_Id(Long id);
+
 
     
 }

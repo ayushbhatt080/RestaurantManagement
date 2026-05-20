@@ -1248,3 +1248,224 @@ $radius-xl: 24px;
   .kpi-grid { grid-template-columns: 1fr; }
   .action-grid { grid-template-columns: 1fr; }
 }
+
+// ═══════════════════════════════════════════════════════
+// CUSTOMER ONLY - FOOD VIDEO HERO UI
+// Applies only to customer dashboard
+// ═══════════════════════════════════════════════════════
+
+.role-customer {
+  .customer-video-hero {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - #{$topbar-h} - 56px);
+    border-radius: $radius-xl;
+    overflow: hidden;
+    margin-bottom: 40px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .customer-hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+
+    // Video is now more visible
+    filter: brightness(0.82) contrast(1.08) saturate(1.18);
+  }
+
+  .customer-hero-dark-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    // Lighter overlay so pizza video is clearly visible
+    background:
+      radial-gradient(
+        circle at center,
+        rgba(0, 0, 0, 0.08) 0%,
+        rgba(0, 0, 0, 0.18) 42%,
+        rgba(0, 0, 0, 0.55) 100%
+      ),
+      linear-gradient(
+        120deg,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(85, 25, 0, 0.28) 45%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+  }
+
+  .customer-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 880px;
+    padding: 68px 28px 78px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    // This keeps text readable while allowing video visibility
+    background: radial-gradient(
+      circle at center,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.22) 48%,
+      rgba(0, 0, 0, 0) 72%
+    );
+  }
+
+  .customer-hero-top-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 24px;
+    border-radius: $radius-sm;
+    border: 1px solid rgba(255, 132, 50, 0.95);
+    background: rgba(0, 0, 0, 0.42);
+    color: #fff1df;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(249, 115, 22, 0.34);
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+
+    &:hover {
+      background: rgba(249, 115, 22, 0.22);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(249, 115, 22, 0.55);
+    }
+  }
+
+  .customer-hero-title {
+    margin-top: 42px;
+    margin-bottom: 26px;
+    font-size: clamp(42px, 7vw, 86px);
+    line-height: 1.02;
+    font-weight: 950;
+    letter-spacing: -0.05em;
+
+    span,
+    strong {
+      display: block;
+    }
+
+    span {
+      color: #ff3b3b;
+      text-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.85),
+        0 0 18px rgba(255, 0, 0, 0.65),
+        0 0 42px rgba(255, 0, 0, 0.35);
+    }
+
+    strong {
+      margin-top: 8px;
+      color: #ff9a3d;
+      text-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.85),
+        0 0 20px rgba(249, 115, 22, 0.85),
+        0 0 46px rgba(249, 115, 22, 0.45);
+    }
+  }
+
+  .customer-hero-subtitle {
+    max-width: 760px;
+    color: #fff4ec;
+    font-size: clamp(16px, 2vw, 22px);
+    line-height: 1.65;
+    margin-bottom: 34px;
+    text-shadow:
+      0 2px 5px rgba(0, 0, 0, 0.9),
+      0 0 14px rgba(0, 0, 0, 0.65);
+  }
+
+  .customer-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .customer-hero-main-btn,
+  .customer-hero-outline-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 14px 32px;
+    border-radius: $radius-md;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .customer-hero-main-btn {
+    border: 1px solid #fb923c;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    color: #fff;
+    box-shadow:
+      0 6px 24px rgba(0, 0, 0, 0.35),
+      0 0 26px rgba(249, 115, 22, 0.45);
+
+    &:hover {
+      background: linear-gradient(135deg, #dc2626, #ea580c);
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.45),
+        0 0 38px rgba(249, 115, 22, 0.6);
+    }
+  }
+
+  .customer-hero-outline-btn {
+    border: 1px solid rgba(249, 115, 22, 0.95);
+    background: rgba(0, 0, 0, 0.38);
+    color: #fff1df;
+    box-shadow:
+      0 6px 22px rgba(0, 0, 0, 0.35),
+      0 0 20px rgba(249, 115, 22, 0.25);
+    backdrop-filter: blur(8px);
+
+    &:hover {
+      background: rgba(249, 115, 22, 0.2);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .customer-video-hero {
+      min-height: 560px;
+      border-radius: $radius-lg;
+    }
+
+    .customer-hero-content {
+      padding: 48px 20px 56px;
+    }
+
+    .customer-hero-title {
+      margin-top: 32px;
+      font-size: clamp(38px, 11vw, 58px);
+    }
+
+    .customer-hero-subtitle {
+      font-size: 15px;
+    }
+
+    .customer-hero-main-btn,
+    .customer-hero-outline-btn {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+}

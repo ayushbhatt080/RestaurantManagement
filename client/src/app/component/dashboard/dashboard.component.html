@@ -1,8 +1,5 @@
-<div
-  class="dashboard-shell"
-  [ngClass]="'role-' + currentRole.toLowerCase()"
-  [class.sidebar-collapsed]="sidebarCollapsed"
->
+<div class="dashboard-shell" [ngClass]="'role-' + currentRole.toLowerCase()"
+  [class.sidebar-collapsed]="sidebarCollapsed">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -77,7 +74,7 @@
         </ng-container>
 
         <!-- CUSTOMER NAV -->
-        <ng-container *ngIf="isCustomer()">
+        <!-- <ng-container *ngIf="isCustomer()">
           <div class="nav-group-label">My Account</div>
           <a class="nav-item" [class.active]="activeTab === 'customer-home'" (click)="setTab('customer-home')">
             <span class="nav-icon">🏠</span>
@@ -88,6 +85,25 @@
             <span class="nav-label">Order</span>
           </a>
           <a class="nav-item" [class.active]="activeTab === 'customer-feedback'" (click)="setTab('customer-feedback')">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Feedback</span>
+          </a>
+        </ng-container> -->
+
+        <ng-container *ngIf="isCustomer()">
+          <div class="nav-group-label">My Account</div>
+
+          <a class="nav-item" [class.active]="activeTab === 'customer-home'" (click)="setTab('customer-home')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+          </a>
+
+          <a class="nav-item" (click)="goToOrders()">
+            <span class="nav-icon">🍴</span>
+            <span class="nav-label">Order</span>
+          </a>
+
+          <a class="nav-item" (click)="goToFeedback()">
             <span class="nav-icon">💬</span>
             <span class="nav-label">Feedback</span>
           </a>
@@ -519,23 +535,44 @@
       <ng-container *ngIf="isCustomer()">
 
         <!-- ── CUSTOMER HOME ── -->
-        <ng-container *ngIf="activeTab === 'customer-home' || activeTab === 'customer-order' || activeTab === 'customer-feedback'">
+        <ng-container
+          *ngIf="activeTab === 'customer-home' || activeTab === 'customer-order' || activeTab === 'customer-feedback'">
 
-          <!-- HERO SECTION -->
-          <div class="cust-hero">
-            <div class="cust-hero-overlay"></div>
-            <div class="cust-hero-content">
-              <p class="cust-hero-eyebrow">🍽 Welcome back</p>
-              <h1 class="cust-hero-title">Hello, <span class="cust-hero-name">{{ username }}</span></h1>
-              <p class="cust-hero-sub">Discover mouth-watering dishes crafted just for you.</p>
-              <div class="cust-hero-actions">
-                <button class="cust-cta-btn primary" (click)="goToOrders()">
-                  <span class="cta-icon">🛒</span>
+          <!-- HERO SECTION - CUSTOMER ONLY VIDEO HERO -->
+          <!-- HERO SECTION - CUSTOMER ONLY FOOD VIDEO HERO -->
+          <div class="customer-video-hero">
+            <video #foodHeroVideo class="customer-hero-video" autoplay muted loop playsinline preload="auto"
+              (loadedmetadata)="foodHeroVideo.muted = true; foodHeroVideo.play()">
+              <source src="https://cdn.pixabay.com/video/2022/07/10/123629-728697948_large.mp4" type="video/mp4" />
+            </video>
+
+            <div class="customer-hero-dark-overlay"></div>
+
+            <div class="customer-hero-content">
+              <button class="customer-hero-top-btn" type="button" (click)="goToOrders()">
+                Explore Let Me Dine
+                <span>→</span>
+              </button>
+
+              <h1 class="customer-hero-title">
+                <span>Welcome to</span>
+                <strong>Let Me Dine</strong>
+              </h1>
+
+              <p class="customer-hero-subtitle">
+                Discover delicious food, explore curated dishes, and place your next order
+                with a premium dining experience.
+              </p>
+
+              <div class="customer-hero-actions">
+                <button class="customer-hero-main-btn" type="button" (click)="goToOrders()">
                   Place an Order
+                  <span>🛒</span>
                 </button>
-                <button class="cust-cta-btn secondary" (click)="goToFeedback()">
-                  <span class="cta-icon">💬</span>
+
+                <button class="customer-hero-outline-btn" type="button" (click)="goToFeedback()">
                   Give Feedback
+                  <span>💬</span>
                 </button>
               </div>
             </div>

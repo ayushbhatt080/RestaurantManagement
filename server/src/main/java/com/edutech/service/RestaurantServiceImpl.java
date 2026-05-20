@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edutech.exception.ResourceNotFoundException;
+import com.edutech.model.MenuItem;
 import com.edutech.model.Restaurant;
 import com.edutech.model.RestaurantManagerAssignment;
 import com.edutech.model.User;
@@ -66,28 +67,33 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	}
 
-	@Override
-@Transactional
-public void deleteRestaurant(long id) {
+@Override
+	@Transactional
+	public void deleteRestaurant(long id) {
 
-    Restaurant restaurant = restaurantRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
+		Restaurant restaurant = restaurantRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
 
-    // ✅ Step 1: delete order_items
-    menuItemRepository.deleteOrderItemsByRestaurantId(id);
+		// ✅ STEP 1: get all menu items
+		List<MenuItem> items = menuItemRepository.findByRestaurantId(id);
 
-    // ✅ Step 2: delete feedback (if any)
-    // menuItemRepository.deleteFeedbackByRestaurantId(id);
+		// ✅ STEP 2: clear order_items
+		for (MenuItem item : items) {
+			menuItemRepository.deleteFromOrderItems(item.getId());
+		}
 
-    // ✅ Step 3: delete orders (CRITICAL FIX 🚨)
-    orderRepository.deleteOrdersByRestaurantId(id);
+		// ✅ STEP 3: ✅ FIXED LINE
+		assignmentRepository.deleteByRestaurant_Id(id);
 
-    // ✅ Step 4: delete menu items
-    menuItemRepository.deleteMenuItemsByRestaurantId(id);
+		// ✅ STEP 4
+		orderRepository.deleteByRestaurant_Id(id);
 
-    // ✅ Step 5: delete restaurant
-    restaurantRepository.delete(restaurant);
-}
+		// ✅ STEP 5
+		menuItemRepository.deleteByRestaurant_Id(id);
+
+		// ✅ STEP 6
+		restaurantRepository.delete(restaurant);
+	}
 @Override
 	public List<Restaurant> getRestaurantsForManager(String username) {
 

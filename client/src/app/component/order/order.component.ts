@@ -367,7 +367,8 @@ else if (this.authService.isManager()) {
             ? Number(item.price)
             : 0;
 
-        return sum + (price * qty);
+        // return sum + (price * qty);
+        return sum + price;
 
       },
       0

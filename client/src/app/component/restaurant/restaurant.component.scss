@@ -1562,3 +1562,362 @@ button {
     }
   }
 }
+
+/* =========================================================
+   CHECKBOX SELECTION STYLES - ADDED FOR RESTAURANT TABLE
+   ========================================================= */
+
+.data-table th.col-select,
+.data-table td.col-select {
+  width: 54px;
+  min-width: 54px;
+  max-width: 54px;
+  text-align: center;
+  padding-left: var(--s-4);
+  padding-right: var(--s-4);
+}
+
+.checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.checkbox-wrap input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: var(--r-xs);
+  border: 1px solid rgba(212, 168, 67, 0.38);
+  background:
+    linear-gradient(135deg, rgba(212, 168, 67, 0.08), rgba(212, 168, 67, 0.02)),
+    var(--c-800);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition:
+    background var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+}
+
+.checkbox-wrap:hover .custom-checkbox {
+  border-color: var(--g-400);
+  box-shadow: var(--glow-gold-s);
+  transform: scale(1.06);
+}
+
+.checkbox-wrap input[type="checkbox"]:checked + .custom-checkbox {
+  background: linear-gradient(
+    135deg,
+    var(--g-600) 0%,
+    var(--g-500) 45%,
+    var(--g-300) 100%
+  );
+  border-color: var(--g-300);
+  box-shadow:
+    0 0 14px rgba(212, 168, 67, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.checkbox-wrap input[type="checkbox"]:checked + .custom-checkbox::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: solid var(--c-900);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translateY(-1px);
+}
+
+.checkbox-wrap input[type="checkbox"]:indeterminate + .custom-checkbox {
+  background: linear-gradient(
+    135deg,
+    var(--g-600),
+    var(--g-400)
+  );
+  border-color: var(--g-300);
+  box-shadow:
+    0 0 14px rgba(212, 168, 67, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.checkbox-wrap input[type="checkbox"]:indeterminate + .custom-checkbox::after {
+  content: '';
+  width: 8px;
+  height: 2px;
+  background: var(--c-900);
+  border-radius: var(--r-pill);
+}
+
+.select-all-wrap {
+  margin: 0 auto;
+}
+
+.data-table .table-row.row-selected {
+  background: rgba(212, 168, 67, 0.07);
+  box-shadow:
+    inset 3px 0 0 var(--g-500),
+    inset 0 1px 0 rgba(212, 168, 67, 0.08);
+}
+
+.data-table .table-row.row-selected:hover {
+  background: rgba(212, 168, 67, 0.105);
+}
+
+.data-table .table-row.row-selected .row-num {
+  background: rgba(212, 168, 67, 0.12);
+  border-color: rgba(212, 168, 67, 0.45);
+  color: var(--g-300);
+}
+
+.data-table .table-row.row-selected .item-name {
+  color: var(--g-200);
+}
+
+.page-container.light-theme .custom-checkbox {
+  background:
+    linear-gradient(135deg, rgba(184, 137, 30, 0.12), rgba(255, 255, 255, 0.65)),
+    var(--c-850);
+  border-color: rgba(184, 137, 30, 0.38);
+}
+
+.page-container.light-theme .checkbox-wrap:hover .custom-checkbox {
+  border-color: var(--g-500);
+  box-shadow: 0 0 12px rgba(184, 137, 30, 0.16);
+}
+
+.page-container.light-theme .data-table .table-row.row-selected {
+  background: rgba(184, 137, 30, 0.10);
+  box-shadow:
+    inset 3px 0 0 var(--g-500),
+    inset 0 1px 0 rgba(184, 137, 30, 0.12);
+}
+
+.data-table {
+  min-width: 900px;
+}
+
+/* =========================================================
+   MOBILE CHECKBOX FIX
+   ========================================================= */
+@media (max-width: 760px) {
+  .data-table td.col-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .data-table td.col-select::before {
+    content: attr(data-label);
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--g-500);
+    opacity: 0.7;
+    flex-shrink: 0;
+    margin-right: var(--s-4);
+  }
+
+  .data-table .table-row.row-selected {
+    background: rgba(212, 168, 67, 0.08);
+    border-color: rgba(212, 168, 67, 0.28);
+  }
+
+  .page-container.light-theme .data-table .table-row.row-selected {
+    background: rgba(184, 137, 30, 0.11);
+    border-color: rgba(184, 137, 30, 0.28);
+  }
+}
+
+/* =========================================================
+   BULK DELETE BUTTONS
+   ========================================================= */
+
+.btn-bulk-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
+  border-radius: var(--r-pill);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.7rem var(--s-4);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-bulk-delete:hover {
+  background: rgba(192, 74, 74, 0.18);
+  border-color: rgba(192, 74, 74, 0.5);
+  color: #F0B0B0;
+  transform: translateY(-2px);
+}
+
+.bulk-count {
+  min-width: 20px;
+  height: 20px;
+  border-radius: var(--r-pill);
+  background: rgba(192, 74, 74, 0.22);
+  border: 1px solid rgba(192, 74, 74, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+}
+
+.btn-clear-selection {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--c-500);
+  color: var(--ivory-50);
+  border-radius: var(--r-pill);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.7rem var(--s-4);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-clear-selection:hover {
+  border-color: var(--g-500);
+  color: var(--g-300);
+  background: rgba(212, 168, 67, 0.06);
+}
+
+/* =========================================================
+   BULK SELECTION BAR
+   ========================================================= */
+
+.bulk-selection-bar {
+  position: relative;
+  z-index: 1;
+  margin: calc(-1 * var(--s-4)) 0 var(--s-8);
+  padding: var(--s-4) var(--s-5);
+  background:
+    linear-gradient(135deg, rgba(212, 168, 67, 0.10), rgba(212, 168, 67, 0.035)),
+    var(--c-750);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(212, 168, 67, 0.10);
+  animation: fadeSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bulk-selection-info {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  color: var(--g-300);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bulk-selection-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--g-400);
+  box-shadow: 0 0 12px rgba(212, 168, 67, 0.55);
+}
+
+.bulk-selection-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+/* Delete Selected Button */
+.btn-bulk-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-text);
+  border-radius: var(--r-pill);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.72rem var(--s-5);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-bulk-delete:hover {
+  background: rgba(192, 74, 74, 0.18);
+  border-color: rgba(192, 74, 74, 0.5);
+  color: #F0B0B0;
+  transform: translateY(-2px);
+}
+
+/* Clear Selection Button */
+.btn-clear-selection {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--c-500);
+  color: var(--ivory-50);
+  border-radius: var(--r-pill);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.72rem var(--s-5);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-clear-selection:hover {
+  border-color: var(--g-500);
+  color: var(--g-300);
+  background: rgba(212, 168, 67, 0.06);
+}
+
+/* Mobile */
+@media (max-width: 680px) {
+  .bulk-selection-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bulk-selection-actions {
+    width: 100%;
+  }
+
+  .bulk-selection-actions .btn-clear-selection,
+  .bulk-selection-actions .btn-bulk-delete {
+    flex: 1;
+  }
+}

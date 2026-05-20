@@ -20,5 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "DELETE FROM orders WHERE restaurant_id = ?1", nativeQuery = true)
     void deleteOrdersByRestaurantId(Long restaurantId);
     List<Order> findByRestaurant_IdIn(List<Long> restaurantIds);
+    void deleteByRestaurant_Id(Long id);
+    
 
 }
