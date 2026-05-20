@@ -23,7 +23,7 @@ public class PaymentService {
 
         JSONObject orderRequest = new JSONObject();
 
-        orderRequest.put("amount", amount * 100);
+        orderRequest.put("amount", amount);
         orderRequest.put("currency", "INR");
         orderRequest.put("receipt", "txn_123456");
 

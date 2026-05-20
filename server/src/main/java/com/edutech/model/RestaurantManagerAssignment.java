@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
@@ -33,11 +35,13 @@ public class RestaurantManagerAssignment {
     // Many assignments → One Restaurant
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore
     private Restaurant restaurant;
 
     // Many assignments → One User (manager)
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     public RestaurantManagerAssignment(Long id, Long managerId, Long assignedBy, LocalDateTime assignedAt,

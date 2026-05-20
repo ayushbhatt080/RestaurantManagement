@@ -35,12 +35,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-     @Autowired
+    @Autowired
     private RestaurantManagerAssignmentRepository assignmentRepository;
 
- 
- 
- @Override
+    @Override
     public List<Order> getOrdersForManager(String username) {
 
         User user = userRepository.findByUsername(username)
@@ -77,13 +75,11 @@ public class OrderServiceImpl implements OrderService {
 
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Restaurant not found with id: " + request.getRestaurantId()
-                ));
+                        "Restaurant not found with id: " + request.getRestaurantId()));
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "User not found with id: " + request.getUserId()
-                ));
+                        "User not found with id: " + request.getUserId()));
 
         List<MenuItem> items = menuItemRepository.findAllById(request.getItemIds());
 
@@ -114,8 +110,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
-                        "Order not found with id: " + id
-                ));
+                        "Order not found with id: " + id));
     }
 
     @Override
@@ -128,8 +123,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
-                        "Order not found with id: " + id
-                ));
+                        "Order not found with id: " + id));
 
         if ("DELIVERED".equalsIgnoreCase(order.getStatus())) {
             throw new BadRequestException("Delivered order cannot be cancelled");
@@ -160,13 +154,13 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Order not found with id: " + id
-                ));
+                        "Order not found with id: " + id));
 
         String updatedStatus = status.trim().toUpperCase();
 
-        if (!updatedStatus.equals("PLACED")
-                && !updatedStatus.equals("PROCESSING")
+        if (!updatedStatus.equals("PENDING")
+                && !updatedStatus.equals("CONFIRMED")
+                && !updatedStatus.equals("PREPARING")
                 && !updatedStatus.equals("DELIVERED")
                 && !updatedStatus.equals("CANCELLED")) {
             throw new BadRequestException("Invalid order status: " + status);
